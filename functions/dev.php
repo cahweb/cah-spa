@@ -16,6 +16,17 @@ function spaced($string) {
     echo "<br><br>";
 }
 
+function spaced_array($strings) {
+	echo "<br><br>";
+	
+    foreach ($strings as $string) {
+		echo $string;
+		echo "<br>";
+	}
+
+    echo "<br><br>";
+}
+
 function test_str($additional_arg) {
     if ($additional_arg !== '') {
         spaced("TEST " . $additional_arg);    
@@ -48,9 +59,11 @@ function display_events_index1($atts = [], $content = null, $tag = '') {
 
 	for ($i=-1; $i<3; $i++) {
 		if ($emonth==12) {
-            $emonth=1; $eyear=date("Y")+1;
+			$emonth=1;
+			$eyear=date("Y")+1;
         } else {
-            $emonth = date("m")+$i; $eyear=date("Y");
+			$emonth = date("m")+$i;
+			$eyear=date("Y");
         }
 		
 		$json = file_get_contents($events_atts['path'].$eyear. "/" . $emonth . "/" . "feed.json");				
@@ -129,4 +142,80 @@ function display_events_index1($atts = [], $content = null, $tag = '') {
 	echo "</div>";
 }
 
+function print_events() {
+	$path = 'http://events.ucf.edu/calendar/3611/cah-events/';
+	$numposts = 4;
+
+	$json = array();
+	$j = 0;
+	$title = "";
+	$a = $b = "";
+	$emonth = date('m');
+	$eyear = date('Y');
+
+	for ($i=-1; $i<3; $i++) {
+		// if ($emonth==12) {
+		// 	$emonth=1;
+		// 	$eyear=date("Y")+1;
+        // } else {
+		// 	$emonth = date("m")+$i;
+		// 	$eyear=date("Y");
+        // }
+		
+		$json = file_get_contents($path . $eyear. "/" . $emonth . "/" . "feed.json");				
+        $events = (array)(json_decode($json));
+
+		if (!empty($events)) {
+			foreach ($events as $ievent) {
+				$dept_events[$j]['title'] = $ievent->title;
+				$dept_events[$j]['url'] = $ievent->url;
+				$dept_events[$j]['starts'] = $ievent->starts;
+				$dept_events[$j]['ends'] = $ievent->ends;
+                $dept_events[$j]['description'] = $ievent->description;
+                
+				$j++;
+			} //end foreach
+        } //end if(!empty($events))
+	} //end for
+
+	$title = "";
+	$count = 0;
+
+	foreach ($dept_events as $ievent) {
+		if ($count == $numposts)
+			break;
+
+		if (date("Y-m-d H:i:s",strtotime($ievent['ends'])) < date("Y-m-d H:i:s"))
+			continue;
+
+		date_default_timezone_set("America/New_York");
+
+		// if (date("F j", strtotime($ievent['starts'])) != date("F j", strtotime($ievent['ends']))) {
+		// 	event_item_template($ievent['url'], date("F j", strtotime($ievent['starts'])) . " - " . date("F j", strtotime($ievent['ends'])), $ievent['title'], strip_tags(substr($ievent['description'], 0, 200) . "..."));
+		// } else {
+		// 	event_item_template($ievent['url'], date("F j", strtotime($ievent['starts'])), $ievent['title'], strip_tags(substr($ievent['description'], 0, 200) . "..."));
+		// }
+	?>
+
+		<div class="cah-events-item col-6" onclick="location.href='<?=$ievent['url']?>'">
+            <h3>
+                <? date_default_timezone_set("America/Chicago"); ?>
+                <? if (date("F j", strtotime($ievent['starts'])) != date("F j", strtotime($ievent['ends']))): ?>
+                <?=date("F j", strtotime($ievent['starts']))?> - <?=date("F j", strtotime($ievent['ends']))?>
+                <? else: ?>
+                <?=date("F j", strtotime($ievent['starts']))?>
+                <? endif; ?>
+            </h3>
+            
+            <h4><?=$ievent['title']?></h4>
+            
+            <div class="cah-events-description">
+                <? echo strip_tags(substr($ievent['description'], 0, 200) . "..."); ?>
+            </div>
+        </div>
+
+	<?
+		$count++;
+	}
+}
 ?>
