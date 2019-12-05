@@ -45,6 +45,13 @@ a.cah-event-item {
             margin-bottom: 0.5em;
             text-transform: none;
         }
+        .cah-event-item h4 {
+            color: rgb(122, 190, 187);
+            font-size: 0.9em;
+            font-weight: 400;
+            margin-bottom: 0.5em;
+            text-transform: none;
+        }
         .cah-event-item p {
             color:#666;
             font-size: 0.9em;

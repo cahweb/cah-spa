@@ -17,14 +17,18 @@ function spaced($string) {
 }
 
 function spaced_array($strings) {
-	echo "<br><br>";
+	if ($strings == '') {
+		spaced("EMPTY ARRAY GIVEN");
+	} else {
+		echo "<br><br>";
+		
+		foreach ($strings as $string) {
+			echo $string;
+			echo "<br>";
+		}
 	
-    foreach ($strings as $string) {
-		echo $string;
-		echo "<br>";
+		echo "<br><br>";
 	}
-
-    echo "<br><br>";
 }
 
 function test_str($additional_arg) {
