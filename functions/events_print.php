@@ -8,12 +8,16 @@
 date_default_timezone_set("America/New_York");
 
 // If multiple months are wanted to be displayed by default.
-function events_handler($num_months_to_show, $category) {
+function events_handler($num_months_to_show) {
     $current_year = date('Y');
     $current_month = date('m');
 
+    // Determines which category to show.
+    $filter = parse_categories();
+
     if ($num_months_to_show == 0 || $num_months_to_show == 1) {
-        parse_print_month_events($current_year, $current_month, $category);
+        // print_month_events($current_year, $current_month, $filter);
+        test_str('1');
     } else {
         $i = 0;
 
@@ -28,7 +32,7 @@ function events_handler($num_months_to_show, $category) {
                 }
             }
 
-            parse_print_month_events($current_year, $current_month, $category);
+            print_month_events($current_year, $current_month, $filter);
             
             $num_months_to_show--;
             $i++;
@@ -61,7 +65,7 @@ function parse_event_category($tags) {
     $categories = array("Gallery", "Music", "SVAD", "Theatre");
 
     if (strtolower($tags[0]) == "music") {
-        return $categories[1];
+        return "$categories[1]";
     } else if (strtolower($tags[0]) == "theatre ucf") {
         return $categories[3];
     } else {
@@ -90,7 +94,7 @@ function parse_event_category($tags) {
 }
 
 // Only prints 1 month's worth of events.
-function parse_print_month_events($year, $month, $category) {
+function print_month_events($year, $month, $filter) {
     $path = "http://events.ucf.edu/calendar/3611/cah-events/";
     
     $events_json_contents = json_decode(file_get_contents($path . $year . "/" . $month . "/" . "feed.json"));
@@ -113,43 +117,16 @@ function parse_print_month_events($year, $month, $category) {
             
             $start = strtotime($event->starts);
             $end = strtotime($event->ends);
-            
-            // TODO: Make else to show "Gallery, SVAD" when sorting just "Gallery".
-            if ($category == '') {
-                $category = parse_event_category($event->tags);
-            }
-            
+
+            $category = parse_event_category($event->tags);
+
             if ($end >= time()) {
                 event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
             }
         }
     } else {
         $GLOBALS['isEmpty'] = TRUE;
-    }
-}
-
-// Determines how to show which events in a category selected above.
-function parse_categories() {
-    if (array_key_exists('sort', $_GET)) {
-        $category = $_GET['sort'];
-        
-        switch ($category) {
-            case "Gallery":
-                $GLOBALS['isActive'][1] = "active";
-                break;
-            case "Music":
-                $GLOBALS['isActive'][2] = "active";
-                break;
-            case "SVAD":
-                $GLOBALS['isActive'][3] = "active";
-                break;
-            case "Theatre":
-                $GLOBALS['isActive'][4] = "active";
-                break;
-        }
-    } else {
-        $category = '';
-        $GLOBALS['isActive'][0] = "active";
+        spaced("EMPTY");
     }
 }
 

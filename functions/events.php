@@ -20,25 +20,12 @@ function display_events($atts = [], $content = null) {
     global $isEmpty;
     $isEmpty = FALSE;
     
-    // Determines how to show which events in a category selected above.
-    // Also responsible for the janky "active" css class for the filters.
-    global $isActive;
-    $isActive = array('', '', '', '', '');
-    $category = parse_categories();
-    
     ?>
 
     <div class="row">
         <? // Filters ?>
         <section class="col-sm-3 my-3">
-            <form method="get" class="list-group list-group-horizontal-sm">
-                <a href="<?= the_permalink(); ?>" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][0] ?>">All</a>
-
-                <input type="submit" name="sort" value="Gallery" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][1] ?>">
-                <input type="submit" name="sort" value="Music" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">
-                <input type="submit" name="sort" value="SVAD" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">
-                <input type="submit" name="sort" value="Theatre" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">
-            </form>
+            <? filter_handler($format) ?>
         </section>
 
         <? // Events ?>
@@ -47,7 +34,7 @@ function display_events($atts = [], $content = null) {
                 <?
                     // First parameter = however many months you want to show.
                     // e.g. 0 or 1, shows 1 month, 2 = 2 months, etc.
-                    events_handler($num_months_to_show, $category);
+                    events_handler($num_months_to_show);
                 ?>
             </ul>
 
