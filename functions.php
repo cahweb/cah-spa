@@ -16,6 +16,8 @@ function my_theme_enqueue_styles() {
 // Events
 include "functions/events.php";
 wp_enqueue_style('events-styles', get_stylesheet_directory_uri() . '/styles/events.css');
+// Helper functions for events.php; esp. for printing.
+include "functions/events_print.php";
 
 // Developer functions for testing and debugging. Remove in production.
 include "functions/dev.php";
