@@ -58,3 +58,7 @@ a.cah-event-item {
             font-weight: 300;
             margin-bottom: 0;
         }
+
+.cah-event-filter-button {
+    cursor: pointer;
+}

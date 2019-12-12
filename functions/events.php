@@ -34,10 +34,10 @@ function display_events($atts = [], $content = null) {
             <form method="get" class="list-group list-group-horizontal-sm">
                 <a href="<?= the_permalink(); ?>" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][0] ?>">All</a>
 
-                <input type="submit" name="sort" value="Gallery" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][1] ?>">
-                <input type="submit" name="sort" value="Music" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">
-                <input type="submit" name="sort" value="SVAD" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">
-                <input type="submit" name="sort" value="Theatre" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">
+                <input type="submit" name="sort" value="Gallery" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][1] ?>">
+                <input type="submit" name="sort" value="Music" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">
+                <input type="submit" name="sort" value="SVAD" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">
+                <input type="submit" name="sort" value="Theatre" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">
             </form>
         </section>
 
