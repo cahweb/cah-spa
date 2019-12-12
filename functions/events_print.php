@@ -15,28 +15,23 @@ function events_handler($num_months_to_show) {
     // Determines which category to show.
     $filter = parse_categories();
 
-    if ($num_months_to_show == 0 || $num_months_to_show == 1) {
-        // print_month_events($current_year, $current_month, $filter);
-        test_str('1');
-    } else {
-        $i = 0;
+    $i = 0;
 
-        while ($num_months_to_show > 0) {
-            // Loop around to next year if the current month is December and the loop as already gone through once.
-            if ($i > 0) {
-                if ($current_month == 12) {
-                    $current_year++;
-                    $current_month = 1;
-                } else {
-                    $current_month++;
-                }
+    while ($num_months_to_show > 0) {
+        // Loop around to next year if the current month is December and the loop as already gone through once.
+        if ($i > 0) {
+            if ($current_month == 12) {
+                $current_year++;
+                $current_month = 1;
+            } else {
+                $current_month++;
             }
-
-            print_month_events($current_year, $current_month, $filter);
-            
-            $num_months_to_show--;
-            $i++;
         }
+
+        print_month_events($current_year, $current_month, $filter);
+            
+        $num_months_to_show--;
+        $i++;
     }
 }
 
@@ -98,7 +93,7 @@ function print_month_events($year, $month, $filter) {
     $path = "http://events.ucf.edu/calendar/3611/cah-events/";
     
     $events_json_contents = json_decode(file_get_contents($path . $year . "/" . $month . "/" . "feed.json"));
-
+    
     if (!empty($events_json_contents)) {
         foreach ($events_json_contents as $event) {
             /*
@@ -120,6 +115,10 @@ function print_month_events($year, $month, $filter) {
 
             $category = parse_event_category($event->tags);
 
+            // TODO: Add something to indicate that there are no more events at the end of the month.
+            // The conditional below does not count as empty even if there are no more events for that month.
+            // So if, in the shortcode, you want to show 2 months, and there are no more events for the current month, it'll only show the next month alone (so technically not 2 months).
+            // e.g. Current month = December; you want to show 3 months; the only months printed will be Jan. and Feb.
             if ($end >= time()) {
                 event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
             }

@@ -25,7 +25,9 @@ function display_events($atts = [], $content = null) {
     <div class="row">
         <? // Filters ?>
         <section class="col-sm-3 my-3">
-            <? filter_handler($format) ?>
+            <?
+                filter_handler($format)
+            ?>
         </section>
 
         <? // Events ?>
