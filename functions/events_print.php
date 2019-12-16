@@ -8,9 +8,9 @@
 date_default_timezone_set("America/New_York");
 
 // If multiple months are wanted to be displayed by default.
-function events_handler($num_months_to_show) {
-    $current_year = date('Y');
-    $current_month = date('m');
+function print_handler($num_months_to_show) {
+    $current_year = date_create('Y');
+    $current_month = date_create('m');
 
     // Determines which category to show.
     $filter = parse_categories();
@@ -20,16 +20,16 @@ function events_handler($num_months_to_show) {
     while ($num_months_to_show > 0) {
         // Loop around to next year if the current month is December and the loop as already gone through once.
         if ($i > 0) {
-            if ($current_month == 12) {
-                $current_year++;
-                $current_month = 1;
-            } else {
-                $current_month++;
+            if (date_format($current_month, 'n') == 12) {
+                $current_year->modify("+1 year");
             }
+
+            $current_month->modify("+1 month");
         }
 
-        print_month_events($current_year, $current_month, $filter);
-            
+        // print_month_events($current_year, $current_month, $filter);
+        print_month_events($current_year, $current_month, $filter, $num_months_to_show);
+
         $num_months_to_show--;
         $i++;
     }
@@ -89,11 +89,14 @@ function parse_event_category($tags) {
 }
 
 // Only prints 1 month's worth of events.
-function print_month_events($year, $month, $filter) {
-    $path = "http://events.ucf.edu/calendar/3611/cah-events/";
+function print_month_events($year, $month, $filter, $num_of_months) {
+    $path = "https://events.ucf.edu/calendar/4310/arts-at-ucf/";
     
-    $events_json_contents = json_decode(file_get_contents($path . $year . "/" . $month . "/" . "feed.json"));
-    
+    $events_json_contents = json_decode(file_get_contents($path . date_format($year, 'Y') . "/" . date_format($month, 'n') . "/" . "feed.json"));
+
+    // Number of events listed in the JSON file.
+    // spaced("# of events " . count($events_json_contents));
+
     if (!empty($events_json_contents)) {
         foreach ($events_json_contents as $event) {
             /*
@@ -107,25 +110,40 @@ function print_month_events($year, $month, $filter) {
                 -> description
             */
             
-            // TODO: Sort by days? Remove continguous duplicates?
-            // For now, I'm ignoring removing contiguous dupes, because sometimes they happen at different times. So, now I just display the times instead.
+            /*
+                TODO: Sort by days? Remove continguous duplicates?
+                For now, I'm ignoring removing contiguous dupes, because sometimes they happen at different times. So, now I just display the times instead.
+            */
             
             $start = strtotime($event->starts);
             $end = strtotime($event->ends);
 
             $category = parse_event_category($event->tags);
 
-            // TODO: Add something to indicate that there are no more events at the end of the month.
-            // The conditional below does not count as empty even if there are no more events for that month.
-            // So if, in the shortcode, you want to show 2 months, and there are no more events for the current month, it'll only show the next month alone (so technically not 2 months).
-            // e.g. Current month = December; you want to show 3 months; the only months printed will be Jan. and Feb.
             if ($end >= time()) {
-                event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
+                if ($filter == "All") {
+                    event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
+                } else if (strpos($filter, $category) !== FALSE) {
+                        event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
+                } else {
+                    ?>
+                        <div class="row my-5">
+                            <p class="mx-auto text-muted"><em>There are currently no more events to listed for <span class="text-secondary"><?= date_format($month, 'F') . " " . date_format($year, 'Y') ?></span>.</em></p>
+                        </div>
+                    <?
+                
+                    break;
+                }
+            } else {
+                ?>
+                    <div class="row my-5">
+                        <p class="mx-auto text-muted"><em>There are currently no more events to listed for <span class="text-secondary"><?= date_format($month, 'F') . " " . date_format($year, 'Y') ?></span>.</em></p>
+                    </div>
+                <?
+                
+                break;
             }
         }
-    } else {
-        $GLOBALS['isEmpty'] = TRUE;
-        spaced("EMPTY");
     }
 }
 

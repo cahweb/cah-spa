@@ -31,12 +31,8 @@ function spaced_array($strings) {
 	}
 }
 
-function test_str($additional_arg) {
-    if ($additional_arg !== '') {
-        spaced("TEST " . $additional_arg);    
-    } else {
-        spaced("TEST");
-    }
+function test() {
+    spaced("TEST");
 }
 
 function test_event_item() {

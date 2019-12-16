@@ -16,7 +16,7 @@ function display_events($atts = [], $content = null) {
     $num_months_to_show = $attributes["months-to-show"];
     $format = $attributes["format"];
 
-    // Flag for events.
+    // Flag for no events in a month.
     global $isEmpty;
     $isEmpty = FALSE;
     
@@ -36,7 +36,7 @@ function display_events($atts = [], $content = null) {
                 <?
                     // First parameter = however many months you want to show.
                     // e.g. 0 or 1, shows 1 month, 2 = 2 months, etc.
-                    events_handler($num_months_to_show);
+                    print_handler($num_months_to_show);
                 ?>
             </ul>
 
