@@ -19,13 +19,17 @@ function filter_handler($format) {
     */
 
     switch ($format) {
+        case 1:
+            form_format_dropdown();
+            break;
         default:
-            form_format_0();
+            form_format_list();
             break;
     }
 }
 
-function form_format_0() {
+// Default left-aligned list filter.
+function form_format_list() {
     // Running this function just to get the isActive global flag to work.
     parse_categories();
     
@@ -37,6 +41,28 @@ function form_format_0() {
             <input type="submit" name="sort" value="Music" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">
             <input type="submit" name="sort" value="SVAD" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">
             <input type="submit" name="sort" value="Theatre" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">
+        </form>
+    <?
+}
+
+// Dropdown filter.
+function form_format_dropdown() {
+    $category = parse_categories();
+    
+    ?>
+        <form method="get" class="dropdown">
+            <a class="btn btn-primary dropdown-toggle w-100" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?= $category ?>
+            </a>
+
+            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
+                <a href="<?= the_permalink(); ?>" class="dropdown-item <?= $GLOBALS['isActive'][0] ?>">All</a>
+
+                <input type="submit" name="sort" value="Gallery" class="dropdown-item <?= $GLOBALS['isActive'][1] ?>">
+                <input type="submit" name="sort" value="Music" class="dropdown-item <?= $GLOBALS['isActive'][2] ?>">
+                <input type="submit" name="sort" value="SVAD" class="dropdown-item <?= $GLOBALS['isActive'][3] ?>">
+                <input type="submit" name="sort" value="Theatre" class="dropdown-item <?= $GLOBALS['isActive'][4] ?>">
+            </div>
         </form>
     <?
 }
@@ -70,7 +96,6 @@ function parse_categories() {
         $path = "http://events.ucf.edu/calendar/3611/cah-events/";
     }
 
-    // return array($category, $path);
     return $category;
 }
 
