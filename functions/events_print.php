@@ -128,7 +128,7 @@ function print_month_events($year, $month, $filter, $num_of_months) {
                 } else {
                     ?>
                         <div class="row my-5">
-                            <p class="mx-auto text-muted"><em>There are currently no more events to listed for <span class="text-secondary"><?= date_format($month, 'F') . " " . date_format($year, 'Y') ?></span>.</em></p>
+                            <p class="mx-auto text-muted"><em>There are currently no more active or upcoming events to listed for <span class="text-secondary"><?= date_format($month, 'F') . " " . date_format($year, 'Y') ?></span>.</em></p>
                         </div>
                     <?
                 
@@ -137,7 +137,7 @@ function print_month_events($year, $month, $filter, $num_of_months) {
             } else {
                 ?>
                     <div class="row my-5">
-                        <p class="mx-auto text-muted"><em>There are currently no more events to listed for <span class="text-secondary"><?= date_format($month, 'F') . " " . date_format($year, 'Y') ?></span>.</em></p>
+                        <p class="mx-auto text-muted"><em>There are currently no more active or upcoming events to listed for <span class="text-secondary"><?= date_format($month, 'F') . " " . date_format($year, 'Y') ?></span>.</em></p>
                     </div>
                 <?
                 

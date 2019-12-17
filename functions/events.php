@@ -51,7 +51,7 @@ function display_events($atts = [], $content = null) {
 function show_more_events_handler() {
     // For the "Show more events" button and shows message if there are no more events.
     // TODO: Does not refresh page to the spot where the button is. Scrolls all the way back up.
-    if (array_key_exists('more-events', $_POST)) {
+    if (isset($_POST['more-events'])) {
         spaced("IT WORKED!");
 
         if ($GLOBALS['isEmpty']) {
@@ -68,7 +68,6 @@ function show_more_events_handler() {
         ?>
                     
             <form method="post" class="row">
-                <!-- <input type="submit" name="more_events" value="Show next month's events" class="btn btn-primary mx-auto"> -->
                 <button type="submit" name="more-events" class="btn btn-primary mx-auto">Show more events</button>
             </form>
                     
