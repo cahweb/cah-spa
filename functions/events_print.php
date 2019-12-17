@@ -7,16 +7,17 @@
 // Sets timezone to EST.
 date_default_timezone_set("America/New_York");
 
-function print_handler($num_months_to_show) {
+
+function print_handler($num_events_to_show) {
     $current_year = date_create('Y');
     $current_month = date_create('m');
-
+    
     // Determines which category to show.
     $filter = parse_categories();
-
+    
     $i = 0;
-    $monthIsEmpty = FALSE;
-
+    $num_months_to_show = total_number_of_Months();
+    
     $path = "https://events.ucf.edu/calendar/4310/arts-at-ucf/";
     
     // Initializes the conditional below. It's repeated again to output the correct path.
@@ -93,7 +94,7 @@ function print_handler($num_months_to_show) {
         ?>
 
             <div class="row my-5">
-                <p class="mx-auto text-muted"><em>There are currently no more active or upcoming events to listed for <span class="text-secondary"><?= date_format($current_month, 'F') . " " . date_format($current_year, 'Y') ?></span>.</em></p>
+                <p class="mx-auto text-muted"><em>There are currently no more active or upcoming events to listed.</em></p>
             </div>
 
         <?
@@ -118,6 +119,11 @@ function event_item_template($link, $start, $end, $title, $category, $descriptio
         </a>
 
     <?
+}
+
+// TODO: Function to index all events into an array for pagnination. This indexing function can possibly be merged with total_number_of_months();
+function events_index() {
+    // Read TODO above.
 }
 
 // Helper function for parse_print_month_events().
@@ -151,6 +157,37 @@ function parse_event_category($tags) {
         }
     }
     
+}
+
+// Used to determine how far the 'Upcoming' calendar goes ahead. Super not DRY as this is almost identical to print_all_events().
+function total_number_of_months() {
+    $current_year = date_create('Y');
+    $current_month = date_create('m');
+
+    $i = 0;
+
+    $path = "https://events.ucf.edu/calendar/4310/arts-at-ucf/";
+    
+    // Initializes the conditional below. It's repeated again to output the correct path.
+    $events_json_contents = json_decode(file_get_contents($path . date_format($current_year, 'Y') . "/" . date_format($current_month, 'n') . "/" . "feed.json"));
+
+    while (!empty($events_json_contents)) {
+        // Loop around to next year if the current month is December and the loop as already gone through once.
+        if ($i > 0) {
+            if (date_format($current_month, 'n') == 12) {
+                $current_year->modify("+1 year");
+            }
+            
+            $current_month->modify("+1 month");
+        }
+
+        // Not DRY, I know.
+        $events_json_contents = json_decode(file_get_contents($path . date_format($current_year, 'Y') . "/" . date_format($current_month, 'n') . "/" . "feed.json"));
+
+        $i++;
+    }
+
+    return $i;
 }
 
 ?>

@@ -9,11 +9,11 @@ add_shortcode("events", "display_events");
 function display_events($atts = [], $content = null) {
     // Attributes given in the shortcode call in Wordpress
     $attributes = shortcode_atts([
-        "months-to-show" => 2,
+        "number-of-events-to-show-per-page" => 5,
         "format" => 0,
     ], $atts);
 
-    $num_months_to_show = $attributes["months-to-show"];
+    $num_events_to_show = $attributes["number-of-events-to-show-per-page"];
     // $format = $attributes["format"];
     $format = 0;
 
@@ -81,9 +81,7 @@ function display_events($atts = [], $content = null) {
 
                     <ul class="cah-events">
                         <?
-                            // First parameter = however many months you want to show.
-                            // e.g. 0 or 1, shows 1 month, 2 = 2 months, etc.
-                            print_handler($num_months_to_show);
+                            print_handler($num_events_to_show);
                         ?>
                     </ul>
 
