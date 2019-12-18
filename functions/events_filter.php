@@ -10,7 +10,12 @@
 global $isActive;
 $isActive = array('', '', '', '', '');
 
+global $activeCat;
+
 function filter_handler($format) {
+    // Primes global variables.
+    parse_categories();
+
     /*
         Format is given by the Wordpress shortcode attribute "format".
 
@@ -30,9 +35,6 @@ function filter_handler($format) {
 
 // Default left-aligned list filter.
 function form_format_list() {
-    // Running this function just to get the isActive global flag to work.
-    parse_categories();
-    
     ?>
         <form method="get" class="cah-event-filter-button list-group list-group-horizontal-sm">
             <a href="<?= the_permalink(); ?>" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][0] ?>">All</a>
@@ -47,12 +49,10 @@ function form_format_list() {
 
 // Dropdown filter.
 function form_format_dropdown() {
-    $category = parse_categories();
-    
     ?>
         <form method="get" class="dropdown">
             <a class="btn btn-primary dropdown-toggle w-100" href="https://example.com" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <?= $category ?>
+                <?= $GLOBALS['activeCat'] ?>
             </a>
 
             <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuLink">
@@ -75,28 +75,24 @@ function parse_categories() {
         switch ($category) {
             case "Gallery":
                 $GLOBALS['isActive'][1] = "active";
-                $path = "https://events.ucf.edu/tag/479904986/art-gallery/";
                 break;
             case "Music":
                 $GLOBALS['isActive'][2] = "active";
-                $path = "https://events.ucf.edu/tag/41613216/music/";
                 break;
             case "SVAD":
                 $GLOBALS['isActive'][3] = "active";
-                $path = "https://events.ucf.edu/tag/20035441/school-of-visual-arts-design/";
                 break;
             case "Theatre":
                 $GLOBALS['isActive'][4] = "active";
-                $path = "https://events.ucf.edu/tag/437729899/theatre-ucf-1/";
                 break;
         }
     } else {
         $GLOBALS['isActive'][0] = "active";
+        $GLOBALS['activeCat'] = 0;
         $category = 'All';
-        $path = "http://events.ucf.edu/calendar/3611/cah-events/";
     }
 
-    return $category;
+    $GLOBALS['activeCat'] = $category;
 }
 
 ?>

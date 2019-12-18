@@ -20,8 +20,8 @@ wp_enqueue_style('events-styles', get_stylesheet_directory_uri() . '/styles/even
 include "functions/events_print.php";
 // Helper functions for events.php; esp. for filtering.
 include "functions/events_filter.php";
-// Helper functions for events.php; esp. for showing more events.
-include "functions/events_more.php";
+// Helper functions for events.php; esp. for generating pagination and links.
+include "functions/events_pagination.php";
 
 // Developer functions for testing and debugging. Remove in production.
 include "functions/dev.php";
