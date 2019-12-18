@@ -8,7 +8,7 @@
 date_default_timezone_set("America/New_York");
 
 
-function print_handler($num_events_to_show) {
+function print_handler1($num_events_to_show) {
     $current_year = date_create('Y');
     $current_month = date_create('m');
     
@@ -101,6 +101,12 @@ function print_handler($num_events_to_show) {
     }
 }
 
+function print_handler($num_events_to_show) {
+    spaced("Number of events to show: " . $num_events_to_show);
+
+    spaced("Number of events in total: " . count(events_index()));
+}
+
 // Handles individual event's html. Description length is shorted to 300 characters.
 function event_item_template($link, $start, $end, $title, $category, $description) {
     ?>
@@ -121,9 +127,49 @@ function event_item_template($link, $start, $end, $title, $category, $descriptio
     <?
 }
 
-// TODO: Function to index all events into an array for pagnination. This indexing function can possibly be merged with total_number_of_months();
+// Function to index all events into an array for pagnination. This indexing function can possibly be merged with total_number_of_months();
 function events_index() {
-    // Read TODO above.
+    $events = array();
+
+    $current_year = date_create('Y');
+    $current_month = date_create('m');
+
+    // Tracks if this is the initial loop where date looping would not apply.
+    $i = 0;
+
+    $path = "https://events.ucf.edu/calendar/4310/arts-at-ucf/";
+    
+    // Initializes the conditional below. It's repeated again to output the correct path.
+    $events_json_contents = json_decode(file_get_contents($path . date_format($current_year, 'Y') . "/" . date_format($current_month, 'n') . "/" . "feed.json"));
+
+    while (!empty($events_json_contents)) {
+        // Loop around to next year if the current month is December and the loop as already gone through once.
+        if ($i > 0) {
+            if (date_format($current_month, 'n') == 12) {
+                $current_year->modify("+1 year");
+            }
+            
+            $current_month->modify("+1 month");
+        }
+
+        // Not DRY, I know.
+        $events_json_contents = json_decode(file_get_contents($path . date_format($current_year, 'Y') . "/" . date_format($current_month, 'n') . "/" . "feed.json"));
+
+        foreach ($events_json_contents as $event) {
+            // The date/time when each event ends.
+            $end = strtotime($event->ends);
+            
+            // Ensures that the events are active or upcoming:
+            if ($end >= time()) {
+                // Pushes each event into an array.
+                array_push($events, $event);
+            }
+        }
+
+        $i++;
+    }
+
+    return $events;
 }
 
 // Helper function for parse_print_month_events().
@@ -157,37 +203,6 @@ function parse_event_category($tags) {
         }
     }
     
-}
-
-// Used to determine how far the 'Upcoming' calendar goes ahead. Super not DRY as this is almost identical to print_all_events().
-function total_number_of_months() {
-    $current_year = date_create('Y');
-    $current_month = date_create('m');
-
-    $i = 0;
-
-    $path = "https://events.ucf.edu/calendar/4310/arts-at-ucf/";
-    
-    // Initializes the conditional below. It's repeated again to output the correct path.
-    $events_json_contents = json_decode(file_get_contents($path . date_format($current_year, 'Y') . "/" . date_format($current_month, 'n') . "/" . "feed.json"));
-
-    while (!empty($events_json_contents)) {
-        // Loop around to next year if the current month is December and the loop as already gone through once.
-        if ($i > 0) {
-            if (date_format($current_month, 'n') == 12) {
-                $current_year->modify("+1 year");
-            }
-            
-            $current_month->modify("+1 month");
-        }
-
-        // Not DRY, I know.
-        $events_json_contents = json_decode(file_get_contents($path . date_format($current_year, 'Y') . "/" . date_format($current_month, 'n') . "/" . "feed.json"));
-
-        $i++;
-    }
-
-    return $i;
 }
 
 ?>
