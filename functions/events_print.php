@@ -6,25 +6,23 @@
 
 function print_handler($number_events_to_show) {
     spaced($_SERVER['REQUEST_URI']);
-    
-    // For ease of typing.
-    $activeCat = $GLOBALS['activeCat'];
-    spaced($activeCat);
+    $events = events_index();
 
-    foreach (events_index() as $event) {
-        $start = strtotime($event->starts);
-        $end = strtotime($event->ends);
+    if (empty($events)) {
+        ?>
+            <p class="text-center text-muted"><em>There are currently no active or upcoming events listed.</em></p>
+        <?
+    } else {
+        foreach (events_index() as $event) {
+            $start = strtotime($event->starts);
+            $end = strtotime($event->ends);
+            
+            $category = parse_event_category($event->tags);
     
-        $category = parse_event_category($event->tags);
-
-        if ($end >= time()) {
-            if ($activeCat == "All") {
-                event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
-            } else if (strpos($activeCat, $category) !== FALSE) {
-                    event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
-            }
+            event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
         }
     }
+
 }
 
 // Handles individual event's html. Description length is shorted to 300 characters.

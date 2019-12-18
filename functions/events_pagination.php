@@ -12,6 +12,7 @@ function events_pagination($num_events_to_show) {
     $GLOBALS['num_total_events'] = count($GLOBALS['events']);
 
     // Number of pages to generate for pagination.
+    // TODO: MOD to determine if there are remainders.
     $GLOBALS['num_of_pages'] = intdiv($GLOBALS['num_total_events'], $num_events_to_show) + 1;
 
     // Determines and applies style based on what page is active.
@@ -21,7 +22,7 @@ function events_pagination($num_events_to_show) {
     $activeCat = $GLOBALS['activeCat'];
 
     if ($activeCat !== "All") {
-        test();
+        // test();
     }
 
     ?>

@@ -105,11 +105,15 @@ function events_handler($atts = [], $content = null) {
 }
 
 // Function to index all events into an array for pagnination. This indexing function can possibly be merged with total_number_of_months();
+// TODO: Add consideration for current active category.
 function events_index() {
     $events = array();
 
     $current_year = date_create('Y');
     $current_month = date_create('m');
+
+    // For ease of typing.
+    $activeCat = $GLOBALS['activeCat'];
 
     // Tracks if this is the initial loop where date looping would not apply.
     $i = 0;
@@ -135,11 +139,18 @@ function events_index() {
         foreach ($events_json_contents as $event) {
             // The date/time when each event ends.
             $end = strtotime($event->ends);
+
+            // The actual tag from the JSON file.
+            $category = parse_event_category($event->tags);
             
             // Ensures that the events are active or upcoming:
             if ($end >= time()) {
-                // Pushes each event into an array.
-                array_push($events, $event);
+                // Pushes each event into an array depending on which category is currently active.
+                if ($activeCat == "All") {
+                    array_push($events, $event);
+                } else if (strpos($activeCat, $category) !== FALSE) {
+                    array_push($events, $event);
+                }
             }
         }
 
