@@ -21,6 +21,10 @@ function filter_handler($format) {
 
         0 - (Default) Item list side bar
         1 - Drop down menu
+        2 - No filter shown
+
+        NOTE: 2 does not need a dedicated function nor case as comparison to an
+              empty string also counts as 'ALL' for active category.
     */
 
     switch ($format) {
@@ -35,15 +39,15 @@ function filter_handler($format) {
 
 // Default left-aligned list filter.
 function form_format_list() {
+    // !WARNING: The links are filtered through a function that is case-sensitive.
+    // TODO: Fix case-sensitivity.
     ?>
-        <form method="get" class="cah-event-filter-button list-group list-group-horizontal-sm">
-            <a href="<?= the_permalink(); ?>" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][0] ?>">All</a>
+        <a href="<? the_permalink(); ?>" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][0] ?>">All</a>
 
-            <input type="submit" name="sort" value="Gallery" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][1] ?>">
-            <input type="submit" name="sort" value="Music" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">
-            <input type="submit" name="sort" value="SVAD" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">
-            <input type="submit" name="sort" value="Theatre" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">
-        </form>
+        <a href="?sort=Gallery" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][1] ?>">Gallery</a>
+        <a href="?sort=Music" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">Music</a>
+        <a href="?sort=SVAD" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">SVAD</a>
+        <a href="?sort=Theatre" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">Theatre</a>
     <?
 }
 
@@ -88,7 +92,6 @@ function parse_categories() {
         }
     } else {
         $GLOBALS['isActive'][0] = "active";
-        $GLOBALS['activeCat'] = 0;
         $category = 'All';
     }
 

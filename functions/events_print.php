@@ -5,21 +5,43 @@
 */
 
 function print_handler($number_events_to_show) {
-    spaced($_SERVER['REQUEST_URI']);
     $events = events_index();
+    $page_number = page_link();
+    
+    spaced_array(array(
+        "<strong>Number of events: </strong>" . count($events),
+        "<strong>Number of pages: </strong>" . $GLOBALS['num_of_pages'],
+        "<strong>Current page number: </strong>" . page_link(),
+        "<strong>Current category: </strong>" . $GLOBALS['activeCat'],
+    ));
 
     if (empty($events)) {
         ?>
-            <p class="text-center text-muted"><em>There are currently no active or upcoming events listed.</em></p>
+            <p class="text-center text-muted my-5"><em>There are currently no active or upcoming events listed.</em></p>
         <?
     } else {
-        foreach (events_index() as $event) {
-            $start = strtotime($event->starts);
-            $end = strtotime($event->ends);
+        // // Prints all events
+        // foreach (events_index() as $event) {
+        //     $start = strtotime($event->starts);
+        //     $end = strtotime($event->ends);
             
-            $category = parse_event_category($event->tags);
-    
-            event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
+        //     $category = parse_event_category($event->tags);
+            
+        //     event_item_template($event->url, $start, $end, $event->title, $category, $event->description);
+        // }
+
+        // Great names, I know. This is just to make writing the for loop simpler.
+        // Includes logic that prints the number of events specified, divided into pages.
+        $x = ($page_number - 1) * $number_events_to_show;
+        $y = $number_events_to_show * $page_number;
+
+        for ($i = $x; $i < $y; $i++) {
+            $start = strtotime($events[$i]->starts);
+            $end = strtotime($events[$i]->ends);
+            
+            $category = parse_event_category($events[$i]->tags);
+
+            event_item_template($events[$i]->url, $start, $end, $events[$i]->title, $category, $events[$i]->description);
         }
     }
 

@@ -34,38 +34,60 @@ function events_handler($atts = [], $content = null) {
 
         0 - (Default) Item list side bar
         1 - Drop down menu
+        2 - No filter shown
 
         NOTE: Could probably merge this with all of the event child functions, but that's for future you or me. DRY means nothing to me lol.
     */
     switch ($format) {
-        // TODO: Edit case 1 to match default.
         case 1:
             ?>
             <div class="d-flex flex-column">
-                <div class="col-sm-9 mx-auto">
+                <div class="col-sm-10 mx-auto">
                     <? // Filters ?>
-                    <section class="col-sm-3 my-5">
+                    <section class="col-sm-5 mb-5 mx-auto">
                         <?
                             filter_handler($format)
                         ?>
                     </section>
 
                     <? // Events ?>
-                    <section class="mt-3">
+                    <section class="mt-0">
                         <?
-                            // events_pagination();
+                            events_pagination($num_events_to_show);
                         ?>
 
                         <ul class="cah-events">
                             <?
-                                // First parameter = however many months you want to show.
-                                // e.g. 0 or 1, shows 1 month, 2 = 2 months, etc.
-                                print_handler($num_months_to_show);
+                                print_handler($num_events_to_show);
                             ?>
                         </ul>
 
                         <?
-                            show_more_events_handler();
+                            events_pagination($num_events_to_show);
+                        ?>
+                    </section>
+                </div>
+            </div>
+            <?
+            break;
+        case 2:
+            ?>
+            <div class="d-flex flex-column">
+                <div class="col-sm-10 mx-auto">
+                    <? // Events ?>
+                    <section class="mt-0">
+                        <?
+                            events_pagination($num_events_to_show);
+                        ?>
+
+                        <ul class="cah-events">
+                            <?
+                                print_handler($num_events_to_show);
+                            ?>
+                        </ul>
+
+                        <?
+                            events_pagination($num_events_to_show);
                         ?>
                     </section>
                 </div>
@@ -146,7 +168,8 @@ function events_index() {
             // Ensures that the events are active or upcoming:
             if ($end >= time()) {
                 // Pushes each event into an array depending on which category is currently active.
-                if ($activeCat == "All") {
+                // Added comparison to empty string for format 2 for filters.
+                if ($activeCat == "All" || $activeCat == "") {
                     array_push($events, $event);
                 } else if (strpos($activeCat, $category) !== FALSE) {
                     array_push($events, $event);
