@@ -6,19 +6,8 @@
 
 function print_handler($number_events_to_show) {
     $events = events_index();
+    $num_of_events = count($events);
     $page_number = page_number();
-    
-    // For debugging.
-    spaced_array(array(
-        "<strong>Number of events: </strong>" . count($events),
-        "<strong>Number of pages: </strong>" . $GLOBALS['num_of_pages'],
-        "<strong>Current page number: </strong>" . page_number(),
-        "<strong>Current category: </strong>" . $GLOBALS['activeCat'],
-        "<strong>Permalink: </strong>" . get_permalink(),
-        "<strong>URI: </strong>" . $_SERVER['REQUEST_URI'],
-        "<strong>Current URL: </strong>" . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
-        "<strong>Wanted: </strong>" . get_permalink() . "?sort=" . $GLOBALS['activeCat'],
-    ));
 
     if (empty($events)) {
         ?>
@@ -41,12 +30,18 @@ function print_handler($number_events_to_show) {
         $y = $number_events_to_show * $page_number;
 
         for ($i = $x; $i < $y; $i++) {
-            $start = strtotime($events[$i]->starts);
-            $end = strtotime($events[$i]->ends);
-            
-            $category = parse_event_category($events[$i]->tags);
-            
-            event_item_template($events[$i]->url, $start, $end, $events[$i]->title, $category, $events[$i]->description);
+            if ($i >= $num_of_events) {
+                // Break added for the last page, where the number of events might not equal to the amount needed to print.
+                // Out of bounds conditional.
+                break;
+            } else {
+                $start = strtotime($events[$i]->starts);
+                $end = strtotime($events[$i]->ends);
+                
+                $category = parse_event_category($events[$i]->tags);
+                
+                event_item_template($events[$i]->url, $start, $end, $events[$i]->title, $category, $events[$i]->description);
+            }
         }
     }
 
@@ -83,6 +78,7 @@ function parse_event_category($tags) {
     } else {
         // It'll be SVAD. Seems like "art gallery" always goes with SVAD.
         // This else statement depends on "art gallery" always being a tag with SVAD.
+        // !WARNING: This might not be true in the future. I'm just too lazy to future-proof this.
 
         // Checks for "art gallery" tag.
         $gallery = false;

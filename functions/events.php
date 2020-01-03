@@ -16,13 +16,13 @@ global $num_of_pages;
 function events_handler($atts = [], $content = null) {
     // Attributes given in the shortcode call in Wordpress
     $attributes = shortcode_atts([
-        "number-of-events-to-show-per-page" => 5,
-        "format" => 0,
+        'format' => 0,
+        'number-of-events-to-show-per-page' => 5,
     ], $atts);
 
-    $num_events_to_show = $attributes["number-of-events-to-show-per-page"];
-    // $format = $attributes["format"];
-    $format = 0; // for dev purposes only
+    $format = $attributes['format'];
+    $num_events_to_show = $attributes['number-of-events-to-show-per-page'];
+    // $format = 0; // for dev purposes only
 
     // Flag for no events in a month.
     // !WARNING: Not sure if this is needed, it's not in global scope.
@@ -52,10 +52,6 @@ function events_handler($atts = [], $content = null) {
 
                     <? // Events ?>
                     <section class="mt-0">
-                        <?
-                            events_pagination($num_events_to_show);
-                        ?>
-
                         <ul class="cah-events">
                             <?
                                 print_handler($num_events_to_show);
@@ -76,10 +72,6 @@ function events_handler($atts = [], $content = null) {
                 <div class="col-sm-10 mx-auto">
                     <? // Events ?>
                     <section class="mt-0">
-                        <?
-                            events_pagination($num_events_to_show);
-                        ?>
-
                         <ul class="cah-events">
                             <?
                                 print_handler($num_events_to_show);
@@ -106,10 +98,6 @@ function events_handler($atts = [], $content = null) {
 
                 <? // Events ?>
                 <section class="col-sm-9 mt-0">
-                    <?
-                        events_pagination($num_events_to_show);
-                    ?>
-
                     <ul class="cah-events">
                         <?
                             print_handler($num_events_to_show);

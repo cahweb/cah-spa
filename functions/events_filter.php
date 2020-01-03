@@ -31,6 +31,8 @@ function filter_handler($format) {
         case 1:
             form_format_dropdown();
             break;
+        case 2:
+            break;
         default:
             form_format_list();
             break;

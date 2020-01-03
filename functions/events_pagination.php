@@ -6,6 +6,9 @@
 
 // Navigation for event pages.
 function events_pagination($num_events_to_show) {
+    // !WARNING: Pagination is not responsive!
+    // So beyond 20 or so pages, it'll run out of its containing div, and quite possibly the screen.
+
     $GLOBALS['events'] = events_index();
     $GLOBALS['num_total_events'] = count($GLOBALS['events']);
 
@@ -67,34 +70,29 @@ function events_pagination($num_events_to_show) {
 }
 
 function page_number() {
+    // Changes base link based on whether or not a category is chosen.
+    if (isset($_GET['sort'])) {
+        $base_page_link = get_permalink() . "?sort=" . $GLOBALS['activeCat'];
+    } else {
+        $base_page_link = get_permalink();
+    }
+
+    // Actual link displayed in the browser.
     $uri = $_SERVER['REQUEST_URI'];
     
-    // Replacing the shared child page link along with the forward slashes.
-    // !WARNING: This is hard coded, so change when changing URL names.
-    // $page = str_replace("events", "", $uri);
-    // $page_number = str_replace("/", "", $page);
-    
-    $permalink = get_permalink();
-    $current_page_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-    $page = str_replace($permalink, "", $current_page_url);
-    $page_number = str_replace("/", "", $page);
-    
+    // Stripping everything except for the page number.
     if (isset($_GET['sort'])) {
-        // spaced($_GET['sort']);
-        // spaced($page_number);
-
-        if (is_numeric($page_number)) {
-            return $page_number;
-        } else {
-            return 1;
-        }
+        $page_number = substr($uri, strripos($uri, "=") + 1);
     } else {
-        if (empty($page_number)) {
-            return 1;
-        } else {
-            return $page_number;
-        }
+        $page = str_replace("events", "", $uri);
+        $page_number = str_replace("/", "", $page);
+    }
+
+    // If there was no page number, then it's probably on the first page.
+    if (is_numeric($page_number)) {
+        return $page_number;
+    } else {
+        return 1;
     }
 }
 ?>
