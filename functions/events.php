@@ -22,7 +22,6 @@ function events_handler($atts = [], $content = null) {
 
     $format = $attributes['format'];
     $num_events_to_show = $attributes['number-of-events-to-show-per-page'];
-    // $format = 0; // for dev purposes only
 
     // Flag for no events in a month.
     // !WARNING: Not sure if this is needed, it's not in global scope.

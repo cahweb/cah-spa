@@ -24,6 +24,6 @@ include "functions/events_filter.php";
 include "functions/events_pagination.php";
 
 // Developer functions for testing and debugging. Remove in production.
-include "functions/dev.php";
+// include "functions/dev.php";
 
 ?>

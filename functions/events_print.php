@@ -52,13 +52,11 @@ function event_item_template($link, $start, $end, $title, $category, $descriptio
     ?>
         <a class="cah-event-item" href=<?= $link ?>>
             <li>
-                <h1 name="date-range"><?= date("F j, Y", $start) ?> <span class="mr-2">,</span> <span class=""><?= date("g a", $start) . " &ndash; " . date("g a", $end) ?></span></h1>
+                <h1 name="date-range"><?= date("F j, Y", $start) ?><span class="mr-2">,</span> <span class=""><?= date("g A", $start) . " &ndash; " . date("g A", $end) ?></span></h1>
 
                 <h2 name="title"><?= $title ?></h2>
-        
-                <h3 name="category"><?= date("g a", $start) . " &ndash; " . date("g a", $end) ?></h3>
 
-                <h4 name="category"><?= $category ?></h3>
+                <!-- <h4 name="category"><?// $category ?></h3> -->
         
                 <p name="description"><?= strip_tags(substr($description, 0, 300) . " . . . ") ?></p>
             </li>
