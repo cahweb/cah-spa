@@ -44,10 +44,10 @@ function form_format_list() {
     ?>
         <a href="<? the_permalink(); ?>" class="list-group-item list-group-item-action <?= $GLOBALS['isActive'][0] ?>">All</a>
 
-        <a href="?sort=Gallery" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][1] ?>">Gallery</a>
-        <a href="?sort=Music" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">Music</a>
-        <a href="?sort=SVAD" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">SVAD</a>
-        <a href="?sort=Theatre" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">Theatre</a>
+        <a href="<?= get_permalink() ?>?sort=Gallery" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][1] ?>">Gallery</a>
+        <a href="<?= get_permalink() ?>?sort=Music" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][2] ?>">Music</a>
+        <a href="<?= get_permalink() ?>?sort=SVAD" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][3] ?>">SVAD</a>
+        <a href="<?= get_permalink() ?>?sort=Theatre" name="sort" class="cah-event-filter-button list-group-item list-group-item-action <?= $GLOBALS['isActive'][4] ?>">Theatre</a>
     <?
 }
 
@@ -74,7 +74,13 @@ function form_format_dropdown() {
 // Determines which events to show and their path.
 function parse_categories() {
     if (isset($_GET['sort'])) {
-        $category = $_GET['sort'];
+        $sort = $_GET['sort'];
+
+        if (strpos($sort, "?page=") !== false) {
+            $category = substr($_GET['sort'], 0, strpos($_GET['sort'], "?"));
+        } else {
+            $category = $sort;
+        }
         
         switch ($category) {
             case "Gallery":

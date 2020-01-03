@@ -6,13 +6,18 @@
 
 function print_handler($number_events_to_show) {
     $events = events_index();
-    $page_number = page_link();
+    $page_number = page_number();
     
+    // For debugging.
     spaced_array(array(
         "<strong>Number of events: </strong>" . count($events),
         "<strong>Number of pages: </strong>" . $GLOBALS['num_of_pages'],
-        "<strong>Current page number: </strong>" . page_link(),
+        "<strong>Current page number: </strong>" . page_number(),
         "<strong>Current category: </strong>" . $GLOBALS['activeCat'],
+        "<strong>Permalink: </strong>" . get_permalink(),
+        "<strong>URI: </strong>" . $_SERVER['REQUEST_URI'],
+        "<strong>Current URL: </strong>" . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
+        "<strong>Wanted: </strong>" . get_permalink() . "?sort=" . $GLOBALS['activeCat'],
     ));
 
     if (empty($events)) {
@@ -40,7 +45,7 @@ function print_handler($number_events_to_show) {
             $end = strtotime($events[$i]->ends);
             
             $category = parse_event_category($events[$i]->tags);
-
+            
             event_item_template($events[$i]->url, $start, $end, $events[$i]->title, $category, $events[$i]->description);
         }
     }

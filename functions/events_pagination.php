@@ -22,7 +22,14 @@ function events_pagination($num_events_to_show) {
     // For ease of typing.
     $num_of_pages = $GLOBALS['num_of_pages'];
 
-    $page_number = page_link();
+    $page_number = page_number();
+
+    // Generates each page number's link.
+    if (isset($_GET['sort'])) {
+        $base_page_link = get_permalink() . "?sort=" . $GLOBALS['activeCat'];
+    } else {
+        $base_page_link = get_permalink();
+    }
 
     ?>
         <div class="row my-3">
@@ -31,7 +38,7 @@ function events_pagination($num_events_to_show) {
                     <ul class="pagination justify-content-center">
                         <? // Previous ?>
                         <li class="page-item<? if ($page_number == 1) { echo ' disabled'; } else { echo ''; } ?>">
-                            <a href="<?= '?page=' . ($page_number - 1) ?>" class="page-link" tabindex="-1">«</a>
+                            <a href="<?= $base_page_link . '?page=' . ($page_number - 1) ?>" class="page-link" tabindex="-1">«</a>
                         </li>
 
                         <?
@@ -40,7 +47,7 @@ function events_pagination($num_events_to_show) {
                             while ($i <= $num_of_pages) {
                                 ?>
                                     <li class="page-item<? if ($page_number == $i) { echo ' active'; } else { echo ''; } ?>">
-                                        <a href="<?= '?page=' . $i ?>" name="page" class="page-link"><?= $i ?></a>
+                                        <a href="<?= $base_page_link .  "?page=" . $i ?>" name="page" class="page-link"><?= $i ?></a>
                                     </li>
                                 <?
 
@@ -50,7 +57,7 @@ function events_pagination($num_events_to_show) {
 
                         <? // Next ?>
                         <li class="page-item<? if ($page_number == $num_of_pages) { echo ' disabled'; } else { echo ''; } ?>">
-                            <a href="<?= '?page=' . ($page_number + 1) ?>" class="page-link" >»</a>
+                            <a href="<?= $base_page_link . '?page=' . ($page_number + 1) ?>" class="page-link" >»</a>
                         </li>
                     </ul>
                 </nav>
@@ -59,7 +66,7 @@ function events_pagination($num_events_to_show) {
     <?
 }
 
-function page_link() {
+function page_number() {
     $uri = $_SERVER['REQUEST_URI'];
     
     // Replacing the shared child page link along with the forward slashes.
