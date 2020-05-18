@@ -31,8 +31,4 @@ function spaced_array($strings) {
 	}
 }
 
-function test() {
-    spaced("TEST");
-}
-
 ?>
