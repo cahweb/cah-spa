@@ -3,7 +3,68 @@
  Theme URI: https://devspa.cah.ucf.edu
  Description: Theme for the UCF School of Performing Arts
  Author: CAH Web Team
- Template: Colleges-Theme
+ Template: UCF-WordPress-Theme
  Version: 0.0.1
  Text Domain: ucf-spa
 */
+
+.photo-tile {
+  min-height: 12.5vw;
+  color: #fff; }
+  .photo-tile:hover {
+    text-decoration: none;
+    color: #fff; }
+  .photo-tile > a {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    text-decoration: none;
+    overflow: hidden;
+    z-index: 0; }
+    .photo-tile > a > img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-transition: -webkit-filter .35s ease-in-out;
+      transition: -webkit-filter .35s ease-in-out;
+      transition: filter .35s ease-in-out;
+      transition: filter .35s ease-in-out, -webkit-filter .35s ease-in-out;
+      -webkit-filter: grayscale(1) sepia(0.15) contrast(0.65) brightness(0.65);
+      filter: grayscale(1) sepia(0.15) contrast(0.65) brightness(0.65);
+      height: calc(100% + 1px);
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: calc(100% + 1px);
+      z-index: -1; }
+      .photo-tile > a > img:active, .photo-tile > a > img:focus, .photo-tile > a > img:hover {
+        -webkit-filter: none;
+        filter: none; }
+    .photo-tile > a > span {
+      line-height: .93;
+      margin-left: .2em;
+      text-shadow: 1px 1px 4px #000;
+      pointer-events: none;
+      color: #FFF;
+      text-transform: uppercase;
+      padding: 1rem; }
+  .photo-tile p, .photo-tile br {
+    display: none; }
+
+.spasubmenu {
+  font-weight: bold;
+  text-decoration: underline;
+  padding-top: 1.2em;
+}
+
+.small {
+  font-size: 90%;
+  padding-left: 27px;
+  line-height: 1.3;
+}
