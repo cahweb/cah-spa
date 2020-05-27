@@ -24,6 +24,12 @@ $phone = $custom["phone"][0];
 $location = $custom['location'][0];*/
 $contactfaculty = $custom['contactfaculty'][0];
 
+if (!empty($custom['test'][0])) {
+    $test = $custom['test'][0];
+} else {
+    $test = "";
+}
+
 $title = get_the_title( $post->ID );
 
 $dept = DEPT;
@@ -96,11 +102,9 @@ else if( stripos( $title, 'music' ) !== false ) {
                    href="/faculty-staff/?id=<?= $contactfaculty; ?>"><strong><?= $row['fullname']; ?></strong></a>
 
                 <?= $outLocationHTML; ?>
-                <? if (!empty($row['email']))
-                    echo "<br><a href='mailto:{$row['email']}'>" . $row['email'] . "</a>"; ?>
-                    <? if (!empty($row['phone']))
-                    echo "<br>Phone: " . $row['phone'] . "</a>"; ?>
-<br><br>
+                <? if (!empty($row['email'])) echo "<br><a href='mailto:{$row['email']}'>" . $row['email'] . "</a>"; ?>
+                <? if (!empty($row['phone'])) echo "<br>Phone: " . $row['phone'] . "</a>"; ?>
+                <br><br>
                 <!--           <p class="pt-2"><strong>Department Contact</strong><br>-->
                 <!--           <a href="mailto:flfacult@ucf.edu">flfacult@ucf.edu</a></p>-->
             <? endif; ?>
@@ -129,9 +133,16 @@ else if( stripos( $title, 'music' ) !== false ) {
             <? endif; ?>
 
             <? if (!empty($catalog)): ?>
-                <br>
-                <a href="<?= $catalog; ?>" class="btn btn-primary btn-sm mt-3" target="_blank">
-                    UCF Catalog</a>
+                <div class="text-center mt-3">
+                    <a href="<?= $catalog; ?>" class="btn btn-primary btn-sm" target="_blank">UCF Catalog</a>
+                </div>
+            <? endif; ?>
+
+            <? if (!empty($test)): ?>
+                <div>
+                    <h1><?= $test ?></h1>
+                    <p>Testing</p>
+                </div>
             <? endif; ?>
 
             <? if (!empty($flyer)): ?>

@@ -3,7 +3,7 @@
  * Custom functions for the SPA theme.
  */
 
- include "dev/dev.php";
+include "dev/dev.php";
 
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 function my_theme_enqueue_styles() {
@@ -31,15 +31,6 @@ function get_header_default_markup( $post ) {
 	$title         = get_header_title( $post );
 	$subtitle      = get_header_subtitle( $post );
 	$extra_content = get_field( 'page_header_extra_content', $post->ID );
-
-	// spaced_array(array(
-	// 	"Title: " . $title,
-	// 	"Subtitle: " . $subtitle,
-	// 	"ID: " . $post->ID,
-	// 	"Post type: " . $post->post_type,
-	// 	"Extra content: " . gettype($extra_content)
-	// ));
-
 	ob_start();
 ?>
 

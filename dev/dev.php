@@ -7,7 +7,7 @@
 */
 
 // Displays error messages and saves lives.
-ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 // error_reporting(E_ALL);
 
 function spaced($string) {
