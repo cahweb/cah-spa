@@ -1,28 +1,40 @@
-<?php get_header();
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
-?>
+<? /*
 
-<?php
+    Generates Degree Program page views.
+    Input options are handled by the Common - Degree Programs CPT plugin.
+        Located at: //net.ucf.edu/cah/NET1252_WEBSITES/wordpress/wp-content/plugins/common-degree-programs
+
+*/ ?>
+
+<? get_header(); ?>
+
+<?
+
 global $post;
-$category_array=array();
+
+$category_array = array();
 $categories = get_the_category($post->ID);
-foreach($categories as $cd){
-$category_array[]=$cd->cat_name;
+foreach ($categories as $cd) {
+    $category_array[]=$cd->cat_name;
 }
+
 $custom = get_post_custom($post->ID);
+
 $subtitle = $custom["subtitle"][0];
-$description = $custom["description"][0];
-$requirements = $custom["requirements"][0];
 $catalog = $custom["catalog"][0];
 $flyer = $custom["flyer"][0];
-$level = $custom["level"][0];
 $flyername = $custom["flyername"][0];
-/*$name = $custom["name"][0];
+$level = $custom["level"][0];
+
+$description = $custom["description"][0];
+$requirements = $custom["requirements"][0];
+
+$name = $custom["name"][0];
 $email = $custom["email"][0];
 $phone = $custom["phone"][0];
-$location = $custom['location'][0];*/
+$location = $custom['location'][0];
 $contactfaculty = $custom['contactfaculty'][0];
+$contact_info = array("name" => $name, "email" => $email, "phone" => $phone, "location" => $location);
 
 if (!empty($custom['test'][0])) {
     $test = $custom['test'][0];
@@ -30,14 +42,13 @@ if (!empty($custom['test'][0])) {
     $test = "";
 }
 
-$title = get_the_title( $post->ID );
+$title = get_the_title($post->ID);
 
 $dept = DEPT;
 
-if( stripos( $title, 'theatre' ) !== false ) {
+if (stripos($title, 'theatre') !== false) {
     $dept = 20;
-}
-else if( stripos( $title, 'music' ) !== false ) {
+} else if (stripos($title, 'music') !== false) {
     $dept = 13;
 }
 
@@ -45,7 +56,6 @@ else if( stripos( $title, 'music' ) !== false ) {
 
 <script src="<?php echo get_stylesheet_uri(); ?>/../library/js/jqueryUI/jquery-ui.min.js"></script>
 <link href="<?php echo get_stylesheet_uri(); ?>/../library/js/jqueryUI/jquery-ui.min.css" rel="stylesheet">
-
 
 <div class="container pt-4 pb-4">
     <div class="row" id="degree-div">
@@ -61,13 +71,10 @@ else if( stripos( $title, 'music' ) !== false ) {
                 </div>
             <? endif; ?>
         </div>
+
         <div class="col-md-4 separated-col">
 
-            <? echo '<p style="display:none;">' . $contactfaculty .'</p>';?>
-
-            
-
-        <? if (!empty($contactfaculty)): ?>
+            <? if (!empty($contactfaculty)): ?>
                 <h3 class="text-primary">Contact</h3>
                 <?
                 $sql = sql_showstaff( $dept, 0, $contactfaculty, 0, 1);
@@ -107,9 +114,7 @@ else if( stripos( $title, 'music' ) !== false ) {
                 <br><br>
                 <!--           <p class="pt-2"><strong>Department Contact</strong><br>-->
                 <!--           <a href="mailto:flfacult@ucf.edu">flfacult@ucf.edu</a></p>-->
-            <? endif; ?>
-            
-            
+            <? endif; ?>       
             
             <? if ($dept == 5): ?>
                 <? if (empty($contactfaculty)): ?>
@@ -147,12 +152,52 @@ else if( stripos( $title, 'music' ) !== false ) {
 
             <? if (!empty($flyer)): ?>
                 <br><span style="display:block;"><a href="<?= $flyer; ?>" class="btn btn-primary btn-sm mt-3" target="_blank">
-            <? echo empty($flyername)?  "Program Attachment": $flyername; ?></a></span>
+                <? echo empty($flyername)?  "Program Attachment": $flyername; ?></a></span>
             <? endif; ?>
+
+            <?
+                // Contact Information
+                $i = 0;
+                foreach ($contact_info as $key => $value) {
+                    if (!empty($value)) {
+                        if ($i === 0) {
+                            echo '<h3 class="text-primary mt-4">Contact</h3>';
+                        }
+                        
+                        echo tsh($key, $value) . "<br>";
+                    }
+
+                    $i++;
+                }
+            ?>
 
         </div>
     </div>
 </div>
+
+<?
+    $post_id = get_the_ID();
+    $post_atts = get_post_custom($post_id);
+
+    echo '<div class="container">';
+
+        dev_cont(array(
+            tsh("Post ID", $post_id),
+            tsh("Post Link", get_the_permalink($post_id)),
+        ));
+
+        // echo '<pre>' . print_r($post_atts) . '</pre>';
+
+        foreach ($post_atts as $key => $value) {
+            if (!empty($value[0])) {
+                echo tsh($key, $value[0]) . "<br>";
+            }
+
+        }
+
+    echo '</div>';
+
+?>
 
 <?php get_footer(); ?>
 
