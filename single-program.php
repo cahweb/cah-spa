@@ -24,6 +24,7 @@ $subtitle = $custom["subtitle"][0];
 $catalog = $custom["catalog"][0];
 $flyer = $custom["flyer"][0];
 $flyername = $custom["flyername"][0];
+$program_category = $custom['program_category'][0];
 $level = $custom["level"][0];
 
 $description = $custom["description"][0];
@@ -179,11 +180,20 @@ if (stripos($title, 'theatre') !== false) {
     $post_id = get_the_ID();
     $post_atts = get_post_custom($post_id);
 
+    // Get Featured Image
+    if (has_post_thumbnail($post_id)) {
+        // $featured_image = wp_get_attachment_img_src(get_post_thumbnail_id($post_id), 'single-post-thumbnail');
+        $featured_image = get_the_post_thumbnail_url($post_id);
+    } else {
+        $featured_image = "N/A";
+    }
+
     echo '<div class="container">';
 
         dev_cont(array(
             tsh("Post ID", $post_id),
             tsh("Post Link", get_the_permalink($post_id)),
+            tsh("Featured Image", $featured_image),
         ));
 
         // echo '<pre>' . print_r($post_atts) . '</pre>';
