@@ -14,11 +14,18 @@ add_shortcode('degree-cards', 'degree_cards_handler');
 function degree_cards_handler($atts = []) {
 	$attributes = shortcode_atts([
         'dept' => '',
-        'level' => '',
+		'level' => '',
+		'desc-limit' => 250,
     ], $atts);
 
     $degree_dept = $atts['dept'];
-    $degree_level = $atts['level'];
+	$degree_level = $atts['level'];
+	
+	if (empty($atts['desc-limit'])) {
+		$desc_limit = 250;
+	} else {
+		$desc_limit = $atts['desc-limit'];
+	}
 
 	ob_start();
 
@@ -30,13 +37,14 @@ function degree_cards_handler($atts = []) {
 				<a v-bind:href="degreeProgram.post_link" style="color: inherit; text-decoration: inherit;">
 					<img v-bind:src="degreeProgram.featured_image" v-bind:alt="'Image for ' + degreeProgram.post_title" class="card-img-top custom-card-img " height="150">
 
-					<div class="bg-primary" style="height: 0.6rem"></div>
+					<div v-if="degreeProgram.program_category === 'music'" class="bg-danger" style="height: 0.6rem"></div>
+					<div v-if="degreeProgram.program_category === 'theatre'" class="bg-primary" style="height: 0.6rem"></div>
 
-					<div class="card-body p-4">
-						<h1 class="card-title mb-3 h4">{{ degreeProgram.post_title }}</h1>
-						<h2 class="card-subtitle mb-4 h6 font-weight-normal font-italic text-capitalize text-muted">{{ degreeProgram.subtitle }}</h2>
+					<div class="card-body p-3">
+						<h1 class="card-title mb-3 h4 text-uppercase font-condensed">{{ degreeProgram.post_title }}</h1>
+						<h2 class="card-subtitle mb-3 h6 font-weight-normal font-italic text-muted text-transform-none">{{ degreeProgram.subtitle }}</h2>
 
-						<p class="card-text mb-4">{{ shortenDescription(degreeProgram.description) }}</p>
+						<p class="card-text mb-3">{{ shortenDescription(degreeProgram.description) }}</p>
 					</div>
 				</a>
 			</div>
@@ -61,8 +69,8 @@ function degree_cards_handler($atts = []) {
 				degreeFilters: ["Music", "Theatre"],
 				degreeLevels: ["undergrad", "grad", "minor", "cert"],
 
-				selectedDept: "<?= $degree_dept ?>",
-				selectedLevel: "<?= $degree_level ?>",
+				selectedDept: "<?= strtolower($degree_dept) ?>",
+				selectedLevel: "<?= strtolower($degree_level) ?>",
 			},
 			computed: {
 				abcDegreePrograms: function() {
@@ -115,10 +123,13 @@ function degree_cards_handler($atts = []) {
 						var shortDesc = strArr[0].concat(".").concat(strArr[1])
 						
 						var strLen = shortDesc.length
-						var preferredStrLen = 250
+						// var preferredStrLen = 250
+						var preferredStrLen = parseInt("<?= $desc_limit ?>")
+
+						console.log("<?= $descLimit ?>");
 						
 						if (strLen >= preferredStrLen) {
-							return shortDesc.substr(0, preferredStrLen) + " . . ."
+							return shortDesc.substr(0, preferredStrLen) + " . . ."
 						} else {
 							// If the last sentence does not contain a period, add one.
 							if (shortDesc.substr(str.length - 1, shortDesc.length).trim() !== ".") {
