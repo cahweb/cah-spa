@@ -51,45 +51,47 @@ function dev_cont($strings) {
 	<?
 }
 
-add_shortcode('dev-spa', 'dev_spa_handler');
+add_shortcode('degree-cards', 'degree_cards_handler');
 
-function dev_spa_handler() {
+function degree_cards_handler($atts = []) {
+	$attributes = shortcode_atts([
+        'dept' => '',
+        'level' => '',
+    ], $atts);
+
+    $degree_dept = $atts['dept'];
+    $degree_level = $atts['level'];
+
 	ob_start();
 
 	?>
 
 	<div id="app">
-		<div v-for="degreeFilter in degreeFilters">
-			<h2>{{ degreeFilter }}</h2>
-		
-			<div class="row mx-0">
-				<div v-for="degreeProgram in filteredDegreePrograms(degreePrograms, degreeFilter)" class="card col-lg-3 mb-4 px-0" style="min-width: 31%; margin-right: 1rem">
-					<img v-bind:src="degreeProgram.featured_image" v-bind:alt="'Image for ' + degreeProgram.post_title" class="card-img-top">
+		<div class="row mx-0">
+			<div v-for="degreeProgram in abcDegreePrograms" class="card col-lg-3 mb-4 px-0 card-hover" style="min-width: 31%; margin-right: 1rem">
+				<a v-bind:href="degreeProgram.post_link" style="color: inherit; text-decoration: inherit;">
+					<img v-bind:src="degreeProgram.featured_image" v-bind:alt="'Image for ' + degreeProgram.post_title" class="card-img-top custom-card-img " height="150">
 
 					<div class="bg-primary" style="height: 0.6rem"></div>
 
 					<div class="card-body p-4">
-						<h4 class="card-title mb-3">{{ degreeProgram.post_title }}</h4>
-						<h5 class="card-subtitle mb-4 h6 font-weight-normal font-italic text-muted">{{ degreeProgram.subtitle }}</h5>
+						<h1 class="card-title mb-3 h4">{{ degreeProgram.post_title }}</h1>
+						<h2 class="card-subtitle mb-4 h6 font-weight-normal font-italic text-capitalize text-muted">{{ degreeProgram.subtitle }}</h2>
 
 						<p class="card-text mb-4">{{ shortenDescription(degreeProgram.description) }}</p>
-
-						<a v-bind:href="degreeProgram.post_link" class="btn btn-primary">Learn More</a>
 					</div>
-				</div>
+				</a>
 			</div>
 		</div>
 	</div>
 
 	<?
 
-	if ($dev) {
-		// Most up-to-date developer version of Vue.js.
-		echo '<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>';
-	} else {
-		// Production version 2.6.11.
-		echo '<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>';
-	}
+	// // Most up-to-date developer version of Vue.js.
+	// echo '<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>';
+
+	// Production version 2.6.11.
+	echo '<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>';
 
 	?>
 
@@ -99,19 +101,51 @@ function dev_spa_handler() {
 			data: {
 				degreePrograms: <? print json_encode(index_degree_programs()) ?>,
 				degreeFilters: ["Music", "Theatre"],
-				degreeLevel: ["Undergraduate", "Graduate", "Minor", "Certificate"]
+				degreeLevels: ["undergrad", "grad", "minor", "cert"],
+
+				selectedDept: "<?= $degree_dept ?>",
+				selectedLevel: "<?= $degree_level ?>",
+			},
+			computed: {
+				abcDegreePrograms: function() {
+					this.sortNestedArrABC(this.degreePrograms, 'post_title')
+
+					this.sortNestedArrABC(this.degreePrograms, 'level')
+
+					sortedArr = this.sortArrByLevel(this.degreePrograms, this.selectedLevel)
+
+					return this.filterByDegreeProgram(sortedArr, this.selectedDept)
+				}
 			},
 			methods: {
-				filteredDegreePrograms: function(degreePrograms, filter) {
+				filterByDegreeProgram: function(degreePrograms, filter) {
 					var filteredArr = []
-
-					degreePrograms.forEach(function(item) {
-						if (item['program_category'] === filter.toLowerCase()) {
-							filteredArr.push(item);
-						}
-					})
-
-					return filteredArr
+					
+					if (filter) {
+						degreePrograms.forEach(function(item) {
+							if (item['program_category'] === filter.toLowerCase()) {
+								filteredArr.push(item);
+							}
+						})
+						
+						return filteredArr
+					} else {
+						return degreePrograms
+					}
+				},
+				getFullDegreeLevel: function(degreeLevel) {
+					switch (degreeLevel) {
+						case "undergrad":
+							return "Undergraduate"
+						case "grad":
+							return "Graduate"
+						case "minor":
+							return "Minor"
+						case "cert":
+							return "Certificate"
+						default:
+							return ""
+					}
 				},
 				shortenDescription: function(description) {
 					if (description) {
@@ -121,8 +155,6 @@ function dev_spa_handler() {
 						
 						var strArr = str.split(".", 2)
 						var shortDesc = strArr[0].concat(".").concat(strArr[1])
-
-						console.log(shortDesc);
 						
 						var strLen = shortDesc.length
 						var preferredStrLen = 250
@@ -139,6 +171,59 @@ function dev_spa_handler() {
 						}
 					}
                 },
+				sortNestedArrABC: function(arr, criteria) {
+					// Sorts the degree programs alphabetically.
+					arr.sort(function(a, b) {
+						var x = a[criteria]
+						var y = b[criteria]
+
+						if (x < y) {
+							return -1;
+						} else if (x > y) {
+							return 1;
+						} else {
+							return 0;
+						}
+					})
+				},
+				sortArrByLevel: function(arr, filter) {
+					var undergrad = []
+					var minor = []
+					var grad = []
+					var cert = []
+					
+					arr.forEach(function(item) {
+						switch (item['level']) {
+							case "undergrad":
+								undergrad.push(item);
+								break;
+							case "minor":
+								minor.push(item);
+								break;
+							case "grad":
+								grad.push(item);
+								break;
+							case "cert":
+								cert.push(item);
+								break;
+						}
+					})
+
+					if (filter.toLowerCase()) {
+						switch (filter) {
+							case "undergrad":
+								return undergrad
+							case "minor":
+								return minor
+							case "grad":
+								return grad
+							case "cert":
+								return cert
+						}
+					} else {
+						return undergrad.concat(minor.concat(grad.concat(cert)))
+					}
+				},
 			}
 		})
 	</script>
@@ -175,6 +260,10 @@ function index_degree_programs() {
 		foreach ($degree_program_atts as $key => $value) {
 			if (!empty($value[0])) {
 				if ($key === "subtitle" || $key === "description" || $key === "level" || $key === "program_category") {
+					if ($key === "level") {
+						$each_degree_program[$key] = "Test";
+					}
+
 					$each_degree_program[$key] = $value[0];
 				}
 			}
