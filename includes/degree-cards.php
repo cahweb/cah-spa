@@ -6,7 +6,8 @@
     - Shortcode used to display degree program cards on SPA.
     - Optional parameters:
         - dept: music, theatre
-        - level: undergrad, minor, grad, cert
+		- level: undergrad, minor, grad, cert
+		- desc_limit: Some integer. Sets the upper chararcter limit for the program's description.
 */
 
 add_shortcode('degree-cards', 'degree_cards_handler');
@@ -17,9 +18,23 @@ function degree_cards_handler($atts = []) {
 		'level' => '',
 		'desc-limit' => 250,
     ], $atts);
+	
+    $degree_dept = strtolower($atts['dept']);
+	$degree_level = strtolower($atts['level']);
 
-    $degree_dept = $atts['dept'];
-	$degree_level = $atts['level'];
+	if (!empty($degree_level)) {
+		switch ($degree_level) {
+			case "undergraduate":
+				$degree_level = "undergrad";
+				break;
+			case "graduate":
+				$degree_level = "grad";
+				break;
+			case "certificate":
+				$degree_level = "cert";
+				break;
+		}
+	}
 	
 	if (empty($atts['desc-limit'])) {
 		$desc_limit = 250;
@@ -31,171 +46,28 @@ function degree_cards_handler($atts = []) {
 
 	?>
 
-	<div id="app">
-		<div class="row mx-0">
-			<div v-for="degreeProgram in abcDegreePrograms" class="card col-lg-3 mb-4 px-0 card-hover" style="min-width: 31%; margin-right: 1rem">
-				<a v-bind:href="degreeProgram.post_link" style="color: inherit; text-decoration: inherit;">
-					<img v-bind:src="degreeProgram.featured_image" v-bind:alt="'Image for ' + degreeProgram.post_title" class="card-img-top custom-card-img " height="150">
+	<div class="row mx-0">
+		<? foreach (get_specific_degree_programs($degree_dept, $degree_level) as $program): ?>
+		<div class="card col-lg-3 mb-4 px-0 card-hover" style="min-width: 31%; margin-right: 1rem">
+			<a href="<?= $program['post_link'] ?>" style="color: inherit; text-decoration: inherit;">
+				<img src="<?= $program['featured_image'] ?>" alt="Image for <?= $program['post_title'] ?>" class="card-img-top custom-card-img" height="150">
 
-					<div v-if="degreeProgram.program_category === 'music'" class="bg-danger" style="height: 0.6rem"></div>
-					<div v-if="degreeProgram.program_category === 'theatre'" class="bg-primary" style="height: 0.6rem"></div>
+				<? if ($program['program_category'] === 'music'): ?>
+				<div class="" style="height: 0.6rem; background-color: #33a6ff"></div>
+				<? elseif ($program['program_category'] === 'theatre'): ?>
+				<div class="" style="height: 0.6rem; background-color: #dc0f5e"></div>
+				<? endif; ?>
 
-					<div class="card-body p-3">
-						<h1 class="card-title mb-3 h4 text-uppercase font-condensed">{{ degreeProgram.post_title }}</h1>
-						<h2 class="card-subtitle mb-3 h6 font-weight-normal font-italic text-muted text-transform-none">{{ degreeProgram.subtitle }}</h2>
+				<div class="card-body p-3">
+					<h1 class="card-title mb-3 h4 text-uppercase font-condensed"><?= $program['post_title'] ?></h1>
+					<h2 class="card-subtitle mb-3 h6 font-weight-normal font-italic text-muted text-transform-none"><?= $program['subtitle'] ?></h2>
 
-						<p class="card-text mb-3">{{ shortenDescription(degreeProgram.description) }}</p>
-					</div>
-				</a>
-			</div>
+					<p class="card-text mb-3" style="font-size: 0.9rem"><?= shorten_desc($program['description'], $desc_limit) ?></p>
+				</div>
+			</a>
 		</div>
+		<? endforeach; ?>
 	</div>
-
-	<?
-
-	// // Most up-to-date developer version of Vue.js.
-	// echo '<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>';
-
-	// Production version 2.6.11.
-	echo '<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>';
-
-	?>
-
-	<script>
-		new Vue({
-			el: "#app",
-			data: {
-				degreePrograms: <? print json_encode(index_degree_programs()) ?>,
-				degreeFilters: ["Music", "Theatre"],
-				degreeLevels: ["undergrad", "grad", "minor", "cert"],
-
-				selectedDept: "<?= strtolower($degree_dept) ?>",
-				selectedLevel: "<?= strtolower($degree_level) ?>",
-			},
-			computed: {
-				abcDegreePrograms: function() {
-					this.sortNestedArrABC(this.degreePrograms, 'post_title')
-
-					this.sortNestedArrABC(this.degreePrograms, 'level')
-
-					sortedArr = this.sortArrByLevel(this.degreePrograms, this.selectedLevel)
-
-					return this.filterByDegreeProgram(sortedArr, this.selectedDept)
-				}
-			},
-			methods: {
-				filterByDegreeProgram: function(degreePrograms, filter) {
-					var filteredArr = []
-					
-					if (filter) {
-						degreePrograms.forEach(function(item) {
-							if (item['program_category'] === filter.toLowerCase()) {
-								filteredArr.push(item);
-							}
-						})
-						
-						return filteredArr
-					} else {
-						return degreePrograms
-					}
-				},
-				getFullDegreeLevel: function(degreeLevel) {
-					switch (degreeLevel) {
-						case "undergrad":
-							return "Undergraduate"
-						case "grad":
-							return "Graduate"
-						case "minor":
-							return "Minor"
-						case "cert":
-							return "Certificate"
-						default:
-							return ""
-					}
-				},
-				shortenDescription: function(description) {
-					if (description) {
-						var str = description.replace(/(\n|<br>|<p>|<\/p>|<span>|<\/span>|<li>|<\/li>)/igm, " ").trim()
-						str = str.replace(/(\s\s+)/igm, " ").trim()
-						str = str.replace(/(<a.*?>|<\/a>|<strong>|<\/strong>|<ul>|<\/ul>)/igm, "").trim()
-						
-						var strArr = str.split(".", 2)
-						var shortDesc = strArr[0].concat(".").concat(strArr[1])
-						
-						var strLen = shortDesc.length
-						// var preferredStrLen = 250
-						var preferredStrLen = parseInt("<?= $desc_limit ?>")
-
-						console.log("<?= $descLimit ?>");
-						
-						if (strLen >= preferredStrLen) {
-							return shortDesc.substr(0, preferredStrLen) + " . . ."
-						} else {
-							// If the last sentence does not contain a period, add one.
-							if (shortDesc.substr(str.length - 1, shortDesc.length).trim() !== ".") {
-								shortDesc += "."
-							}
-	
-							return shortDesc
-						}
-					}
-                },
-				sortNestedArrABC: function(arr, criteria) {
-					// Sorts the degree programs alphabetically.
-					arr.sort(function(a, b) {
-						var x = a[criteria]
-						var y = b[criteria]
-
-						if (x < y) {
-							return -1;
-						} else if (x > y) {
-							return 1;
-						} else {
-							return 0;
-						}
-					})
-				},
-				sortArrByLevel: function(arr, filter) {
-					var undergrad = []
-					var minor = []
-					var grad = []
-					var cert = []
-					
-					arr.forEach(function(item) {
-						switch (item['level']) {
-							case "undergrad":
-								undergrad.push(item);
-								break;
-							case "minor":
-								minor.push(item);
-								break;
-							case "grad":
-								grad.push(item);
-								break;
-							case "cert":
-								cert.push(item);
-								break;
-						}
-					})
-
-					if (filter.toLowerCase()) {
-						switch (filter) {
-							case "undergrad":
-								return undergrad
-							case "minor":
-								return minor
-							case "grad":
-								return grad
-							case "cert":
-								return cert
-						}
-					} else {
-						return undergrad.concat(minor.concat(grad.concat(cert)))
-					}
-				},
-			}
-		})
-	</script>
 
 	<?
 
@@ -229,10 +101,6 @@ function index_degree_programs() {
 		foreach ($degree_program_atts as $key => $value) {
 			if (!empty($value[0])) {
 				if ($key === "subtitle" || $key === "description" || $key === "level" || $key === "program_category") {
-					if ($key === "level") {
-						$each_degree_program[$key] = "Test";
-					}
-
 					$each_degree_program[$key] = $value[0];
 				}
 			}
@@ -243,6 +111,51 @@ function index_degree_programs() {
 
 
 	return $indexed_degree_programs;
+}
+
+function get_specific_degree_programs($degree_dept, $degree_level) {
+	$filteredArr = array();
+	$ogArr = index_degree_programs();
+
+	foreach($ogArr as $program) {
+		if ($program['program_category'] === $degree_dept && $program['level'] === $degree_level) {
+			array_push($filteredArr, $program);
+		} elseif ($program['program_category'] === $degree_dept && empty($program['level'])) {
+			array_push($filteredArr, $program);
+		} elseif (empty($program['program_category']) && $program['level'] === $degree_level) {
+			array_push($filteredArr, $program);
+		}
+	}
+	
+	// Sorts it alphabetically by title.
+	usort($filteredArr, function ($elem1, $elem2) {
+		return strcmp($elem1['post_title'], $elem2['post_title']);
+	});
+	   
+	if (empty($degree_level)) {
+		// Sorts it by level.
+		usort($filteredArr, function ($elem1, $elem2) {
+			return strcmp($elem1['level'], $elem2['level']);
+		});
+	}
+
+	return $filteredArr;
+}
+
+function shorten_desc($desc, $desc_limit) {
+	$shorten_desc = substr($desc, 0, $desc_limit);
+	$shorten_desc = substr($desc, 0, strrpos($shorten_desc," "));
+
+	$newStrLen = strlen($shorten_desc);
+	$punctuation = array('.', '?', '!');
+
+	if ($newStrLen > 0 && $newStrLen < $desc_limit) {
+		if (!in_array($shorten_desc[$newStrLen - 1], $punctuation)) {
+			return $shorten_desc . "&nbsp;.&nbsp;.&nbsp;.";
+		}
+
+		return $shorten_desc;
+	}
 }
 
 ?>
