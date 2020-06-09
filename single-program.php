@@ -185,16 +185,19 @@ if (stripos($title, 'theatre') !== false) {
         dev_cont(array(
             tsh("Post ID", $post_id),
             tsh("Post Link", get_the_permalink($post_id)),
+            tsh("Excerpt", get_the_excerpt($post_id)),
         ));
 
-        echo '<pre>' . print_r($post_atts) . '</pre>';
+        // echo '<pre>';
+        // print_r($post_atts);
+        // echo '</pre>';
 
-        // foreach ($post_atts as $key => $value) {
-        //     if (!empty($value[0])) {
-        //         echo tsh($key, $value[0]) . "<br>";
-        //     }
+        foreach ($post_atts as $key => $value) {
+            if (!empty($value[0])) {
+                echo tsh($key, $value[0]) . "<br>";
+            }
 
-        // }
+        }
 
     echo '</div>';
 
