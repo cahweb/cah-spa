@@ -192,12 +192,37 @@ if (stripos($title, 'theatre') !== false) {
         // print_r($post_atts);
         // echo '</pre>';
 
-        foreach ($post_atts as $key => $value) {
-            if (!empty($value[0])) {
-                echo tsh($key, $value[0]) . "<br>";
-            }
+        // foreach ($post_atts as $key => $value) {
+        //     if (!empty($value[0])) {
+        //         echo tsh($key, $value[0]) . "<br>";
+        //     }
 
+        // }
+
+        $sidebar_sections = maybe_unserialize(get_post_meta($post_id, 'sidebar-sections', true));
+    
+        foreach ($sidebar_sections as $sidebar_section) {
+            foreach ($sidebar_section as $key => $value) {
+                if (!empty($value)) {
+                    if (is_array($value)) {
+                        echo "<strong>" . $key . ":</strong><br>";
+                        echo "<ul>";
+                        foreach ($value as $key2 => $value2) {
+                            echo "<li>" . tsh($key2, $value2) . "</li>";
+                        }
+                        echo "</ul>";
+                    } else {
+                        echo tsh($key, $value) . "<br>";
+                    }
+                } else {
+                    echo tsh($key, "EMPTY") . "<br>";
+                }
+            }
         }
+
+        // echo '<pre>';
+        // print_r($sidebar_sections);
+        // echo '</pre>';
 
     echo '</div>';
 
