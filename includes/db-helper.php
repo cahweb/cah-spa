@@ -1,6 +1,9 @@
 <?php
 namespace UCF\CAH;
 
+// Include the MySQL connection object from the global namespace.
+use mysqli;
+
 require_once '_mailauth.php';
 
 /**

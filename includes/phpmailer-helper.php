@@ -1,9 +1,15 @@
 <?php
 namespace UCF\CAH\MailTools;
 
+/* For Local Dev */
+require_once 'D:\\wamp64\\composer\\vendor\\autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+
 // Load PHPMailer
+/* For PROD
 require_once 'class.phpmailer.php';
 use PHPMailer as PHPMailer;
+*/
 
 // SMTP info and authorization credentials
 require_once '_mailauth.php';
@@ -60,7 +66,13 @@ if( !class_exists( 'PHPMailerHelper' ) ) {
 
             $this->mail->Host = $mail_server;
             
-            $this->mail->SMTPAuth = false;
+            /* For DEV on local */
+            $this->mail->SMTPAuth = true;
+            $this->mail->Username = $mail_username;
+            $this->mail->Password = $mail_password;
+
+            /* For PROD */
+            // $this->mail->SMTPAuth = false;
 
             /* In case the SMTP server requires authentication.
             $this->mail->SMTPAuth = true;

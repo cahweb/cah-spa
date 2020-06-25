@@ -1,0 +1,74 @@
+{
+    "ba-theatre": [
+        {
+            "text": "October 14, 2020",
+            "value": "2020-10-14"
+        },
+        {
+            "text": "October 15, 2020",
+            "value": "2020-10-15"
+        },
+        {
+            "text": "October 17, 2020",
+            "value": "2020-10-17"
+        },
+        {
+            "text": "October 18, 2020",
+            "value": "2020-10-18"
+        },
+        {
+            "text": "November 25, 2020",
+            "value": "2020-11-25"
+        },
+        {
+            "text": "November 26, 2020",
+            "value": "2020-11-26"
+        },
+        {
+            "text": "February 17, 2021",
+            "value": "2021-02-17"
+        },
+        {
+            "text": "February 21, 2021",
+            "value": "2021-02-21"
+        },
+        {
+            "text": "March 16, 2021",
+            "value": "2021-03-16"
+        },
+        {
+            "text": "March 17, 2021",
+            "value": "2021-03-17"
+        },
+        {
+            "text": "March 18, 2021",
+            "value": "2021-03-18"
+        },
+        {
+            "text": "March 19, 2021",
+            "value": "2021-03-19"
+        },
+        {
+            "text": "April 27, 2021",
+            "value": "2021-04-27"
+        },
+        {
+            "text": "April 28, 2021",
+            "value": "2021-04-28"
+        },
+        {
+            "text": "April 29, 2021",
+            "value": "2021-04-29"
+        }
+    ],
+    "general": [
+        {
+            "text": "February 15, 2021",
+            "value": "2021-02-15"
+        },
+        {
+            "text": "February 29, 2021",
+            "value": "2021-02-29"
+        }
+    ]
+}

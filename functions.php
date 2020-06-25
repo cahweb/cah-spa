@@ -66,4 +66,9 @@ function get_header_default_markup( $post ) {
 <?
 	return ob_get_clean();
 }
+
+// Theatre Audition Form
+include_once "audition-forms/theatre-audition-form/theatre-audition-form-setup.php";
+
+add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormSetup", 'setup' ], 10, 0 );
 ?>
