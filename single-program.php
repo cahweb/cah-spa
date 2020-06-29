@@ -35,7 +35,8 @@ $email = $custom["email"][0];
 $phone = $custom["phone"][0];
 $location = $custom['location'][0];
 $contactfaculty = $custom['contactfaculty'][0];
-$contact_info = array("name" => $name, "email" => $email, "phone" => $phone, "location" => $location);
+// $contact_info = array("name" => $name, "email" => $email, "phone" => $phone, "location" => $location);
+$sidebar_contact = $custom["sidebar_contact"][0];
 
 if (!empty($custom['test'][0])) {
     $test = $custom['test'][0];
@@ -169,17 +170,23 @@ if (stripos($title, 'theatre') !== false) {
 
             <?
                 // Contact Information
-                $i = 0;
-                foreach ($contact_info as $key => $value) {
-                    if (!empty($value)) {
-                        if ($i === 0) {
-                            echo '<h3 class="text-primary mt-4">Contact</h3>';
-                        }
-                        
-                        echo tsh($key, $value) . "<br>";
-                    }
 
-                    $i++;
+                // // Old
+                // $i = 0;
+                // foreach ($contact_info as $key => $value) {
+                //     if (!empty($value)) {
+                //         if ($i === 0) {
+                //             echo '<h3 class="text-primary mt-4">Contact</h3>';
+                //         }
+                        
+                //         echo tsh($key, $value) . "<br>";
+                //     }
+
+                //     $i++;
+                // }
+
+                if ($sidebar_contact) {
+                    echo apply_filters("the_content", $sidebar_contact);
                 }
             ?>
 
