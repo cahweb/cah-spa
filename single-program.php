@@ -62,7 +62,7 @@ if (stripos($title, 'theatre') !== false) {
 <div class="container pt-4 pb-4">
     <div class="row" id="degree-div">
         <div class="col-md-8">
-            <h2>Overview</h2>
+            <!-- <h2>Overview</h2> -->
             <div>
                 <?php echo apply_filters("the_content", $description); ?>
             </div>
@@ -137,7 +137,13 @@ if (stripos($title, 'theatre') !== false) {
                 <br><a href="mailto:svadadvising@ucf.edu">svadadvising@ucf.edu</a>
                 <br>407-823-1355
                 <br>NSC 121
-            <? endif; ?>   
+            <? endif; ?>
+
+            <? if (!empty($catalog)): ?>
+                <div class="mb-4">
+                    <a href="<?= $catalog; ?>" class="btn btn-primary btn-sm" target="_blank">UCF Catalog</a>
+                </div>
+            <? endif; ?>
 
             <?
                 $sidebar_sections = maybe_unserialize(get_post_meta(get_the_ID(), 'sidebar-sections', true));
@@ -156,12 +162,6 @@ if (stripos($title, 'theatre') !== false) {
                     }
                 }
             ?>
-
-            <? if (!empty($catalog)): ?>
-                <div class="mt-3">
-                    <a href="<?= $catalog; ?>" class="btn btn-primary btn-sm" target="_blank">UCF Catalog</a>
-                </div>
-            <? endif; ?>
 
             <? if (!empty($flyer)): ?>
                 <br><span style="display:block;"><a href="<?= $flyer; ?>" class="btn btn-primary btn-sm mt-3" target="_blank">
