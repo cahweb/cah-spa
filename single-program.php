@@ -35,7 +35,8 @@ $email = $custom["email"][0];
 $phone = $custom["phone"][0];
 $location = $custom['location'][0];
 $contactfaculty = $custom['contactfaculty'][0];
-$contact_info = array("name" => $name, "email" => $email, "phone" => $phone, "location" => $location);
+// $contact_info = array("name" => $name, "email" => $email, "phone" => $phone, "location" => $location);
+$sidebar_contact = $custom["sidebar_contact"][0];
 
 if (!empty($custom['test'][0])) {
     $test = $custom['test'][0];
@@ -61,7 +62,7 @@ if (stripos($title, 'theatre') !== false) {
 <div class="container pt-4 pb-4">
     <div class="row" id="degree-div">
         <div class="col-md-8">
-            <h2>Overview</h2>
+            <!-- <h2>Overview</h2> -->
             <div>
                 <?php echo apply_filters("the_content", $description); ?>
             </div>
@@ -139,17 +140,28 @@ if (stripos($title, 'theatre') !== false) {
             <? endif; ?>
 
             <? if (!empty($catalog)): ?>
-                <div class="text-center mt-3">
+                <div class="mb-4">
                     <a href="<?= $catalog; ?>" class="btn btn-primary btn-sm" target="_blank">UCF Catalog</a>
                 </div>
             <? endif; ?>
 
-            <? if (!empty($test)): ?>
-                <div>
-                    <h1><?= $test ?></h1>
-                    <p>Testing</p>
-                </div>
-            <? endif; ?>
+            <?
+                $sidebar_sections = maybe_unserialize(get_post_meta(get_the_ID(), 'sidebar-sections', true));
+
+                if (!empty($sidebar_sections)) {
+
+                    foreach ($sidebar_sections as $sidebar_section) {
+                        echo '<div class="mb-4">';
+                        echo '<h2 class="h4"><span class="badge badge-default">' . $sidebar_section['name'] . "</span></h2>";
+
+                        foreach ($sidebar_section['links'] as $link) {
+                            echo '<div class="p-3" style="border-bottom: 1px solid rgba(0,0,0,.125)"><a href="' . $link['link-address'] . '" class="text-default">' . $link['link-name'] . '</a></div>';
+                        }
+
+                        echo '</div>';
+                    }
+                }
+            ?>
 
             <? if (!empty($flyer)): ?>
                 <br><span style="display:block;"><a href="<?= $flyer; ?>" class="btn btn-primary btn-sm mt-3" target="_blank">
@@ -158,75 +170,29 @@ if (stripos($title, 'theatre') !== false) {
 
             <?
                 // Contact Information
-                $i = 0;
-                foreach ($contact_info as $key => $value) {
-                    if (!empty($value)) {
-                        if ($i === 0) {
-                            echo '<h3 class="text-primary mt-4">Contact</h3>';
-                        }
-                        
-                        echo tsh($key, $value) . "<br>";
-                    }
 
-                    $i++;
+                // // Old
+                // $i = 0;
+                // foreach ($contact_info as $key => $value) {
+                //     if (!empty($value)) {
+                //         if ($i === 0) {
+                //             echo '<h3 class="text-primary mt-4">Contact</h3>';
+                //         }
+                        
+                //         echo tsh($key, $value) . "<br>";
+                //     }
+
+                //     $i++;
+                // }
+
+                if ($sidebar_contact) {
+                    echo apply_filters("the_content", $sidebar_contact);
                 }
             ?>
 
         </div>
     </div>
 </div>
-
-<?
-    $post_id = get_the_ID();
-    $post_atts = get_post_custom($post_id);
-
-    echo '<div class="container">';
-
-        dev_cont(array(
-            tsh("Post ID", $post_id),
-            tsh("Post Link", get_the_permalink($post_id)),
-            tsh("Excerpt", get_the_excerpt($post_id)),
-        ));
-
-        // echo '<pre>';
-        // print_r($post_atts);
-        // echo '</pre>';
-
-        // foreach ($post_atts as $key => $value) {
-        //     if (!empty($value[0])) {
-        //         echo tsh($key, $value[0]) . "<br>";
-        //     }
-
-        // }
-
-        $sidebar_sections = maybe_unserialize(get_post_meta($post_id, 'sidebar-sections', true));
-    
-        foreach ($sidebar_sections as $sidebar_section) {
-            foreach ($sidebar_section as $key => $value) {
-                if (!empty($value)) {
-                    if (is_array($value)) {
-                        echo "<strong>" . $key . ":</strong><br>";
-                        echo "<ul>";
-                        foreach ($value as $key2 => $value2) {
-                            echo "<li>" . tsh($key2, $value2) . "</li>";
-                        }
-                        echo "</ul>";
-                    } else {
-                        echo tsh($key, $value) . "<br>";
-                    }
-                } else {
-                    echo tsh($key, "EMPTY") . "<br>";
-                }
-            }
-        }
-
-        // echo '<pre>';
-        // print_r($sidebar_sections);
-        // echo '</pre>';
-
-    echo '</div>';
-
-?>
 
 <?php get_footer(); ?>
 
