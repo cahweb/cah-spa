@@ -25,6 +25,8 @@ function spa_menu_fix() {
 // Shadowing the function in the parent theme, so we can add special functionality.
 function get_header_default_markup( $post ) {
 
+	if( !isset( $post ) || !is_object( $post ) ) return;
+
     if ( 'studio' == $post->post_type || 'ensemble' == $post->post_type ) {
         return '';
     }
