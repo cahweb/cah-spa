@@ -65,14 +65,9 @@ if( !class_exists( 'PHPMailerHelper' ) ) {
             global $mail_server, $mail_username, $mail_password;
 
             $this->mail->Host = $mail_server;
-            
-            /* For DEV on local */
-            $this->mail->SMTPAuth = true;
-            $this->mail->Username = $mail_username;
-            $this->mail->Password = $mail_password;
 
             /* For PROD */
-            // $this->mail->SMTPAuth = false;
+            $this->mail->SMTPAuth = false;
 
             /* In case the SMTP server requires authentication.
             $this->mail->SMTPAuth = true;
