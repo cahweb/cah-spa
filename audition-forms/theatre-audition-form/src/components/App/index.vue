@@ -43,7 +43,7 @@
                         </template>
                     </div>
                 </div>
-                <div v-if="showForm" class="mb-3">
+                <div v-show="showForm" class="mb-3">
                     <h4>Student Information</h4>
                     <div class="row w-75">
                         <template v-for="(input, i) in inputs.studentInfo">
