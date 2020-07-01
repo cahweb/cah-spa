@@ -183,6 +183,8 @@ export default {
             uploadPercentage: 0,
             doneMessage: '',
             maxUploadSize: 10485760, // 10 MB in bytes
+            rcSiteKey: wpVars.reCAPTCHA,
+            rcLang: wpVars.lang,
         }
     },
     computed: {

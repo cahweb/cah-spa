@@ -135,6 +135,9 @@ final class AuditionFormSetup
             // with the chunk script as a dependency.
             wp_enqueue_script( 'theatre-form-script' );
 
+            // Require reCAPTCHA file
+            require_once 'recaptcha.php';
+
             // Send some variables that Vue will need to the front-end.
             wp_localize_script(
                 'theatre-form-script',
@@ -142,6 +145,8 @@ final class AuditionFormSetup
                 [
                     'baseUrl' => get_stylesheet_directory_uri(),
                     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+                    'reCAPTCHA' => $siteKey,
+                    'lang' => $lang,
                 ]
             );
 
@@ -165,6 +170,18 @@ final class AuditionFormSetup
         // Validate nonce from front-end
         if( !check_ajax_referer( 'theatre_form_submit', 'theatre-form-nonce' ) ) {
             wp_die( 'Invalid nonce.' );
+        }
+
+        // Pull in reCAPTCHA file
+        require_once 'recaptcha.php';
+
+        if( isset( $_POST['g-recaptcha-response'] ) ) {
+            $recaptcha = new \ReCaptcha\ReCaptcha( $secret );
+            $resp = $recaptcha->verify( $_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR'] );
+
+            if( !$resp ) {
+                wp_die( "reCAPTCHA validation failed." );
+            }
         }
 
         // We're going to assume the best from the beginning, and change it

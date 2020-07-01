@@ -89,6 +89,12 @@
                             <button type="button" class="btn btn-complementary btn-sm mt-2 rounded float-right" @click="newFile">&plus;</button>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="g-recaptcha" :data-sitekey="rcSiteKey"></div>
+                            <script :src="`https://www.google.com/recaptcha/api.js?h1=${rcLang}`"></script>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-secondary" @click="submitForm">Submit</button>
                 </div>
                 <div v-if="showAcceptd" class="mb-3">
