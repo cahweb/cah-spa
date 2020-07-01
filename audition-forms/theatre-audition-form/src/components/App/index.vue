@@ -84,7 +84,7 @@
                             <file-input v-for="(file, i) in extraFileList" :key="i" :index="i" :required="false" :name="`file-extra-${i}`" :file="file" :acceptedFileTypes="acceptedFileTypes" @fileChange="payload => {fileChange(payload)}" @removeFile="payload => {removeFile(payload)}" />
                         </div>
                     </div>
-                    <div class="row w-75">
+                    <div class="row w-75 mb-3">
                         <div class="col-md-7">
                             <button type="button" class="btn btn-complementary btn-sm mt-2 rounded float-right" @click="newFile">&plus;</button>
                         </div>
