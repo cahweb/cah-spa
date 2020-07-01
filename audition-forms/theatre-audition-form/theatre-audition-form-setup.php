@@ -202,7 +202,7 @@ final class AuditionFormSetup
         $sql = sprintf( $sql_base, $_POST['lname'], $_POST['fname'], $_POST['email'], $_POST['address'], $_POST['phone'], $program_code, $_POST['firstChoiceDate'], $_POST['secondChoiceDate']);
 
         // Create a new DB_Helper object
-        $db = new DB();
+        $db = new DB('spa_auditions_theatre');
 
         // Insert the new application entry and retrieve the ID.
         $id = 0;

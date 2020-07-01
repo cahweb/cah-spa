@@ -32,8 +32,8 @@ if( !class_exists( 'DB_Helper' ) ) {
          * 
          * @return void
          */
-        public function __construct() {
-            $this->connect();
+        public function __construct(string $db = null) {
+            $this->connect($db);
         }
 
 
@@ -92,10 +92,12 @@ if( !class_exists( 'DB_Helper' ) ) {
          * 
          * @return void
          */
-        private function connect() {
+        private function connect(string $database = null) {
             global $db_server, $db_user, $db_pass, $db, $db_charset;
 
-            $this->db_connection = mysqli_connect( $db_server, $db_user, $db_pass, $db );
+            $use_database = !is_null( $database ) ? $database : $db;
+
+            $this->db_connection = mysqli_connect( $db_server, $db_user, $db_pass, $use_database );
             mysqli_set_charset( $this->db_connection, $db_charset );
         }
 
