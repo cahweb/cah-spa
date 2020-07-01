@@ -76,7 +76,7 @@
                     </div>
                     <h5>Additional Documents</h5>
                     <div class="row w-75">
-                        <p class="col-12">R&eacute;sum&eacute; is required.</p>
+                        <p class="col-12">R&eacute;sum&eacute; is required. Maximum 10 files or 10 MB total.</p>
                         <div class="col-md-7">
                             <file-input :name="`resume`" :file="values.files.resume" :acceptedFileTypes="acceptedFileTypes" :index="-1" :required="true" @fileChange="payload => {fileChange(payload)}" @removeFile="payload => {removeFile(payload)}" />
                         </div>

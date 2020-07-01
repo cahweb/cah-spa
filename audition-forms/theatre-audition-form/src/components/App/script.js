@@ -182,6 +182,7 @@ export default {
             isProcessing: false,
             uploadPercentage: 0,
             doneMessage: '',
+            maxUploadSize: 10485760, // 10 MB in bytes
         }
     },
     computed: {
@@ -276,7 +277,14 @@ export default {
             }
             else 
                 return this.doneMessage
-        }
+        },
+        totalFileSize() {
+            const resumeSize = this.values.files.resume.size
+            const extraFilesSize = this.values.files.extra.length
+                ? this.values.files.extra.reduce((totalSize, extraFile) => totalSize + (extraFile !== null ? extraFile.size : 0))
+                : 0
+            return resumeSize + extraFilesSize
+        },
     },
     methods: {
         /**
@@ -338,7 +346,10 @@ export default {
          * Add an empty entry to the extra file array
          */
         newFile() {
-            this.values.files.extra.push(null)
+            if (this.extraFileList.length < 9 && this.totalFileSize < this.maxUploadSize)
+                this.values.files.extra.push(null)
+            else
+                alert("Maximum of 10 files allowed, for a maximum total of 10 MB.")
         },
         /**
          * Executes when the user clicks "Submit"
