@@ -452,7 +452,8 @@ export default {
         const nonceField = document.querySelector('input[name=theatre-form-nonce]')
         this.nonce = nonceField.value
         nonceField.remove()
-
+    },
+    mounted() {
         const recaptchaDiv = document.querySelector('#recaptcha-div')
         const rcScript = document.createElement('script')
         rcScript.setAttribute('src', `https://www.google.com/recaptcha/api.js?h1=${this.rcLang}`)
