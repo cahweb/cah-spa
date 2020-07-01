@@ -38,7 +38,7 @@ final class AuditionFormSetup
     ];
 
     // For DEV
-    private static $application_file_path = "D:\\wamp64\\application-files\\spa\\theatre";
+    private static $application_file_path = "D:\\inetpub\\store\\spa\\theatre\\audition-files";
 
     private function __construct() { /* Prevents instantiation */ }
 
@@ -453,7 +453,7 @@ final class AuditionFormSetup
             // Run the scan
             $output = shell_exec( "$cmdpath $file" );
 
-            error_log( $output );
+            error_log( "Scan result for $file: $output" );
 
             $threat_pattern = '/found (\d+) threats/';
             $matches = [];
