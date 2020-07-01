@@ -90,8 +90,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div id="recaptcha-div" class="g-recaptcha" :data-sitekey="rcSiteKey"></div>
+                        <div class="col-lg-6" id="recaptcha-div">
+                            <div class="g-recaptcha" :data-sitekey="rcSiteKey"></div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-secondary" @click="submitForm">Submit</button>
