@@ -91,10 +91,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="g-recaptcha" :data-sitekey="rcSiteKey"></div>
-                            <template>
-                                <script :src="`https://www.google.com/recaptcha/api.js?h1=${rcLang}`"></script>
-                            </template>
+                            <div id="recaptcha-div" class="g-recaptcha" :data-sitekey="rcSiteKey"></div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-secondary" @click="submitForm">Submit</button>
