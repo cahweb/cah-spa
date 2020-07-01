@@ -89,7 +89,7 @@
                             <button type="button" class="btn btn-complementary btn-sm mt-2 rounded float-right" @click="newFile">&plus;</button>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-lg-6" id="recaptcha-div">
                             <div class="g-recaptcha" :data-sitekey="rcSiteKey"></div>
                         </div>
