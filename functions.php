@@ -67,8 +67,16 @@ function get_header_default_markup( $post ) {
 	return ob_get_clean();
 }
 
+// Ensemble Interest Form Results
+include_once "includes/ensemble-student-results.php";
+add_action( 'init', [ "UCF\\CAH\\SPA\\Music\\EnsembleAdminPage", 'setup' ], 10, 0 );
+
 // Theatre Audition Form
 include_once "audition-forms/theatre-audition-form/theatre-audition-form-setup.php";
 
 add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormSetup", 'setup' ], 10, 0 );
+
+//include_once "audition-forms/theatre-audition-form/includes/theatre-audition-form-admin.php";
+
+//add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormAdmin", 'setup' ], 10, 0 );
 ?>

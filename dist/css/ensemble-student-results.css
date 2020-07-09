@@ -1,0 +1,47 @@
+#ensemble-results {
+    border: 1px solid #CCC;
+    border-collapse: collapse;
+    width: 95%;
+}
+
+#ensemble-results tr {
+    padding: 1em;
+    background-color: #FFF;
+}
+
+#ensemble-results tr:hover,
+#ensemble-results tr:first-child {
+    background-color: #EEE;
+}
+
+#ensemble-results th, td {
+    padding: 1em .5em;
+    border-bottom: 1px solid #CCC;
+}
+
+#ensemble-results th {
+    text-align: center;
+}
+
+#ensemble-results td:last-child {
+    padding-left: 1em;
+}
+
+td.lname, td.fname, td.email, td.phone, td.year, td.major, td.no-result, #ensemble-results th {
+    white-space: nowrap;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 1em;
+}
+
+.button-bar {
+    width: 95%;
+    min-height: 30px;
+    margin-bottom: 1em;
+}
+
+.button-bar a {
+    float: right;
+}
