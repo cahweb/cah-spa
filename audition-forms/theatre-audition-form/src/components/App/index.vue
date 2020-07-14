@@ -29,7 +29,7 @@
                 <div v-if="showReqs" class="mb-5">
                     <h2 class="heading-underline">Program Requirements for {{ values.program.label }}</h2>
                     <div id="prog-reqs-preamble" class="mb-3">
-                        <p id="prog-coord"><strong>Program Coordinator:</strong> {{ values.program.name }}<a :href="`mailto:${values.program.email}`">{{ values.program.email }}</a></p>
+                        <p id="prog-coord"><strong>Program Coordinator:</strong> {{ values.program.name }} (<a :href="`mailto:${values.program.email}`">{{ values.program.email }}</a>)</p>
                         <p v-if="values.level === 'undergrad'" id="undergrad-blurb">Students must apply and be accepted through both the UCF School of Performing Arts and <a href="https://www.ucf.edu/admissions/undergraduate">UCF Undergraduate Admissions</a>. It is encouraged to apply to both UCF Undergraduate Admissions and the UCF School of Performing Arts as early as possible. The school can provisionally accept students prior to being accepted by UCF Undergraduate Admissions but cannot offer official acceptance of study until students receive their UCF acceptance.</p>
                     </div>
                     <div v-html="programReqs" class="mb-3"></div>
