@@ -2,7 +2,7 @@
     <div class="app">
         <div v-if="!isSubmitted" class="form-container">
             <form id="theatre-audition-form" method="post" enctype="multipart/form-data" ref="form">
-                <p>Are you auditioning for an Undergraduate or Graduate program?</p>
+                <p>Are you auditioning for an Undergraduate (B.A. or B.F.A.) or Graduate (M.A. or M.F.A.) program?</p>
                 <div class="radio-group mb-3">
                     <template v-for="(button, i) in buttons.level">
                         <div :key="i" class="form-check form-check-inline mx-2">
@@ -14,7 +14,7 @@
                     </template>
                 </div>
                 <div v-if="values.level !== ''" class="mb-5">
-                    <p>Which program were you interested in?</p>
+                    <p>Which program are you applying for?</p>
                     <div class="radio-group mb-3">
                         <template v-for="(button, i) in (values.level == 'undergrad' ? buttons.programs.undergrad : buttons.programs.grad)">
                             <div :key="i" class="form-check form-check-inline mx-2">
@@ -28,7 +28,14 @@
                 </div>
                 <div v-if="showReqs" class="mb-5">
                     <h2 class="heading-underline">Program Requirements for {{ values.program.label }}</h2>
-                    <div v-html="programReqs"></div>
+                    <div id="prog-reqs-preamble" class="mb-3">
+                        <p id="prog-coord"><strong>Program Coordinator:</strong> {{ values.program.name }}<a :href="`mailto:${values.program.email}`">{{ values.program.email }}</a></p>
+                        <p v-if="values.level === 'undergrad'" id="undergrad-blurb">Students must apply and be accepted through both the UCF School of Performing Arts and <a href="https://www.ucf.edu/admissions/undergraduate">UCF Undergraduate Admissions</a>. It is encouraged to apply to both UCF Undergraduate Admissions and the UCF School of Performing Arts as early as possible. The school can provisionally accept students prior to being accepted by UCF Undergraduate Admissions but cannot offer official acceptance of study until students receive their UCF acceptance.</p>
+                    </div>
+                    <div v-html="programReqs" class="mb-3"></div>
+                    <div id="prog-reqs-postamble">
+                        <p><em>We don't want application fees to be a barrier. Contact the program coordinator of the program you are applying to for more information.</em></p>
+                    </div>
                 </div>
                 <div v-if="isBfaActing" class="mb-3">
                     <p class="mt-4">Did you want to schedule a live audition or submit a video audition?</p>
