@@ -11,7 +11,7 @@ namespace UCF\CAH\SPA\Music;
 defined( 'ABSPATH' ) or die( 'No direct access plzthx' );
 
 // Bring in our database helper class.
-require_once 'includes/db-helper.php';
+require_once 'db-helper.php';
 use UCF\CAH\DB_Helper as db;
 
 // Bring mysqli_result into the current namespace
@@ -176,6 +176,7 @@ class EnsembleAdminPage
             header( "Content-Type: text/csv; charset=utf-8" );
             header( "Content-Description: File Transfer" );
             header( "Content-Disposition: attachment; filename=$filename" );
+            header( "Pragma: no-cache" );
 
             $output = fopen( 'php://output', 'w' );
 

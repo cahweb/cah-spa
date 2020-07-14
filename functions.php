@@ -73,10 +73,8 @@ add_action( 'init', [ "UCF\\CAH\\SPA\\Music\\EnsembleAdminPage", 'setup' ], 10, 
 
 // Theatre Audition Form
 include_once "audition-forms/theatre-audition-form/theatre-audition-form-setup.php";
-
 add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormSetup", 'setup' ], 10, 0 );
 
-//include_once "audition-forms/theatre-audition-form/includes/theatre-audition-form-admin.php";
-
-//add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormAdmin", 'setup' ], 10, 0 );
+include_once "audition-forms/theatre-audition-form/includes/theatre-audition-form-admin.php";
+add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormAdmin", 'setup' ], 10, 0 );
 ?>

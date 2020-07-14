@@ -38,7 +38,10 @@ final class AuditionFormSetup
     ];
 
     // For DEV
-    private static $application_file_path = "D:\\inetpub\\store\\spa\\theatre\\audition-files";
+    private static $application_file_path = "D:\\wamp64\\application-files\\spa\\theatre";
+
+    // For PROD
+    //private static $application_file_path = "D:\\inetpub\\store\\spa\\theatre\\audition-files";
 
     private function __construct() { /* Prevents instantiation */ }
 
@@ -136,7 +139,12 @@ final class AuditionFormSetup
             wp_enqueue_script( 'theatre-form-script' );
 
             // Require reCAPTCHA file
-            require_once 'recaptcha.php';
+
+            /* -- FOR DEV */
+            require_once "D:\\wamp64\\php-helpers\\lib\\recaptcha.php";
+
+            /* -- FOR PROD -- */
+            //require_once 'recaptcha.php';
 
             // Send some variables that Vue will need to the front-end.
             wp_localize_script(
@@ -173,7 +181,12 @@ final class AuditionFormSetup
         }
 
         // Pull in reCAPTCHA file
-        require_once 'recaptcha.php';
+
+        /* -- FOR DEV */
+        require_once "D:\\wamp64\\php-helpers\\lib\\recaptcha.php";
+
+        /* -- FOR PROD -- */
+        //require_once 'recaptcha.php';
 
         if( isset( $_POST['g-recaptcha-response'] ) ) {
             $recaptcha = new \ReCaptcha\ReCaptcha( $secret );
@@ -288,7 +301,7 @@ final class AuditionFormSetup
                     $files[] = [
                         'filename' => $filename,
                         'filetype' => $file['type'],
-                        'filesize' => $file['size'],
+                        'filesize' => intval( $file['size'] ),
                     ];
                 }
 
