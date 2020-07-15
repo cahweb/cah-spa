@@ -28,11 +28,16 @@ export default {
                         state: '',
                         zip: '',
                     },
+                    lastSchool: '',
+                    preferredName: '',
+                    pronouns: '',
+                    pronounOther: '',
                 },
                 auditionDates: {
                     first: '',
                     second: '',
                 },
+                auditionIsZoom: false,
                 files: {
                     resume: null,
                     extra: [],
@@ -151,6 +156,37 @@ export default {
                         maxlength: 10,
                         required: true,
                     },
+                    {
+                        label: 'Last School Attended',
+                        name: 'lastSchool',
+                        required: true,
+                    },
+                    {
+                        label: 'Preferred Name',
+                        name: 'preferredName',
+                    },
+                    {
+                        label: 'Preferred Pronouns',
+                        name: 'pronouns',
+                        options: [
+                            {
+                                text: 'He/Him/His',
+                                value: 'he-him-his',
+                            },
+                            {
+                                text: 'She/Her/Hers',
+                                value: 'she-her-hers',
+                            },
+                            {
+                                text: 'They/Them/Theirs',
+                                value: 'they-them-theirs',
+                            },
+                            {
+                                text: 'Other',
+                                value: 'other'
+                            }
+                        ],
+                    }
                 ],
                 address: [
                     {
@@ -186,9 +222,7 @@ export default {
                 ],
             },
             acceptdPrograms: {
-                undergrad: [
-                    'bfa-musical-theatre',
-                ],
+                undergrad: [],
                 grad: [
                     'mfa-young-theatre',
                 ],
@@ -399,10 +433,15 @@ export default {
                 email: studentInfo.email,
                 address: `${address.street1},${address.street2 != '' ? ' ' + address.street2 + ',' : ''} ${address.city}, ${address.state} ${address.zip}`,
                 phone: studentInfo.phone,
+                preferredName: studentInfo.preferredName,
+                pronouns: studentInfo.pronouns,
+                pronounOther: studentInfo.pronounOther,
+                lastSchool: studentInfo.lastSchool,
                 level: this.values.level,
                 program: this.values.program.value,
                 firstChoiceDate: this.values.auditionDates.first,
                 secondChoiceDate: this.values.auditionDates.second,
+                auditionisZoom: this.values.auditionisZoom ? 1 : 0,
                 resume: this.values.files.resume,
             }
 

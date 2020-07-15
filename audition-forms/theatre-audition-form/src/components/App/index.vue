@@ -56,9 +56,19 @@
                         <template v-for="(input, i) in inputs.studentInfo">
                             <div :key="i" class="form-group col-md-6">
                                 <label>{{ input.label }}:</label>
-                                <input :type="input.type !== undefined ? input.type : 'text'" :name="input.name" :maxlength="input.maxlength !== undefined ? input.maxlength : null" v-model="values.studentInfo[input.name]" class="form-control" :required="input.required">
+                                <input v-if="input.name !== 'pronouns'" :type="input.type !== undefined ? input.type : 'text'" :name="input.name" :maxlength="input.maxlength !== undefined ? input.maxlength : null" v-model="values.studentInfo[input.name]" class="form-control" :required="input.required">
+                                <select v-else class="form-control" :name="input.name" v-model="values.studentInfo.pronouns">
+                                    <option value=""> -- Please Select -- </option>
+                                    <option v-for="(option, j) in input.options" :key="j" :value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
                             </div>
                         </template>
+                        <div v-if="values.studentInfo.pronouns === 'other'" class="form-group col-md-6">
+                            <label>If Other, please specify:</label>
+                            <input type="text" name="pronounOther" v-model="values.studentInfo.pronounOther" class="form-control">
+                        </div>
                     </div>
                     <div class="row w-75 mb-3">
                         <template v-for="(input, i) in inputs.address">
@@ -68,7 +78,7 @@
                             </div>
                         </template>
                     </div>
-                    <h4>Audition Information</h4>
+                    <h4>Select an Interview Date</h4>
                     <div class="row w-75 mb-3">
                         <template v-for="(ordinal, i) in ['First', 'Second']">
                             <div :key="i" class="form-group col-md-7" :class="{'has-danger': sameDate}">
@@ -76,14 +86,25 @@
                                 <select :name="`audition${i + 1}`" v-model="values.auditionDates[ordinal.toLowerCase()]" class="form-control" :class="{'form-control-danger': sameDate}">
                                     <option value="">-- Please Select --</option>
                                     <option v-for="(date, j) in dateList" :key="j" :value="date.value">{{ date.text }}</option>
+                                    <option value="next-available">Next Available Date</option>
                                 </select>
                                 <div v-if="ordinal === 'Second' && sameDate" class="form-control-feedback">Can't select the same date.</div>
                             </div>
                         </template>
                     </div>
+                    <div class="row w-75 mb-3">
+                        <div class="form-check col-md-7">
+                            <label class="form-check-label">
+                                <input type="checkbox" name="auditionIsZoom" :value="true" v-model="values.auditionIsZoom">
+                                Would you prefer to interview through Zoom?
+                            </label>
+                            <p class="form-text mt-2"><small>If you choose Zoom, a link will be sent to the email provided.</small></p>
+                        </div>
+                    </div>
                     <h5>Additional Documents</h5>
                     <div class="row w-75">
-                        <p class="col-12">R&eacute;sum&eacute; is required. Maximum 10 files or 10 MB total.</p>
+                        <p class="col-12">R&eacute;sum&eacute; required at the time of application. All remaining documents must be received prior to your interview. They can be emailed directly to <a href="mailto:auditions@ucf.edu">auditions@ucf.edu</a>. Please be sure all documents you send include your first and last name and the type of document (<em>e.g.</em>, r&eacute;sum&eacute;, letter, transcript, etc.).</p>
+                        <p class="col-12"><small>Maximum 10 files or 10 MB total.</small></p>
                         <div class="col-md-7">
                             <file-input :name="`resume`" :file="values.files.resume" :acceptedFileTypes="acceptedFileTypes" :index="-1" :required="true" @fileChange="payload => {fileChange(payload)}" @removeFile="payload => {removeFile(payload)}" />
                         </div>

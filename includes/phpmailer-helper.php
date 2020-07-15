@@ -1,15 +1,18 @@
 <?php
 namespace UCF\CAH\MailTools;
 
+// Load PHPMailer
 /* For Local Dev */
+/*
 require_once 'D:\\wamp64\\composer\\vendor\\autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
+*/
 
-// Load PHPMailer
-/* For PROD
+/* -- For PROD -- */
+
 require_once 'class.phpmailer.php';
 use PHPMailer as PHPMailer;
-*/
+//*/
 
 // SMTP info and authorization credentials
 require_once '_mailauth.php';
