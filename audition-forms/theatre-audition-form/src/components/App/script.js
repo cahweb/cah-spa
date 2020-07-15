@@ -427,6 +427,12 @@ export default {
             const studentInfo = this.values.studentInfo
             const address = studentInfo.address
 
+            const auditionDates = this.values.auditionDates
+
+            for (const [index, value] of Object.entries(auditionDates)) {
+                auditiondates[index] = 'next-available' === value ? '1970-01-01' : value
+            }
+
             const data = {
                 lname: studentInfo.lname,
                 fname: studentInfo.fname,
