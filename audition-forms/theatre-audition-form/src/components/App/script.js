@@ -445,8 +445,8 @@ export default {
                 lastSchool: studentInfo.lastSchool,
                 level: this.values.level,
                 program: this.values.program.value,
-                firstChoiceDate: this.values.auditionDates.first,
-                secondChoiceDate: this.values.auditionDates.second,
+                firstChoiceDate: auditionDates.first,
+                secondChoiceDate: auditionDates.second,
                 auditionisZoom: this.values.auditionisZoom ? 1 : 0,
                 resume: this.values.files.resume,
             }
