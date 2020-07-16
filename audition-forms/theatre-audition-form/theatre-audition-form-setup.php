@@ -1,6 +1,11 @@
 <?php
 namespace UCF\CAH\SPA\Theatre\AuditionForm;
 
+// Figures out if we're on my local server; if not, assumes we're on PROD
+if( !defined( 'IS_DEV' ) ) {
+    define( 'IS_DEV', file_exists( "D:\\wamp64" ) );
+}
+
 // This will handle DB Access
 require_once get_stylesheet_directory() . "/includes/db-helper.php";
 
@@ -24,7 +29,7 @@ use mysqli as mysqli;
 final class AuditionFormSetup
 {
     // The slug of our target page
-    private static $target_slug = "theatre-audition-form";
+    private static $target_slug = "theatre-application-form";
 
     // The MIME types we'll accept for uploaded files
     private static $allowed_file_types = [
@@ -36,12 +41,6 @@ final class AuditionFormSetup
         "image/png",
         "text/plain",
     ];
-
-    // For DEV
-    private static $application_file_path = "D:\\wamp64\\application-files\\spa\\theatre";
-
-    // For PROD
-    //private static $application_file_path = "D:\\inetpub\\store\\spa\\theatre\\audition-files";
 
     private function __construct() { /* Prevents instantiation */ }
 
@@ -140,11 +139,12 @@ final class AuditionFormSetup
 
             // Require reCAPTCHA file
 
-            /* -- FOR DEV */
-            require_once "D:\\wamp64\\php-helpers\\lib\\recaptcha.php";
+            $rc_path = "";
+            if( IS_DEV ) {
+                $rc_path = "D:\\wamp64\\php-helpers\\lib\\";
+            }
 
-            /* -- FOR PROD -- */
-            //require_once 'recaptcha.php';
+            require_once $rc_path . "recaptcha.php";
 
             // Send some variables that Vue will need to the front-end.
             wp_localize_script(
@@ -181,12 +181,12 @@ final class AuditionFormSetup
         }
 
         // Pull in reCAPTCHA file
+        $rc_path = "";
+        if( IS_DEV ) {
+            $rc_path = "D:\\wamp64\\php-helpers\\lib\\";
+        }
 
-        /* -- FOR DEV */
-        require_once "D:\\wamp64\\php-helpers\\lib\\recaptcha.php";
-
-        /* -- FOR PROD -- */
-        //require_once 'recaptcha.php';
+        require_once $rc_path . "recaptcha.php";
 
         if( isset( $_POST['g-recaptcha-response'] ) ) {
             $recaptcha = new \ReCaptcha\ReCaptcha( $secret );
@@ -226,10 +226,10 @@ final class AuditionFormSetup
         }
 
         // Create the SQL scaffold
-        $sql_base = "INSERT INTO applications (last_name, first_name, email, `address`, phone, program, first_choice_date, second_choice_date) VALUES ('%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')";
+        $sql_base = "INSERT INTO applications (last_name, first_name, email, `address`, phone, last_school, preferred_name, pronouns, pronoun_other, program, first_choice_date, second_choice_date, audition_is_zoom) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', %d)";
 
         // Build the SQL string
-        $sql = sprintf( $sql_base, $_POST['lname'], $_POST['fname'], $_POST['email'], $_POST['address'], $_POST['phone'], $program_code, $_POST['firstChoiceDate'], $_POST['secondChoiceDate']);
+        $sql = sprintf( $sql_base, $_POST['lname'], $_POST['fname'], $_POST['email'], $_POST['address'], $_POST['phone'], $_POST['lastSchool'], $_POST['preferredName'], $_POST['pronouns'], $_POST['pronounOther'], $program_code, $_POST['firstChoiceDate'], $_POST['secondChoiceDate'], $_POST['auditionIsZoom'] );
 
         // Create a new DB_Helper object
         $db = new DB('spa_auditions_theatre');
@@ -257,11 +257,19 @@ final class AuditionFormSetup
 
         // Now do the files. The resume is required, so it shouldn't be
         // empty.
+
+        if( IS_DEV ) {
+            $application_file_path = "D:\\wamp64\\application-files\\spa\\theatre";
+        }
+        else {
+            $application_file_path = "D:\\inetpub\\store\\spa\\theatre\\audition-files";
+        }
+
         $files = [];
         if( !empty( $_FILES ) ) {
             // Create the new application directory path based on the user's
             // application ID in the database.
-            $path = self::$application_file_path . "\\$id";
+            $path = $application_file_path . "\\$id";
             // Make the directory
             if( mkdir( $path ) ) {
                 $files_to_scan = [];
@@ -433,42 +441,43 @@ final class AuditionFormSetup
     private static function _scan_files( array $files ) : array {
 
         // The path to the Microsoft virus scanner application
-        /* === For DEV === */
-        /*
-        $path = "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform";
-        $dir = new DirectoryIterator( $path );
+        /* -- For DEV -- */
+        if( IS_DEV ) {
+            $path = "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform";
+            $dir = new DirectoryIterator( $path );
 
-        // On Windows 10 systems, you have to do all this crap to find
-        // the right version and it's stupid
-        $latest = null;
-        $v = '';
-        foreach( $dir as $file ) {
-            $pattern = '/(\d+\.\d+\.\d+)(\.\d-\d)/';
-            $matches = [];
-            preg_match( $pattern, $file->getFilename(), $matches );
-            
-            if( !empty( $matches ) ) {
-                $date = date_create_from_format( 'n.j.Y', $matches[1] );
+            // On Windows 10 systems, you have to do all this crap to find
+            // the right version and it's stupid
+            $latest = null;
+            $v = '';
+            foreach( $dir as $file ) {
+                $pattern = '/(\d+\.\d+\.\d+)(\.\d-\d)/';
+                $matches = [];
+                preg_match( $pattern, $file->getFilename(), $matches );
+                
+                if( !empty( $matches ) ) {
+                    $date = date_create_from_format( 'n.j.Y', $matches[1] );
 
-                if( is_null( $latest ) || $latest <= $date ) {
-                    $latest = $date;
-                    $v = $matches[2];
+                    if( is_null( $latest ) || $latest <= $date ) {
+                        $latest = $date;
+                        $v = $matches[2];
+                    }
                 }
             }
+
+            if( is_null( $latest ) ) {
+                error_log( "Could not parse Windows Defender version folder" );
+                wp_die( "Could not parse Windows Defender version folder" );
+            }
+            $win_def_version = date_format( $latest, 'n.j.Y' ) . $v;
+
+            $cmdpath = "C:\\ProgramData\\Microsoft\\\"Windows Defender\"\\Platform\\$win_def_version\\MpCmdRun.exe -Scan -ScanType 3 -ReturnHR -DisableRemediation -File";
         }
-
-        if( is_null( $latest ) ) {
-            error_log( "Could not parse Windows Defender version folder" );
-            wp_die( "Could not parse Windows Defender version folder" );
+        /* -- FOR PROD -- */
+        else {
+            // Much simpler, because we don't need to check for a dated version folder
+            $cmdpath = "C:\\\"Program Files\"\\\"Microsoft Security Client\"\\MpCmdRun.exe -Scan -ScanType 3 -ReturnHR -File";    
         }
-        $win_def_version = date_format( $latest, 'n.j.Y' ) . $v;
-
-        $cmdpath = "C:\\ProgramData\\Microsoft\\\"Windows Defender\"\\Platform\\$win_def_version\\MpCmdRun.exe -Scan -ScanType 3 -ReturnHR -DisableRemediation -File";
-        */
-
-        /* === For PROD === */
-        // Much simpler, because we don't need to check for a dated version folder
-        $cmdpath = "C:\\\"Program Files\"\\\"Microsoft Security Client\"\\MpCmdRun.exe -Scan -ScanType 3 -ReturnHR -File";
 
         // Create containers
         $infected_files = [];
