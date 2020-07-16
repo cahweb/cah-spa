@@ -166,7 +166,7 @@ export default {
                         name: 'preferredName',
                     },
                     {
-                        label: 'Preferred Pronouns',
+                        label: 'Pronouns',
                         name: 'pronouns',
                         options: [
                             {

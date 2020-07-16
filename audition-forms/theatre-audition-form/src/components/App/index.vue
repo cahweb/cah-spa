@@ -34,7 +34,7 @@
                     </div>
                     <div v-html="programReqs" class="mb-3"></div>
                     <div id="prog-reqs-postamble">
-                        <p><em>We don't want application fees to be a barrier. Contact the program coordinator of the program you are applying to for more information.</em></p>
+                        <p><em>We don't want application fees to be a barrier. If you are submitting an application through AcceptD and need assistance, contact the coordinator for the program you are applying to for more information. For information about application fee waivers for UCF admissions, <a href="https://www.ucf.edu/admissions/undergraduate/question/how-can-i-request-a-waiver-of-the-application-fee/" target="_blank" rel="noopener">click here</a>.</em></p>
                     </div>
                 </div>
                 <div v-if="isBfaActing" class="mb-3">
@@ -103,7 +103,7 @@
                     </div>
                     <h5>Additional Documents</h5>
                     <div class="row w-75">
-                        <p class="col-12">R&eacute;sum&eacute; required at the time of application. All remaining documents must be received prior to your interview. They can be emailed directly to <a href="mailto:auditions@ucf.edu">auditions@ucf.edu</a>. Please be sure all documents you send include your first and last name and the type of document (<em>e.g.</em>, r&eacute;sum&eacute;, letter, transcript, etc.).</p>
+                        <p class="col-12">R&eacute;sum&eacute; required at the time of application. All remaining documents must be received prior to your interview. They can be emailed directly to <a href="mailto:audition@ucf.edu">audition@ucf.edu</a>. Please be sure all documents you send include your first and last name and the type of document (<em>e.g.</em>, r&eacute;sum&eacute;, letter, transcript, etc.).</p>
                         <p class="col-12"><small>Maximum 10 files or 10 MB total.</small></p>
                         <div class="col-md-7">
                             <file-input :name="`resume`" :file="values.files.resume" :acceptedFileTypes="acceptedFileTypes" :index="-1" :required="true" @fileChange="payload => {fileChange(payload)}" @removeFile="payload => {removeFile(payload)}" />
