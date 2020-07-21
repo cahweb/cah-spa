@@ -166,7 +166,7 @@ export default {
                         name: 'preferredName',
                     },
                     {
-                        label: 'Preferred Pronouns',
+                        label: 'Pronouns',
                         name: 'pronouns',
                         options: [
                             {
@@ -427,6 +427,12 @@ export default {
             const studentInfo = this.values.studentInfo
             const address = studentInfo.address
 
+            const auditionDates = this.values.auditionDates
+
+            for (const [index, value] of Object.entries(auditionDates)) {
+                auditionDates[index] = 'next-available' === value ? '1970-01-01' : value
+            }
+
             const data = {
                 lname: studentInfo.lname,
                 fname: studentInfo.fname,
@@ -439,8 +445,8 @@ export default {
                 lastSchool: studentInfo.lastSchool,
                 level: this.values.level,
                 program: this.values.program.value,
-                firstChoiceDate: this.values.auditionDates.first,
-                secondChoiceDate: this.values.auditionDates.second,
+                firstChoiceDate: auditionDates.first,
+                secondChoiceDate: auditionDates.second,
                 auditionisZoom: this.values.auditionisZoom ? 1 : 0,
                 resume: this.values.files.resume,
             }
