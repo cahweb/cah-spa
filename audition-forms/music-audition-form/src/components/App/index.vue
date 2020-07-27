@@ -1,7 +1,18 @@
 <template>
     <div class="app">
-        <div class="row">
-            <text-input v-for="(input, i) of fields.studentInfo" :valueParent="`studentInfo`" :key="i" :label="input.label" :name="input.name" :colWidth="input.colWidth" :type="input.type !== undefined ? input.type : null" :val="input.val !== undefined ? input.val : null" :maxLength="input.maxLength !== undefined ? input.maxLength : null" />
+        <form v-show="!isSubmitted" id="music-audition-form" method="post" action="" @submit="submitForm">
+            <student-info :inputs="fields.studentInfo" />
+            <program-select :levels="buttons.level" 
+                :programs="buttons.programs"
+            />
+            <audition-info v-show="showAuditionInfo" 
+                :buttonList="buttons.years" 
+                :fieldList="fields.auditionInfo" 
+            />
+            <button v-show="showAuditionInfo" id="submitButton" type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div v-if="isSubmitted" class="status-box" id="status">
+            <p>{{ displayMessage }}</p>
         </div>
     </div>
 </template>

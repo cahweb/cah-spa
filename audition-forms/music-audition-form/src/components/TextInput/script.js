@@ -2,7 +2,10 @@ import {EventBus} from '../event-bus'
 
 export default {
     props: {
-        colWidth: Number,
+        colWidth: {
+            type: Number,
+            default: 6,
+        },
         type: String,
         label: String,
         name: String,
@@ -10,6 +13,10 @@ export default {
         maxLength: Number,
         valueParent: String,
         emitOn: String,
+        isRequired: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return{

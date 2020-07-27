@@ -1,0 +1,118 @@
+{
+    "classical": [
+        {
+            "name": "Bassoon",
+            "value": "bassoon"
+        },
+        {
+            "name": "Cello",
+            "value": "cello"
+        },
+        {
+            "name": "Clarinet",
+            "value": "clarinet"
+        },
+        {
+            "name": "Double-Bass - Classical",
+            "value": "double-bass"
+        },
+        {
+            "name": "Euphonium/Baritone",
+            "value": "baritone"
+        },
+        {
+            "name": "Flute",
+            "value": "flute"
+        },
+        {
+            "name": "French Horn",
+            "value": "french-horn"
+        },
+        {
+            "name": "Guitar",
+            "value": "guitar"
+        },
+        {
+            "name": "Harp",
+            "value": "harp"
+        },
+        {
+            "name": "Oboe",
+            "value": "oboe"
+        },
+        {
+            "name": "Percussion",
+            "value": "percussion"
+        },
+        {
+            "name": "Saxophone",
+            "value": "saxophone"
+        },
+        {
+            "name": "Trombone",
+            "value": "trombone"
+        },
+        {
+            "name": "Trumpet",
+            "value": "trumpet"
+        },
+        {
+            "name": "Tuba",
+            "value": "tuba"
+        },
+        {
+            "name": "Viola",
+            "value": "viola"
+        },
+        {
+            "name": "Violin",
+            "value": "violin"
+        },
+        {
+            "name": "Voice - Alto",
+            "value": "voice-alto"
+        },
+        {
+            "name": "Voice - Baritone/Bass",
+            "value": "voice-bass"
+        },
+        {
+            "name": "Voice - Soprano",
+            "value": "voice-soprano"
+        },
+        {
+            "name": "Voice - Tenor",
+            "value": "voice-tenor"
+        }
+    ],
+    "jazz": [
+        {
+            "name": "Guitar",
+            "value": "guitar"
+        },
+        {
+            "name": "Percussion",
+            "value": "percussion"
+        },
+        {
+            "name": "Piano",
+            "value": "piano"
+        },
+        {
+            "name": "Saxophone",
+            "value": "saxophone"
+        },
+        {
+            "name": "String Bass - Jazz",
+            "value": "string-bass"
+        },
+        {
+            "name": "Trombone",
+            "value": "trombone"
+        },
+        {
+            "name": "Trumpet",
+            "value": "trumpet"
+        }
+    ]
+}

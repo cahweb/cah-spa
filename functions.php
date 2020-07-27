@@ -77,4 +77,8 @@ add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormSetup",
 
 include_once "audition-forms/theatre-audition-form/includes/theatre-audition-form-admin.php";
 add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormAdmin", 'setup' ], 10, 0 );
+
+// Music Audition Form
+include_once "audition-forms/music-audition-form/music-audition-form-setup.php";
+add_action( 'init', [ "UCF\\CAH\\SPA\\Music\\AuditionForm\\AuditionFormSetup", 'setup' ], 10, 0 );
 ?>

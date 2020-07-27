@@ -1,7 +1,7 @@
 <template>
     <div class="form-group" :class="colWidth !== null ? `col-md-${colWidth}` : ''">
         <label>{{ label }}:</label>
-        <input :type="type !== null ? type : 'text'" class="form-control" :name="name" v-model="value" @change="fieldChange" :emitOn="textInputChange" :maxlength="maxLength">
+        <input :type="type !== null ? type : 'text'" class="form-control" :name="name" v-model="value" @change="fieldChange" :maxlength="maxLength" :required="isRequired">
     </div>
 </template>
 

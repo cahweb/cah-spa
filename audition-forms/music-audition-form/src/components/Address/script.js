@@ -11,17 +11,21 @@ export default {
         totalWidth: Number,
     },
     data() {
-        return{}
-    },
-    computed: {
-        address() {
-            output = {}
-            for (const [key, value] )
+        return{
+            address: {
+                street1: '',
+                street2: '',
+                city: '',
+                state: '',
+                zip: '',
+            },
         }
     },
     methods: {
         updateAddress({name, value}) {
-            Vue.set(this, name, value)
+            Vue.set(this.address, name, value)
+
+            EventBus.$emit('addressUpdate', this.address)
         }
     },
     mounted() {
