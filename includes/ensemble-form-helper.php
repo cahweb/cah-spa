@@ -538,6 +538,13 @@ function add_entry( $db, array $data ) : bool {
     // the return value will be either TRUE or FALSE)
     $result = mysqli_query( $db, $sql );
 
+    if( !$result && mysqli_errno( $db->get_db() ) !== 0 ) {
+        error_log( "Ensemble Form MySQL Error: " . mysqli_errno( $db->get_db() ) . " - " . mysqli_error( $db->get_db() ) . "\n\tSQL: $sql" );
+    }
+    else if( !$result ) {
+        error_log( "Ensemble Form MySQL Error: unspecified\n\tSQL: $sql" );
+    }
+
     return $result;
 }
 
