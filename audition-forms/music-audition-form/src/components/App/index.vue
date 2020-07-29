@@ -9,7 +9,7 @@
                 :buttonList="buttons.years" 
                 :fieldList="fields.auditionInfo" 
             />
-            <recaptcha :site-key="rcSiteKey" :lang="lang" />
+            <recaptcha v-show="showAuditionInfo" :site-key="rcSiteKey" :lang="lang" />
             <button v-show="showAuditionInfo" id="submitButton" type="submit" class="btn btn-primary">Submit</button>
         </form>
         <div v-if="isSubmitted" class="status-box" id="status">

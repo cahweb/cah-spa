@@ -270,7 +270,7 @@ export default {
             formData.append('action', 'music_form_submit')
             formData.append('music-form-nonce', this.wpNonce)
 
-            const reCaptcha = document.querySelector('input[name=g-recaptcha-response]')
+            const reCaptcha = document.querySelector(`#g-recaptcha-response`)
             formData.append('g-recaptcha-response', reCaptcha.value)
 
             for (const [key, value] of Object.entries(data)) {

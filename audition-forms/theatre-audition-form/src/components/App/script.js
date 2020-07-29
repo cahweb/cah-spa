@@ -463,7 +463,7 @@ export default {
             formData.append('action', 'theatre_form_submit')
             formData.append('theatre-form-nonce', this.nonce)
 
-            const reCaptcha = document.querySelector('input[name=g-recaptcha-response]')
+            const reCaptcha = document.querySelector('#g-recaptcha-response')
             formData.append('g-recaptcha-response', reCaptcha.value)
 
             // Add all the elements of data to our FormData object

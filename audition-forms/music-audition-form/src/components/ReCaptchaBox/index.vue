@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row mb-3">
         <div id="recaptcha-div" class="col-md-6">
             <div class="g-recaptcha" :data-sitekey="siteKey"></div>
         </div>
