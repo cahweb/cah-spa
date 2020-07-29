@@ -6,6 +6,7 @@ import axios from 'axios'
 import StudentInfo from '../StudentInfo'
 import ProgramSelect from '../ProgramSelect'
 import AuditionInfo from '../AuditionInfo'
+import ReCaptchaBox from '../ReCaptchaBox'
 
 import {EventBus} from '../event-bus'
 
@@ -14,6 +15,7 @@ export default {
         'student-info': StudentInfo,
         'program-select': ProgramSelect,
         'audition-info': AuditionInfo,
+        'recaptcha': ReCaptchaBox,
     },
     data() {
         return{
@@ -219,7 +221,10 @@ export default {
     },
     computed: {
         showAuditionInfo() {
-            return this.values.level !== '' && this.values.program.name !== '' && this.values.program.name.length > 3
+            return this.values.level !== ''
+                && this.values.program.name !== ''
+                && (this.values.program.name.length > 3
+                        || this.values.program.name === 'bme')
         },
         displayMessage() {
             if (this.isSubmitted && !this.isProcessing) {
@@ -231,7 +236,10 @@ export default {
         },
     },
     methods: {
-        submitForm() {
+        submitForm(event) {
+            event.preventDefault()
+            event.stopImmediatePropagation()
+            
             document.querySelector('#submitButton').disabled = true
             this.isProcessing = true
             this.isSubmitted = true
@@ -261,6 +269,9 @@ export default {
 
             formData.append('action', 'music_form_submit')
             formData.append('music-form-nonce', this.wpNonce)
+
+            const reCaptcha = document.querySelector('input[name=g-recaptcha-response]')
+            formData.append('g-recaptcha-response', reCaptcha.value)
 
             for (const [key, value] of Object.entries(data)) {
                 formData.append(key, value)
