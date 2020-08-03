@@ -261,9 +261,9 @@ class EnsembleAdminPage
     private static function _get_student_info() : ?mysqli_result {
         $db = new db();
 
-        $sql = "SELECT * FROM students LEFT JOIN entries ON students.id = entries.student_id ORDER BY students.lname, students.fname, entries.id";
+        $sql = "SELECT * FROM students LEFT JOIN entries ON students.id = entries.student_id WHERE entries.instruments IS NOT NULL AND entries.interests IS NOT NULL ORDER BY students.lname, students.fname, entries.id";
 
-        $result = $db->query( $sql );
+        $result = mysqli_query( $db->get_db(), $sql );
 
         if( $result instanceof mysqli_result && $result->num_rows > 0 ) {
             return $result;
