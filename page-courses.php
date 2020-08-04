@@ -23,6 +23,60 @@
         }
     }
 
+    function db_connect() {
+        $db_server = "net1251.net.ucf.edu";
+        $db_user = 'cah';
+        $db_pass = 'cahweb';
+        $db_name = 'cah';
+
+        $db_connection = new mysqli($db_server, $db_user, $db_pass, $db_name);
+
+        if ($db_connection->connect_error) {
+            die("Database connection failed: " . $db_connection->connect_error . "<br><br>");
+        } else {
+            echo "Database connection success.<br><br>";
+            return $db_connection;
+        }
+    }
+
+    $courses_data = array();
+
+    $db_connection = db_connect();
+
+    $sql = "SELECT term, department, career, number, prefix, catalog_number, instruction_mode, instructor, class_start, class_end, meeting_days FROM courses";
+    $result = $db_connection->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $course_data = array(
+                "term" => $row['term'],
+                "department" => $row['department'],
+                "career" => $row['career'],
+                "number" => $row['number'],
+                "course" => $row['prefix'] . $row['catalog_number'],
+                "mode" => $row['instruction_mode'],
+                "instructor" => $row['instructor'],
+                "meeting_days" => $row['meeting_days'],
+                "start_time" => $row['class_start'],
+                "end_time" => $row['class_end']
+            );
+
+            array_push($courses_data, $course_data);
+
+            // echo "<pre>";
+            // print_r($row);
+            // echo "</pre>";
+        }
+    } else {
+        echo "NOPE";
+    }
+
+    $db_connection->close();
+
+    echo "<pre>";
+    print_r($courses_data);
+    echo "</pre>";
+
     ?>
 
     <div class="container">
@@ -90,7 +144,7 @@
     <script type="text/javascript">
     
         var id = "<?// DEPT ?>";
-        var dataTemp = [];
+        var dataTemp = <? print json_encode($courses_data) ?>;
         var subjects = [];
         var careers = [];
         var characterLimit = 100;
@@ -119,15 +173,16 @@
 
             $('#coursesTable tbody').on( 'click', "td:contains('Expand'), td:contains('Collapse')", function () {
                 var content = table.cell( this ).data();
-                if(content.length > characterLimit+moreContent.length) {
+                
+                if (content.length > characterLimit+moreContent.length) {
                     table.cell(this).data(table.cell(this).data().substring(0,characterLimit) + moreContent).draw(false);
-                }else if($.inArray(content, dataTemp)){
-                table.cell(this).data(dataTemp[content]).draw(false);
+                } else if ($.inArray(content, dataTemp)) {
+                    table.cell(this).data(dataTemp[content]).draw(false);
                 }
             });
         });
 
-        console.log( id );
+        // console.log( id );
 
         var updateTable = function() {
             $('#titleYear').empty();
