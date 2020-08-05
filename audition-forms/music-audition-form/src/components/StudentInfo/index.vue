@@ -1,5 +1,6 @@
 <template>
     <div class="row w-75 form-section mb-4" id="student-info">
+        <h2 class="heading-underline">Student Information</h2>
         <template v-for="(input, i) in inputs">
             <text-input v-if="input.name !== 'address'" :key="i"
                 :label="input.label"

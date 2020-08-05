@@ -1,9 +1,12 @@
 <template>
     <div class="app">
         <form v-show="!isSubmitted" id="music-audition-form" method="post" action="" @submit="submitForm">
-            <student-info :inputs="fields.studentInfo" />
             <program-select :levels="buttons.level" 
                 :programs="buttons.programs"
+                :base-url="baseUrl"
+            />
+            <student-info v-show="showAuditionInfo"
+                :inputs="fields.studentInfo"
             />
             <audition-info v-show="showAuditionInfo" 
                 :buttonList="buttons.years" 

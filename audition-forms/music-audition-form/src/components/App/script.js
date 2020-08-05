@@ -24,6 +24,7 @@ export default {
                     fname: '',
                     lname: '',
                     email: '',
+                    pid: '',
                     phone: '',
                     address: {
                         street1: '',
@@ -139,6 +140,14 @@ export default {
                         required: true,
                     },
                     {
+                        label: 'UCF ID (PID)',
+                        name: 'pid',
+                        colWidth: 6,
+                        type: 'number',
+                        required: true,
+                        maxLength: 7
+                    },
+                    {
                         label: 'Phone',
                         name: 'phone',
                         colWidth: 6,
@@ -221,8 +230,9 @@ export default {
     },
     computed: {
         showAuditionInfo() {
-            return this.values.level !== ''
+            return this.values.level === 'undergrad'
                 && this.values.program.name !== ''
+                && this.values.program.name.substring(0, 3) !== 'ma-'
                 && (this.values.program.name.length > 3
                         || this.values.program.name === 'bme')
         },
@@ -248,6 +258,7 @@ export default {
                 firstName: this.values.studentInfo.fname,
                 lastName: this.values.studentInfo.lname,
                 email: this.values.studentInfo.email,
+                pid: this.values.studentInfo.pid,
                 phone: this.values.studentInfo.phone,
                 parentName: this.values.studentInfo.parentName,
                 preferredName: this.values.studentInfo.preferredName,
