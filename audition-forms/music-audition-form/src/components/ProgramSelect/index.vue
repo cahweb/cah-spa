@@ -12,6 +12,12 @@
             <p>Which track?</p>
             <button-group :buttonList="programs.tracks" name="track" :inline="true" emitOn="trackChange" />
         </div>
+        <div v-if="showReqs" class="row mb-3 w-75 mx-0">
+            <div class="col-12 px-0">
+                <h2 class="heading-underline">Program Requirements for {{ programName }}</h2>
+                <div v-html="programReqs" id="program-reqs"></div>
+            </div>
+        </div>
     </div>
 </template>
 
