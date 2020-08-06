@@ -1,6 +1,7 @@
 <template>
     <div class="form-section">
         <h2 class="heading-underline">Audition Information</h2>
+        <p>UCF Clas Standing upon start of program:</p>
         <div class="row w-75 button-container">
             <button-group :buttonList="buttonList" 
                 name="year" 
@@ -17,6 +18,9 @@
                 emitOn="textInputChange"
                 :isRequired="field.required"
             />
+        </div>
+        <h5 class="subsection-title text-muted">Instrument Details</h5>
+        <div class="row w-75">
             <div class="form-group col-md-6">
                 <label>Primary Instrument or Voice Type:</label>
                 <select class="form-control" 
@@ -34,12 +38,24 @@
                     </option>
                 </select>
             </div>
-            <text-input name="instrumentYears" 
-                label="Years of Private Study" 
-                type="number" 
-                emitOn="textInputChange"
-                :isRequired="true"
-            />
+            <div class="col-12">
+                <div class="row">
+                    <text-input name="instrumentYears" 
+                        label="Years of Private Study" 
+                        type="number" 
+                        emitOn="textInputChange"
+                        :isRequired="true"
+                    />
+                    <text-input name="instrumentTeacher"
+                        label="Private Teacher's Name"
+                        emitOn="textInputChange"
+                        :isRequired="true"
+                    />
+                </div>
+            </div>
+        </div>
+        <h5 class="subsection-title text-muted">Audition Date</h5>
+        <div class="row w-75">
             <div class="form-group col-md-6">
                 <label>Please select your preferred audition date:</label>
                 <select class="form-control" 

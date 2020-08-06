@@ -31,7 +31,19 @@ input[type=radio][data-v-e7bb22a0] {
       content: counter(item);
 }
 
+.row[data-v-c96ff4e4] {
+  margin-bottom: 1em;
+}
 .button-container[data-v-c96ff4e4] {
   margin-right: 0;
   margin-left: 0;
 }
+.subsection-title[data-v-c96ff4e4] {
+  padding-bottom: .5em;
+  margin-bottom: 1em;
+  width: 36%;
+  border-bottom: 2px solid #636c72;
+}
+
+
+
