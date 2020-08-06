@@ -112,8 +112,4 @@
         })
     </script>
 
-    <script>
-    console.log(<? print json_encode($courses_data) ?>);
-    </script>
-
 <? get_footer(); ?>
