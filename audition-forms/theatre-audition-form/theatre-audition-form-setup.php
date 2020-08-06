@@ -29,7 +29,7 @@ use mysqli as mysqli;
 final class AuditionFormSetup
 {
     // The slug of our target page
-    private static $target_slug = "theatre-application-form";
+    private static $target_slug = "theatre/apply";
 
     // The MIME types we'll accept for uploaded files
     private static $allowed_file_types = [
@@ -129,9 +129,10 @@ final class AuditionFormSetup
 
         // Get the page slug
         $slug = $post->post_name;
+        $parent_slug = get_post( wp_get_post_parent_id( $post->ID ) )->post_name;
 
         // Test against the slug we defined as a class member, above.
-        if( $slug === self::$target_slug ) {
+        if( "$parent_slug/$slug" === self::$target_slug ) {
 
             // We only need to enqueue the main script, since we registered it
             // with the chunk script as a dependency.

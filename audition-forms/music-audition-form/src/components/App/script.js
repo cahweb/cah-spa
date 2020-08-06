@@ -48,6 +48,7 @@ export default {
                 hsCounty: '',
                 instrument: '',
                 instrumentYears: '',
+                instrumentTeacher: '',
                 date: '',
             },
             buttons: {
@@ -270,6 +271,7 @@ export default {
                 schoolCounty: this.values.hsCounty,
                 instrument: this.values.instrument,
                 instrumentYears: this.values.instrumentYears,
+                instrumentTeacher: this.values.instrumentTeacher,
                 date: this.values.date,
             }
 

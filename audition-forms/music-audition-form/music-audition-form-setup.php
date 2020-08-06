@@ -16,7 +16,7 @@ use mysqli as mysqli;
 
 final class AuditionFormSetup
 {
-    private static $target_slug = "music-application-form";
+    private static $target_slug = "music/apply";
 
     private function __construct() {}
 
@@ -67,8 +67,9 @@ final class AuditionFormSetup
         if( !isset( $post ) || !is_object( $post ) ) return;
 
         $slug = $post->post_name;
+        $parent_slug = get_post( wp_get_post_parent_id( $post->ID ) )->post_name;
 
-        if( $slug === self::$target_slug ) {
+        if( "$parent_slug/$slug" === self::$target_slug ) {
 
             wp_enqueue_script( "music-form-script" );
 
