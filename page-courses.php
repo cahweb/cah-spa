@@ -14,7 +14,7 @@
         if ($db_connection->connect_error) {
             die("Database connection failed: " . $db_connection->connect_error . "<br><br>");
         } else {
-            echo "Database connection success.<br><br>";
+            // echo "Database connection success.<br><br>";
             return $db_connection;
         }
     }
@@ -22,23 +22,23 @@
     $courses_data = array();
         
     $db_connection = db_connect();      
-    $sql = "SELECT term, department, career, number, prefix, catalog_number, title, instruction_mode, instructor, class_start, class_end, meeting_days FROM courses";
+    $sql = "SELECT courses.term, courses.career, courses.number AS course_number, CONCAT(courses.prefix, courses.catalog_number) AS course_code, courses.title, courses.instruction_mode, TIME_FORMAT(class_start, '%h:%i %p') AS course_time_start, TIME_FORMAT(class_end, '%h:%i %p') AS course_time_end, courses.meeting_days, courses.user_id, courses.department_id, CONCAT(users.fname, ' ', users.lname) AS instructor, departments.short_description AS department FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id;";
     $result = $db_connection->query($sql);
         
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $course_data = array(
-                "term" => $row['term'],
-                "department" => $row['department'],
                 "career" => $row['career'],
-                "number" => $row['number'],
-                "course" => $row['prefix'] . $row['catalog_number'],
-                "title" => $row['title'],
-                "mode" => $row['instruction_mode'],
+                "course_code" => $row['course_code'],
+                "course_number" => $row['course_number'],
+                "department" => $row['department'],
+                "department_id" => $row['department_id'],
                 "instructor" => $row['instructor'],
-                "meeting_days" => $row['meeting_days'],
-                "start_time" => $row['class_start'],
-                "end_time" => $row['class_end']
+                "instructor_id" => $row['user_id'],
+                "instruction_mode" => $row['instruction_mode'],
+                "meeting_datetimes" => $row['meeting_days'] . " " . date_format(date_create($row['course_time_start']), "g:i A") . " - " . date_format(date_create($row['course_time_end']), "g:i A"),
+                "term" => $row['term'],
+                "title" => $row['title'],
             );
         
             array_push($courses_data, $course_data);
@@ -63,8 +63,14 @@
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
 
+<style>
+    #courses > * {
+        font-size: 0.86rem;
+    }
+</style>
+
     <div class="container">
-		<table id="courses" class="display" width="100%">
+		<table id="courses" class="display" width="100%" data-page-length="50">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -100,12 +106,12 @@
             $('#courses').DataTable({
                 data: <? print json_encode($courses_data) ?>,
                 columns: [
-                    { data: 'number' },
-                    { data: 'course' },
+                    { data: 'course_number' },
+                    { data: 'course_code' },
                     { data: 'title' },
                     { data: 'instructor' },
-                    { data: 'mode' },
-                    { data: 'meeting_days' },
+                    { data: 'instruction_mode' },
+                    { data: 'meeting_datetimes' },
                     { data: 'career' }
                 ]
             });
