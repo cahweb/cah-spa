@@ -359,6 +359,10 @@ export default {
                 else
                     item.closest('label').classList.remove('active')
             })
+
+            if ('level' === name) {
+                this.values.program = ''
+            }
         },
         /**
          * Updates data() to store the correct File objects.
@@ -416,6 +420,13 @@ export default {
             // Stop the normal event response
             event.preventDefault()
             event.stopImmediatePropagation()
+
+            const acknowledged = document.querySelector('input[name=programAcknowledge]').checked
+
+            if (!acknowledged) {
+                alert("Please make sure to acknowledge that you are submitting to the correct program below before continuing.")
+                return
+            }
 
             // Set the booleans for the View updates
             this.isSubmitted = true

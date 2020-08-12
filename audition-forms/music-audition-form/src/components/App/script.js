@@ -69,20 +69,29 @@ export default {
                         {
                             text: 'Bachelor of Arts, Music',
                             value: 'ba-music',
+                            hasForm: true,
                         },
                         {
                             text: 'Bachelor of Music',
                             value: 'bm-',
+                            hasForm: true,
                         },
                         {
                             text: 'Bachelor of Music Education',
                             value: 'bme',
+                            hasForm: true
                         },
                     ],
                     grad: [
                         {
-                            text: 'Master of Arts, Music',
+                            text: 'Master of Arts, Music Studies Concentration',
                             value: 'ma-music',
+                            hasForm: false,
+                        },
+                        {
+                            text: 'Master of Arts, Conducting Concentration',
+                            value: 'ma-conducting',
+                            hasForm: false,
                         },
                     ],
                     tracks: [
@@ -245,11 +254,31 @@ export default {
                 return "Processing..."
             }
         },
+        programName() {
+            let name = this.values.program.label
+
+            if (this.values.program.name.substring(0, 3) === 'bm-') {
+                const selectedTrack = this.values.program.name.substring(3)
+                for (const track of this.buttons.tracks) {
+                    if (track.value === selectedTrack) {
+                        return name + `, ${track.text}`
+                    }
+                }
+            }
+            else return name
+        },
     },
     methods: {
         submitForm(event) {
             event.preventDefault()
             event.stopImmediatePropagation()
+
+            const acknowledged = document.querySelector('input[name=programAcknowledge').checked
+
+            if (!acknowledged) {
+                alert("Please check the acknowledgement box near the bottom of the form.")
+                return
+            }
             
             document.querySelector('#submitButton').disabled = true
             this.isProcessing = true
@@ -316,6 +345,7 @@ export default {
                     if (program.value === value) {
                         currentProgram.label = program.text
                         currentProgram.name = program.value
+                        currentProgram.hasForm = program.hasForm
                         break
                     }
                 }

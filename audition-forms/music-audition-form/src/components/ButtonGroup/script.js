@@ -36,13 +36,15 @@ export default {
 
             const buttons = document.querySelectorAll(`input[name=${name}]`)
 
-            buttons.forEach(item => {
-                const label = item.parentNode
-                if (item.getAttribute('value') === this.value)
-                    label.classList.add('active')
-                else
-                    label.classList.remove('active')
-            })
+            if (buttons !== undefined) {
+                buttons.forEach(item => {
+                    const label = item.parentNode
+                    if (item.getAttribute('value') === this.value)
+                        label.classList.add('active')
+                    else
+                        label.classList.remove('active')
+                })
+            }
         },
     }
 }

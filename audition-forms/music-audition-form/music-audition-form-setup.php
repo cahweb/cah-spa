@@ -128,6 +128,7 @@ final class AuditionFormSetup
             'bm-composition',
             'bme',
             'ma-music',
+            'ma-conducting',
         ];
 
         $program_code = array_search( $_POST['program'], $program_lookup );
