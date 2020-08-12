@@ -2,12 +2,17 @@
     <div class="app">
         <div v-if="!isSubmitted" class="form-container">
             <form id="theatre-audition-form" method="post" enctype="multipart/form-data" ref="form">
+                <div class="row mb-3" v-if="values.level !== '' && values.program !== '' && !showForm">
+                    <div class="col-12">
+                        <p>You are viewing instructions to apply for the <strong>{{ values.program.label }}</strong> program. Please be sure you have selected the correct program before continuing.</p>
+                    </div>
+                </div>
                 <p>Are you auditioning for an Undergraduate (B.A. or B.F.A.) or Graduate (M.A. or M.F.A.) program?</p>
                 <div class="radio-group mb-3">
                     <template v-for="(button, i) in buttons.level">
                         <div :key="i" class="form-check form-check-inline mx-2">
                             <label class="form-check-label btn btn-primary btn-sm">
-                                <input type="radio" :id="`level-${i}`" name="level" class="form-check-input" v-model="values.level" :value="button.value" @click="updateActive('level')">
+                                <input type="radio" :id="`level-${i}`" name="level" class="form-check-input" v-model="values.level" :value="button.value" @change="updateActive('level')">
                                 {{ button.label }}
                             </label>
                         </div>
@@ -115,6 +120,14 @@
                     <div class="row w-75 mb-3">
                         <div class="col-md-7">
                             <button type="button" class="btn btn-complementary btn-sm mt-2 rounded float-right" @click="newFile">&plus;</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3" v-if="showForm">
+                        <div class="form-check col-12">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" name="programAcknowledge" value="1" required>
+                                You are submitting an application to the UCF School of Performing Arts for the <strong>{{ values.program.label }}</strong> program. Please click to confirm that this is the correct degree program before continuing.
+                            </label>
                         </div>
                     </div>
                     <div class="row mb-3">
