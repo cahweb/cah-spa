@@ -22,7 +22,7 @@
     $courses_data = array();
         
     $db_connection = db_connect();      
-    $sql = "SELECT courses.term, courses.career, courses.number AS course_number, CONCAT(courses.prefix, courses.catalog_number) AS course_code, courses.title, courses.instruction_mode, TIME_FORMAT(class_start, '%h:%i %p') AS course_time_start, TIME_FORMAT(class_end, '%h:%i %p') AS course_time_end, courses.meeting_days, courses.user_id, courses.department_id, CONCAT(users.fname, ' ', users.lname) AS instructor, departments.short_description AS department FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA';";
+    $sql = "SELECT SUBSTRING_INDEX(courses.term, ' ', 1) AS term_season, SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS term_year, courses.career, courses.number AS course_number, CONCAT(courses.prefix, courses.catalog_number) AS course_code, courses.title, courses.instruction_mode, TIME_FORMAT(class_start, '%h:%i %p') AS course_time_start, TIME_FORMAT(class_end, '%h:%i %p') AS course_time_end, courses.meeting_days, courses.user_id, courses.department_id, CONCAT(users.fname, ' ', users.lname) AS instructor, departments.short_description AS department FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE());";
     $result = $db_connection->query($sql);
         
     if ($result->num_rows > 0) {
@@ -37,7 +37,8 @@
                 "instructor_id" => $row['user_id'],
                 "instruction_mode" => $row['instruction_mode'],
                 "meeting_datetimes" => $row['meeting_days'] . " " . date_format(date_create($row['course_time_start']), "g:i A") . " - " . date_format(date_create($row['course_time_end']), "g:i A"),
-                "term" => $row['term'],
+                "term_season" => $row['term_season'],
+                "term_year" => $row['term_year'],
                 "title" => $row['title'],
             );
         
@@ -80,6 +81,9 @@
                         <th>Mode</th>
                         <th>Date</th>
                         <th>Career</th>
+                        <th>Department</th>
+                        <th>Term Season</th>
+                        <th>Term Year</th>
                     </tr>
                 </thead>
 
@@ -95,6 +99,9 @@
                         <th>Mode</th>
                         <th>Date</th>
                         <th>Career</th>
+                        <th>Department</th>
+                        <th>Term Season</th>
+                        <th>Term Year</th>
                     </tr>
                 </tfoot>
         </table>
@@ -112,7 +119,10 @@
                     { data: 'instructor' },
                     { data: 'instruction_mode' },
                     { data: 'meeting_datetimes' },
-                    { data: 'career' }
+                    { data: 'career' },
+                    { data: 'department' },
+                    { data: 'term_season' },
+                    { data: 'term_year' },
                 ]
             });
         })
