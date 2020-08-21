@@ -80,7 +80,7 @@ function degree_cards_handler($atts = []) {
 					<h1 class="card-title mb-3 h4 text-uppercase font-condensed"><?= $program['post_title'] ?></h1>
 					<h2 class="card-subtitle mb-3 h6 font-weight-normal font-italic text-muted text-transform-none"><?= $program['subtitle'] ?></h2>
 
-					<p class="card-text mb-3" style="font-size: 0.9rem"><?= shorten_desc($program['excerpt'], $desc_limit) ?></p>
+					<p class="card-text mb-3" style="font-size: 0.9rem"><?= $program['excerpt'] ?> <?//shorten_desc($program['excerpt'], $desc_limit) ?></p>
 				</div>
 			</a>
 		</div>

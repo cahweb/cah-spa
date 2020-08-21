@@ -853,5 +853,4 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var D_wa
 eval("module.exports = __webpack_require__(/*! ./src/main.js */\"./src/main.js\");\n\n\n//# sourceURL=webpack:///multi_./src/main.js?");
 
 /***/ })
-
 /******/ });
