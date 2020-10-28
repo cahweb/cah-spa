@@ -275,23 +275,36 @@ function section_cards_handler($atts = []) {
 }
 
 function create_cards($cards) {
+	$music_color = "#33a6ff";
+	$theatre_color = "#dc0f5e";
+	$default_color = "#ffcc00";
+	
 	ob_start();
 
 	?>
 
 	<div class="row mx-0">
 		<? foreach ($cards as $card): ?>
+		
+		<?
+			$card_color = $default_color;
+
+			if ($card['post_category'] === 'music') {
+				$card_color = $music_color;
+			} elseif ($card['post_category'] === 'theatre') {
+				$card_color = $theatre_color;
+			}
+		?>
+
 		<div class="card col-lg-3 mb-4 px-0 card-hover" style="min-width: 31%; margin-right: 1rem">
 			<a href="<?= $card['post_link'] ?>" style="color: inherit; text-decoration: inherit;">
+				<? if ($card['featured_image']): ?>
 				<img src="<?= $card['featured_image'] ?>" alt="Image for <?= $card['post_title'] ?>" class="card-img-top custom-card-img" height="150">
-
-				<? if ($card['post_category'] === 'music'): ?>
-				<div class="" style="height: 0.6rem; background-color: #33a6ff"></div>
-				<? elseif ($card['post_category'] === 'theatre'): ?>
-				<div class="" style="height: 0.6rem; background-color: #dc0f5e"></div>
 				<? else: ?>
-				<div class="" style="height: 0.6rem; background-color: #ffcc00"></div>
+				<div class="" style="height: 150px; background-color: <?= $card_color ?>"></div>
 				<? endif; ?>
+				
+				<div class="" style="height: 0.6rem; background-color: <?= $card_color ?>"></div>
 
 				<div class="card-body p-3">
 					<h1 class="card-title mb-3 h4 text-uppercase font-condensed"><?= $card['post_title'] ?></h1>
