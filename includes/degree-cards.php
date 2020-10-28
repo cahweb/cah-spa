@@ -203,4 +203,110 @@ function shorten_desc($desc, $desc_limit) {
 	}
 }
 
+/*
+    [section-cards]
+    -------------------
+	- Shortcode used to display section cards on SPA.
+		- `section` is drawn from the page tags.
+		- Ensure that the proper category for Music and Theatre are assigned to have the right colored bar.
+    - Parameters:
+		- section: about, beyond
+		- desc-limit: Some integer. Sets the upper chararcter limit for the program's description.
+*/
+
+add_shortcode('section-cards', 'section_cards_handler');
+
+function section_cards_handler($atts = []) {
+	$attributes = shortcode_atts([
+        'section' => '',
+		'desc-limit' => 250,
+    ], $atts);
+	
+    $section = strtolower($atts['section']);
+	
+	// Description limit
+	if (empty($atts['desc-limit'])) {
+		$desc_limit = 250;
+	} else {
+		$desc_limit = $atts['desc-limit'];
+	}
+
+	$cards = array();
+
+	foreach (get_pages() as $page) {
+		if (has_tag($section, $page) && $page->post_status === "publish") {
+			$category = "";
+			if (has_category("Music", $page)) {
+				$category = "music";
+			} elseif (has_category("Theatre", $page)) {
+				$category = "theatre";
+			}
+
+			// echo "ID: " . $page->ID . "<br>";
+			// echo "tags: " . $section . "<br>";
+			// echo "post_status: " . $page->post_status . "<br>";
+
+			// echo "post_link: " . get_page_link($page) . "<br>";
+			// echo "featured_image: " . get_the_post_thumbnail_url($page->ID);
+			// echo "post_title: " . $page->post_title . "<br>";
+			// echo "category: " . $category . "<br>";
+			// echo "subtitle: " . get_the_subtitle($page, '', '', false) . "<br>";
+			// echo "excerpt: " . $page->post_excerpt . "<br>";
+	
+			// echo "<br><br>";
+
+			array_push($cards, array(
+				"post_link" => get_page_link($page),
+				"featured_image" => get_the_post_thumbnail_url($page->ID),
+				"post_title" => $page->post_title,
+				"post_category" => $category,
+				"subtitle" => get_the_subtitle($page, '', '', false),
+				"excerpt" => $page->post_excerpt,
+			));
+		}
+	}
+
+	// Sort cards by `post_title`.
+	usort($cards, function($a, $b) {
+		return $a['post_title'] <=> $b['post_title'];
+	});
+
+	return create_cards($cards);
+}
+
+function create_cards($cards) {
+	ob_start();
+
+	?>
+
+	<div class="row mx-0">
+		<? foreach ($cards as $card): ?>
+		<div class="card col-lg-3 mb-4 px-0 card-hover" style="min-width: 31%; margin-right: 1rem">
+			<a href="<?= $card['post_link'] ?>" style="color: inherit; text-decoration: inherit;">
+				<img src="<?= $card['featured_image'] ?>" alt="Image for <?= $card['post_title'] ?>" class="card-img-top custom-card-img" height="150">
+
+				<? if ($card['post_category'] === 'music'): ?>
+				<div class="" style="height: 0.6rem; background-color: #33a6ff"></div>
+				<? elseif ($card['post_category'] === 'theatre'): ?>
+				<div class="" style="height: 0.6rem; background-color: #dc0f5e"></div>
+				<? else: ?>
+				<div class="" style="height: 0.6rem; background-color: #ffcc00"></div>
+				<? endif; ?>
+
+				<div class="card-body p-3">
+					<h1 class="card-title mb-3 h4 text-uppercase font-condensed"><?= $card['post_title'] ?></h1>
+					<h2 class="card-subtitle mb-3 h6 font-weight-normal font-italic text-muted text-transform-none"><?= $card['subtitle'] ?></h2>
+
+					<p class="card-text mb-3" style="font-size: 0.9rem"><?= $card['excerpt'] ?> <?//shorten_desc($card['excerpt'], $desc_limit) ?></p>
+				</div>
+			</a>
+		</div>
+		<? endforeach; ?>
+	</div>
+
+	<?
+
+	return ob_get_clean();
+}
+
 ?>

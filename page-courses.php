@@ -23,7 +23,7 @@
         $courses_data = array();
             
         $db_connection = db_connect();      
-        $sql = "SELECT SUBSTRING_INDEX(courses.term, ' ', 1) AS term_season, SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS term_year, courses.career, courses.number AS course_number, CONCAT(courses.prefix, courses.catalog_number) AS course_code, courses.title, courses.instruction_mode, TIME_FORMAT(class_start, '%h:%i %p') AS course_time_start, TIME_FORMAT(class_end, '%h:%i %p') AS course_time_end, courses.meeting_days, courses.user_id, courses.department_id, CONCAT(users.fname, ' ', users.lname) AS instructor, departments.short_description AS department FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE());";
+        $sql = "SELECT courses.term, courses.career, courses.number AS course_number, CONCAT(courses.prefix, courses.catalog_number) AS course_code, courses.title, courses.instruction_mode, TIME_FORMAT(class_start, '%h:%i %p') AS course_time_start, TIME_FORMAT(class_end, '%h:%i %p') AS course_time_end, courses.meeting_days, courses.user_id, courses.department_id, CONCAT(users.fname, ' ', users.lname) AS instructor, departments.short_description AS department FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE());";
         $result = $db_connection->query($sql);
             
         if ($result->num_rows > 0) {
@@ -38,16 +38,11 @@
                     "instructor_id" => $row['user_id'],
                     "instruction_mode" => $row['instruction_mode'],
                     "meeting_datetimes" => $row['meeting_days'] . " " . date_format(date_create($row['course_time_start']), "g:i A") . " - " . date_format(date_create($row['course_time_end']), "g:i A"),
-                    "term_season" => $row['term_season'],
-                    "term_year" => $row['term_year'],
+                    "term" => $row['term'],
                     "title" => $row['title'],
                 );
             
                 array_push($courses_data, $course_data);
-            
-                // echo "<pre>";
-                // print_r($row);
-                // echo "</pre>";
             }
         } else {
             echo "There is either no course data or something went wrong trying to fetch that data.";
@@ -57,22 +52,40 @@
 
         return $courses_data;
     }
-        
 
-    function get_unique_term_years() {
-        $unique_years = array();
+    function get_current_term() {
+        $current_year = date("Y");
+        $current_month = date("n");
+        $current_day = date("j");
+
+        $current_term_season = "";
+        
+        // Fair chance that if it's after August 14th, it's the start of Fall semester.
+        if (($current_month == 7 && $current_day > 14) || (8 <= $current_month && $current_month <= 11)) {
+            $current_term_season = "Fall";
+        }
+        // Spring semester.
+        else if ((0 <= $current_month && $current_month <= 3) || ($current_month == 4 && $current_day >= 14)) {
+            $current_term_season = "Spring";
+        }
+        // Fair chance that if it's after May 14th, it's the start of Summer semester.
+        else {
+            $current_term_season = "Summer";
+        }
+
+        return array("current_term_year" => $current_year, "current_term_season" => $current_term_season);
+    }
+
+    function get_unique_terms() {
+        $unique_terms = array();
 
         $db_connection = db_connect();
-        $sql = "SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS term_year FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE());";
+        $sql = "SELECT DISTINCT courses.term FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE()) ORDER BY SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) ASC, SUBSTRING_INDEX(courses.term, ' ', 2) DESC;";
         $result = $db_connection->query($sql);
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                array_push($unique_years, $row['term_year']);
-            
-                // echo "<pre>";
-                // print_r($row);
-                // echo "</pre>";
+                array_push($unique_terms, $row['term']);
             }
         } else {
             echo "There is either no course data or something went wrong trying to fetch that data.";
@@ -80,12 +93,8 @@
 
         $db_connection->close();
 
-        return $unique_years;
+        return $unique_terms;
     }
-        
-    // echo "<pre>";
-    // print_r(get_unique_term_years());
-    // echo "</pre>";
 ?>
 
 <? get_header(); ?>
@@ -102,7 +111,38 @@
 </style>
 
     <div class="container mb-5">
-        <h2 id="current-term">Test</h2>
+        <h2 id="current-term"></h2>
+
+        <div class="mb-4 row mx-0 justify-content-center">
+            <div class="mr-4">
+                <label for="filter-term">Term:</label>
+                <select name="filter-term" id="filter-term" class="filter-select">
+                    <?
+                        foreach (get_unique_terms() as $term) {
+                            echo '<option value="' . $term . '">' . $term . "</option>";
+                        }
+                    ?>
+                </select> 
+            </div>
+
+            <div class="mr-4">
+                <label for="filter-subject">Subject:</label>
+                <select name="filter-subject" id="filter-subject" class="filter-select">
+                    <option value="All">All</option>
+                    <option value="Music">Music</option>
+                    <option value="Theatre">Theatre</option>
+                </select> 
+            </div>
+
+            <div>
+                <label for="filter-career">Career:</label>
+                <select name="filter-career" id="filter-career" class="filter-select">
+                    <option value="All">All</option>
+                    <option value="UGRD">UGRD</option>
+                    <option value="GRAD">GRAD</option>
+                </select> 
+            </div>
+        </div>
 
 		<table id="courses" class="display" width="100%" data-page-length="50">
                 <thead>
@@ -115,8 +155,7 @@
                         <th>Date</th>
                         <th>Career</th>
                         <th>Department</th>
-                        <th>Term Season</th>
-                        <th>Term Year</th>
+                        <th>Term</th>
                     </tr>
                 </thead>
 
@@ -133,8 +172,7 @@
                         <th>Date</th>
                         <th>Career</th>
                         <th>Department</th>
-                        <th>Term Season</th>
-                        <th>Term Year</th>
+                        <th>Term</th>
                     </tr>
                 </tfoot>
         </table>
@@ -142,32 +180,62 @@
 
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     <script>
-        let termSeasons = ["Fall", "Spring", "Summer"];
-        let termYears = <? print json_encode(get_unique_term_years()) ?>;
-        let currentTermHeader = document.getElementById("current-term");
-
-        let currentDate = new Date();
-        let currentTermYear = termYears[0];
-        let currentTermSeason;
+        let currentTerm = "<?= get_current_term()['current_term_season'] . ' ' . get_current_term()['current_term_year'] ?>";
         
-        // Fair chance that if it's after August 14th, it's the start of Fall semester.
-        if ((currentDate.getMonth() == 7 && currentDate.getDate() > 14) || (8 <= currentDate.getMonth() && currentDate.getMonth() <= 11)) {
-            currentTermSeason = "Fall";
-        }
-        // Spring semester.
-        else if ((0 <= currentDate.getMonth() && currentDate.getMonth() <= 3) || (currentDate.getMonth() == 4 && currentDate.getDate() >= 14)) {
-            currentTermSeason = "Spring";
-        }
-        // Fair chance that if it's after May 14th, it's the start of Summer semester.
-        else {
-            currentTermSeason = "Summer";
-        }
+        let currentTermHeader = document.getElementById("current-term");
+        currentTermHeader.innerHTML = currentTerm;
 
-        currentTermHeader.innerHTML = currentTermSeason + " " + currentTermYear;
+        let currentTermFilter = document.getElementById("filter-term");
+        currentTermFilter.value = currentTerm;
+        let currentSubjectFilter = document.getElementById("filter-subject");
+        currentSubjectFilter.value = "All";
+        let currentCareerFilter = document.getElementById("filter-career");
+        currentCareerFilter.value = "All";
 
-        $(document).ready(function () {
+        let courseData = <?= json_encode(get_course_data()) ?>;
+
+        function filterCourseData(data, term, subject, career) {
+            let filteredCourseData = [];
+
+            data.forEach(course => {
+                if (course.term == term) {
+                    if (subject == "All" && career == "All") {
+                        filteredCourseData.push(course);
+                    }
+
+                    if (subject != "All") {
+                        if (career == "All") {
+                            if (course.department == subject){
+                                filteredCourseData.push(course);
+                            }
+                        } else {
+                            if (course.department == subject && course.career == career){
+                                filteredCourseData.push(course);
+                            }
+                        }
+                    }
+
+                    if (career != "All") {
+                        if (subject == "All") {
+                            if (course.career == career){
+                                filteredCourseData.push(course);
+                            }
+                        } else {
+                            if (course.career == career && course.department == subject){
+                                filteredCourseData.push(course);
+                            }
+                        }
+                    }
+                }
+            });
+
+            return filteredCourseData;
+        }  
+
+        function renderCourseTable(filteredCourseData) {
             $('#courses').DataTable({
-                data: <? print json_encode(get_course_data()) ?>,
+                data: filteredCourseData,
+                destroy: true,
                 columns: [
                     { data: 'course_number' },
                     { data: 'course_code' },
@@ -177,11 +245,19 @@
                     { data: 'meeting_datetimes' },
                     { data: 'career' },
                     { data: 'department' },
-                    { data: 'term_season' },
-                    { data: 'term_year' },
+                    { data: 'term' },
                 ]
             });
-        })
+        }
+
+        $(document).ready(function () {
+            renderCourseTable(filterCourseData(courseData, currentTermFilter.value, currentSubjectFilter.value, currentCareerFilter.value));
+        });
+
+        $('.filter-select').change(function() {
+            currentTermHeader.innerHTML = currentTermFilter.value;
+            renderCourseTable(filterCourseData(courseData, currentTermFilter.value, currentSubjectFilter.value, currentCareerFilter.value));
+        });
     </script>
 
 <? get_footer(); ?>
