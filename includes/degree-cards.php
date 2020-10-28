@@ -207,10 +207,11 @@ function shorten_desc($desc, $desc_limit) {
     [section-cards]
     -------------------
 	- Shortcode used to display section cards on SPA.
-		- `section` is drawn from the page tags.
+		- `section` is drawn from the page tags if it "about" and "beyond".
+			- Otherwise, it can be "studio" or "ensemble".
 		- Ensure that the proper category for Music and Theatre are assigned to have the right colored bar.
     - Parameters:
-		- section: about, beyond
+		- section: about, beyond, ensemble, studio
 		- desc-limit: Some integer. Sets the upper chararcter limit for the program's description.
 */
 
@@ -232,40 +233,65 @@ function section_cards_handler($atts = []) {
 	}
 
 	$cards = array();
+	$pages = array();
+	$se_flag = false;
 
-	foreach (get_pages() as $page) {
-		if (has_tag($section, $page) && $page->post_status === "publish") {
+	if ($section === "studio") {
+		$pages = get_posts(array('post_type' => 'studio', 'posts_per_page' => -1));
+		$se_flag = true;
+	} else if ($section === "ensemble") {
+		$pages = get_posts(array('post_type' => 'ensemble', 'posts_per_page' => -1));
+		$se_flag = true;
+	} else {
+		$pages = get_pages();
+	}
+
+	foreach ($pages as $page) {
+		$push_flag = false;
+
+		if ($page->post_status === "publish") {
 			$category = "";
-			if (has_category("Music", $page)) {
-				$category = "music";
-			} elseif (has_category("Theatre", $page)) {
-				$category = "theatre";
+
+			if (has_tag($section, $page)) {
+				if (has_category("Music", $page)) {
+					$category = "music";
+				} elseif (has_category("Theatre", $page)) {
+					$category = "theatre";
+				}
+
+				$push_flag = true;
+			} else if ($se_flag) {
+				$category = ucfirst($section);
+
+				$push_flag = true;
 			}
 
 			// echo "ID: " . $page->ID . "<br>";
-			// echo "tags: " . $section . "<br>";
+			// echo "section: " . $section . "<br>";
 			// echo "post_status: " . $page->post_status . "<br>";
 
 			// echo "post_link: " . get_page_link($page) . "<br>";
-			// echo "featured_image: " . get_the_post_thumbnail_url($page->ID);
+			// echo "featured_image: " . get_the_post_thumbnail_url($page->ID) . "<br>";
 			// echo "post_title: " . $page->post_title . "<br>";
 			// echo "category: " . $category . "<br>";
 			// echo "subtitle: " . get_the_subtitle($page, '', '', false) . "<br>";
 			// echo "excerpt: " . $page->post_excerpt . "<br>";
 	
-			// echo "<br><br>";
+			// echo "<br>";
 
-			array_push($cards, array(
-				"post_link" => get_page_link($page),
-				"featured_image" => get_the_post_thumbnail_url($page->ID),
-				"post_title" => $page->post_title,
-				"post_category" => $category,
-				"subtitle" => get_the_subtitle($page, '', '', false),
-				"excerpt" => $page->post_excerpt,
-			));
+			if ($push_flag) {
+				array_push($cards, array(
+					"post_link" => get_page_link($page),
+					"featured_image" => get_the_post_thumbnail_url($page->ID),
+					"post_title" => $page->post_title,
+					"post_category" => $category,
+					"subtitle" => get_the_subtitle($page, '', '', false),
+					"excerpt" => $page->post_excerpt,
+				));
+			}
 		}
 	}
-
+	
 	// Sort cards by `post_title`.
 	usort($cards, function($a, $b) {
 		return $a['post_title'] <=> $b['post_title'];
@@ -289,7 +315,7 @@ function create_cards($cards) {
 		<?
 			$card_color = $default_color;
 
-			if ($card['post_category'] === 'music') {
+			if ($card['post_category'] === 'music' || "studio" || "ensemble") {
 				$card_color = $music_color;
 			} elseif ($card['post_category'] === 'theatre') {
 				$card_color = $theatre_color;
@@ -303,7 +329,7 @@ function create_cards($cards) {
 				<? else: ?>
 				<div class="" style="height: 150px; background-color: <?= $card_color ?>"></div>
 				<? endif; ?>
-				
+
 				<div class="" style="height: 0.6rem; background-color: <?= $card_color ?>"></div>
 
 				<div class="card-body p-3">
