@@ -261,7 +261,7 @@ function section_cards_handler($atts = []) {
 
 				$push_flag = true;
 			} else if ($se_flag) {
-				$category = ucfirst($section);
+				$category = $section;
 
 				$push_flag = true;
 			}
@@ -269,14 +269,14 @@ function section_cards_handler($atts = []) {
 			// echo "ID: " . $page->ID . "<br>";
 			// echo "section: " . $section . "<br>";
 			// echo "post_status: " . $page->post_status . "<br>";
-
+			
 			// echo "post_link: " . get_page_link($page) . "<br>";
 			// echo "featured_image: " . get_the_post_thumbnail_url($page->ID) . "<br>";
 			// echo "post_title: " . $page->post_title . "<br>";
 			// echo "category: " . $category . "<br>";
 			// echo "subtitle: " . get_the_subtitle($page, '', '', false) . "<br>";
 			// echo "excerpt: " . $page->post_excerpt . "<br>";
-	
+			
 			// echo "<br>";
 
 			if ($push_flag) {
@@ -315,7 +315,7 @@ function create_cards($cards) {
 		<?
 			$card_color = $default_color;
 
-			if ($card['post_category'] === 'music' || "studio" || "ensemble") {
+			if (in_array($card['post_category'], array('music', 'studio', 'ensemble'))) {
 				$card_color = $music_color;
 			} elseif ($card['post_category'] === 'theatre') {
 				$card_color = $theatre_color;
