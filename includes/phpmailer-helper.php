@@ -3,13 +3,13 @@ namespace UCF\CAH\MailTools;
 
 // Load PHPMailer
 /* For Local Dev */
-/*
+///*
 require_once 'D:\\wamp64\\composer\\vendor\\autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
-*/
+//*/
 
 /* -- For PROD -- */
-
+/*
 require_once 'class.phpmailer.php';
 use PHPMailer as PHPMailer;
 //*/
