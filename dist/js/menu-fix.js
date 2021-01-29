@@ -32,6 +32,15 @@
                 }
             })
         })
+
+        $(".navbar-brand").css("font-size", "1.1rem");
+        $(".navbar-brand").html("School of Performing&nbsp;Arts");
+
+        $("#header-menu>ul").find("li").each(function() {
+            $(this).children("a").css("text-align", "center");
+            $(this).children("a").css("font-size", "0.7rem");
+            $(this).children("a").css("padding-left", "0.75rem");
+            $(this).children("a").css("padding-right", "0.75rem");
+        })
     })
-    
 })(jQuery)

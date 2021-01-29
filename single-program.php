@@ -22,6 +22,7 @@ $custom = get_post_custom($post->ID);
 
 $subtitle = $custom["subtitle"][0];
 $catalog = $custom["catalog"][0];
+$apply_link = $custom['apply-link'][0];
 $flyer = $custom["flyer"][0];
 $flyername = $custom["flyername"][0];
 $program_category = $custom['program_category'][0];
@@ -61,13 +62,24 @@ if (stripos($title, 'theatre') !== false) {
 
 <div class="container pt-4 pb-4">
     <div class="row" id="degree-div">
-        <div class="col-md-8">
+        <div class="col-md-8 pt-3">
             <!-- <h2>Overview</h2> -->
+
+            <? if (!empty($catalog)): ?>
+                <div class="mb-4 hidden-md-up btn-group-vertical mt-3">
+                    <a href="<?= $catalog; ?>" class="btn btn-default" target="_blank" rel="noopener">UCF Catalog</a>
+                    <?php if (!empty( $apply_link ) ) : ?>
+                    <a href="<?= $apply_link ?>" class="btn btn-default" target="_blank" rel="noopener">How to Apply</a>
+                    <?php endif; ?>
+                </div>
+            <? endif; ?>
+
             <div>
                 <?php echo apply_filters("the_content", $description); ?>
             </div>
             <? if (!empty($requirements)): ?>
-                <h2>Requirements</h2>
+                <hr class="my-4">
+                <h2 class="h1 font-condensed mt-5 mb-4">Notes</h2>
                 <div>
                     <?php echo apply_filters("the_content", $requirements); ?>
                 </div>
@@ -139,9 +151,14 @@ if (stripos($title, 'theatre') !== false) {
                 <br>NSC 121
             <? endif; ?>
 
-            <? if (!empty($catalog)): ?>
-                <div class="mb-4">
-                    <a href="<?= $catalog; ?>" class="btn btn-primary btn-sm" target="_blank">UCF Catalog</a>
+            <? if (!empty($catalog) || !empty( $apply_link ) ): ?>
+                <div class="mb-4 btn-group-vertical mt-3">
+                    <?php if( !empty( $catalog ) ): ?>
+                    <a href="<?= $catalog; ?>" class="btn btn-default" target="_blank" rel="noopener">UCF Catalog</a>
+                    <?php endif; ?>
+                    <?php if( !empty( $apply_link ) ): ?>
+                    <a href="<?= $apply_link ?>" class="btn btn-default" target="_blank" rel="noopener">How to Apply</a>
+                    <?php endif; ?>
                 </div>
             <? endif; ?>
 

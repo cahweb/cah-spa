@@ -19,27 +19,63 @@
         }
     }
 
+    function parse_instruction_mode($mode_short, $mode) {
+        $parsed_mode = "";
+
+        switch ($mode_short) {
+            case "P":
+                $parsed_mode = "F2F";
+                break;
+            case "W":
+                $parsed_mode = "WWW";
+                break;
+            case "M":
+                $parsed_mode = "MIX";
+                break;
+            case "Adaptive Reduced Seat Time":
+                $parsed_mode = "RST";
+                break;
+            case "V":
+                $parsed_mode = "VID";
+                break;
+            default:
+                $parsed_mode = "N/A";
+        }
+
+        return '<abbr class="initialism" title="' . $mode . '">' . $parsed_mode . '</abbr>';
+    }
+
+    function parse_syllabus($flag, $file) {
+        if ($flag) {
+            return '<a class="d-block text-center" href="/common/files/syllabi/' . $file . '" rel="external" target="_blank"><i class="fa fa-lg fa-file-text-o"></i></a>';
+        } else {
+            return "";
+        }
+    }
+
     function get_course_data() {
         $courses_data = array();
             
         $db_connection = db_connect();      
-        $sql = "SELECT courses.term, courses.career, courses.number AS course_number, CONCAT(courses.prefix, courses.catalog_number) AS course_code, courses.title, courses.instruction_mode, TIME_FORMAT(class_start, '%h:%i %p') AS course_time_start, TIME_FORMAT(class_end, '%h:%i %p') AS course_time_end, courses.meeting_days, courses.user_id, courses.department_id, CONCAT(users.fname, ' ', users.lname) AS instructor, departments.short_description AS department FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE());";
+        $sql = "SELECT courses.term, courses.career, courses.number AS course_number, courses.prefix, CONCAT(courses.prefix, courses.catalog_number) AS course_code, courses.title, courses.description, courses.instruction_mode, substring_index(substring_index(courses.instruction_mode, '(', -1), ')', 1) AS instruction_mode_short, TIME_FORMAT(class_start, '%h:%i %p') AS course_time_start, TIME_FORMAT(class_end, '%h:%i %p') AS course_time_end, courses.meeting_days, courses.user_id, courses.department_id, CONCAT(users.fname, ' ', users.lname) AS instructor, departments.short_description AS department, courses.syllabus_file, CONCAT(courses.prefix, courses.catalog_number, courses.section, SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', 1), SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1), '.pdf') AS syllabus_pdf FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE());";
         $result = $db_connection->query($sql);
             
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $course_data = array(
                     "career" => $row['career'],
+                    "prefix" => $row['prefix'],
                     "course_code" => $row['course_code'],
                     "course_number" => $row['course_number'],
                     "department" => $row['department'],
                     "department_id" => $row['department_id'],
-                    "instructor" => $row['instructor'],
-                    "instructor_id" => $row['user_id'],
-                    "instruction_mode" => $row['instruction_mode'],
+                    "instructor" => '<a href="/faculty-staff?id=' . $row['user_id'] . '">' . $row['instructor'] . "</a>",
+                    "instruction_mode" => parse_instruction_mode($row['instruction_mode_short'], $row['instruction_mode']),
                     "meeting_datetimes" => $row['meeting_days'] . " " . date_format(date_create($row['course_time_start']), "g:i A") . " - " . date_format(date_create($row['course_time_end']), "g:i A"),
                     "term" => $row['term'],
                     "title" => $row['title'],
+                    "description" => $row['description'],
+                    "syllabus" => parse_syllabus($row['syllabus_file'], $row['syllabus_pdf']),
                 );
             
                 array_push($courses_data, $course_data);
@@ -95,6 +131,27 @@
 
         return $unique_terms;
     }
+
+    function get_unique_prefixes() {
+        $unique_prefixes = array();
+
+        $db_connection = db_connect();
+        $sql = "SELECT DISTINCT courses.prefix FROM courses INNER JOIN users ON courses.user_id = users.id INNER JOIN departments ON courses.department_id = departments.id WHERE departments.ou = 'SPA' AND CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(courses.term, ' ', 2), ' ', -1) AS UNSIGNED) >= YEAR(CURDATE()) ORDER BY courses.prefix ASC;";
+        $result = $db_connection->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                array_push($unique_prefixes, $row['prefix']);
+            }
+        } else {
+            echo "There is either no course data or something went wrong trying to fetch that data.";
+        }
+
+        $db_connection->close();
+
+        return $unique_prefixes;
+    }
+    
 ?>
 
 <? get_header(); ?>
@@ -126,11 +183,14 @@
             </div>
 
             <div class="mr-4">
-                <label for="filter-subject">Subject:</label>
-                <select name="filter-subject" id="filter-subject" class="filter-select">
+                <label for="filter-prefix">Prefix:</label>
+                <select name="filter-prefix" id="filter-prefix" class="filter-select">
                     <option value="All">All</option>
-                    <option value="Music">Music</option>
-                    <option value="Theatre">Theatre</option>
+                    <?
+                        foreach (get_unique_prefixes() as $prefix) {
+                            echo '<option value="' . $prefix . '">' . $prefix . "</option>";
+                        }
+                    ?>
                 </select> 
             </div>
 
@@ -144,18 +204,18 @@
             </div>
         </div>
 
-		<table id="courses" class="display" width="100%" data-page-length="50">
+		<table id="courses" class="display responsive" width="100%" data-page-length="50" style="font-size:0.8rem;">
                 <thead>
                     <tr>
                         <th>No.</th>
                         <th>Course</th>
                         <th>Title</th>
+                        <th>Description</th>
                         <th>Instructor</th>
                         <th>Mode</th>
                         <th>Date</th>
+                        <th>Syllabus</th>
                         <th>Career</th>
-                        <th>Department</th>
-                        <th>Term</th>
                     </tr>
                 </thead>
 
@@ -167,12 +227,12 @@
                         <th>No.</th>
                         <th>Course</th>
                         <th>Title</th>
+                        <th>Description</th>
                         <th>Instructor</th>
                         <th>Mode</th>
                         <th>Date</th>
+                        <th>Syllabus</th>
                         <th>Career</th>
-                        <th>Department</th>
-                        <th>Term</th>
                     </tr>
                 </tfoot>
         </table>
@@ -187,43 +247,34 @@
 
         let currentTermFilter = document.getElementById("filter-term");
         currentTermFilter.value = currentTerm;
-        let currentSubjectFilter = document.getElementById("filter-subject");
-        currentSubjectFilter.value = "All";
+        let currentPrefixFilter = document.getElementById("filter-prefix");
+        currentPrefixFilter.value = "All";
         let currentCareerFilter = document.getElementById("filter-career");
         currentCareerFilter.value = "All";
 
         let courseData = <?= json_encode(get_course_data()) ?>;
 
-        function filterCourseData(data, term, subject, career) {
+        function filterCourseData(data, term, prefix, career) {
             let filteredCourseData = [];
 
             data.forEach(course => {
                 if (course.term == term) {
-                    if (subject == "All" && career == "All") {
+                    if (prefix == "All" && career == "All") {
                         filteredCourseData.push(course);
                     }
-
-                    if (subject != "All") {
-                        if (career == "All") {
-                            if (course.department == subject){
-                                filteredCourseData.push(course);
-                            }
-                        } else {
-                            if (course.department == subject && course.career == career){
-                                filteredCourseData.push(course);
-                            }
+                    else if (prefix == "All" && career != "All") {
+                        if (course.career == career) {
+                            filteredCourseData.push(course);
                         }
                     }
-
-                    if (career != "All") {
-                        if (subject == "All") {
-                            if (course.career == career){
-                                filteredCourseData.push(course);
-                            }
-                        } else {
-                            if (course.career == career && course.department == subject){
-                                filteredCourseData.push(course);
-                            }
+                    else if (prefix != "All" && career == "All") {
+                        if (course.prefix == prefix) {
+                            filteredCourseData.push(course);
+                        }
+                    }
+                    else if (prefix != "All" && career != "All") {
+                        if (course.prefix == prefix && course.career == career) {
+                            filteredCourseData.push(course);
                         }
                     }
                 }
@@ -240,23 +291,23 @@
                     { data: 'course_number' },
                     { data: 'course_code' },
                     { data: 'title' },
+                    { data: 'description' },
                     { data: 'instructor' },
                     { data: 'instruction_mode' },
                     { data: 'meeting_datetimes' },
+                    { data: 'syllabus' },
                     { data: 'career' },
-                    { data: 'department' },
-                    { data: 'term' },
                 ]
             });
         }
 
         $(document).ready(function () {
-            renderCourseTable(filterCourseData(courseData, currentTermFilter.value, currentSubjectFilter.value, currentCareerFilter.value));
+            renderCourseTable(filterCourseData(courseData, currentTermFilter.value, currentPrefixFilter.value, currentCareerFilter.value));
         });
 
         $('.filter-select').change(function() {
             currentTermHeader.innerHTML = currentTermFilter.value;
-            renderCourseTable(filterCourseData(courseData, currentTermFilter.value, currentSubjectFilter.value, currentCareerFilter.value));
+            renderCourseTable(filterCourseData(courseData, currentTermFilter.value, currentPrefixFilter.value, currentCareerFilter.value));
         });
     </script>
 

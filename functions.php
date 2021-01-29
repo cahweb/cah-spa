@@ -6,12 +6,13 @@
 include "dev/dev.php";
 include "includes/degree-cards.php";
 
+
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 function my_theme_enqueue_styles() {
-    wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/static/css/style.min.css' );
+	wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/static/css/style.min.css' );
     
     // Customized Style
-    wp_enqueue_style( 'child-style',  get_stylesheet_directory_uri() . '/style.css', array('parent-style'));
+	wp_enqueue_style( 'child-style',  get_stylesheet_directory_uri() . '/style.css', array('parent-style'));
 }
 
 // Defining SPA department code
@@ -67,6 +68,12 @@ function get_header_default_markup( $post ) {
 	return ob_get_clean();
 }
 
+// Enables the Excerpt meta box in post type edit screen.
+function wpcodex_add_excerpt_support_for_post() {
+	add_post_type_support( 'page', 'excerpt' );
+}
+add_action( 'init', 'wpcodex_add_excerpt_support_for_post' );
+
 // Ensemble Interest Form Results
 include_once "includes/ensemble-student-results.php";
 add_action( 'init', [ "UCF\\CAH\\SPA\\Music\\EnsembleAdminPage", 'setup' ], 10, 0 );
@@ -81,4 +88,5 @@ add_action( 'init', [ "UCF\\CAH\\SPA\\Theatre\\AuditionForm\\AuditionFormAdmin",
 // Music Audition Form
 include_once "audition-forms/music-audition-form/music-audition-form-setup.php";
 add_action( 'init', [ "UCF\\CAH\\SPA\\Music\\AuditionForm\\AuditionFormSetup", 'setup' ], 10, 0 );
+
 ?>

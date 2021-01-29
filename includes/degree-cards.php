@@ -266,6 +266,17 @@ function section_cards_handler($atts = []) {
 				$push_flag = true;
 			}
 
+			switch($section) {
+				case "studio":
+					$post_link = "/studio/" . $page->post_name;
+					break;
+				case "ensemble":
+					$post_link = "/ensemble/" . $page->post_name;
+					break;
+				default:
+					$post_link = get_page_link($page);
+			}
+
 			// echo "ID: " . $page->ID . "<br>";
 			// echo "section: " . $section . "<br>";
 			// echo "post_status: " . $page->post_status . "<br>";
@@ -281,7 +292,7 @@ function section_cards_handler($atts = []) {
 
 			if ($push_flag) {
 				array_push($cards, array(
-					"post_link" => get_page_link($page),
+					"post_link" => $post_link,
 					"featured_image" => get_the_post_thumbnail_url($page->ID),
 					"post_title" => $page->post_title,
 					"post_category" => $category,
@@ -332,11 +343,11 @@ function create_cards($cards) {
 
 				<div class="" style="height: 0.6rem; background-color: <?= $card_color ?>"></div>
 
-				<div class="card-body p-3">
+				<div class="card-body p-3" style="line-height: 1.5rem;">
 					<h1 class="card-title mb-3 h4 text-uppercase font-condensed"><?= $card['post_title'] ?></h1>
 					<h2 class="card-subtitle mb-3 h6 font-weight-normal font-italic text-muted text-transform-none"><?= $card['subtitle'] ?></h2>
 
-					<p class="card-text mb-3" style="font-size: 0.9rem"><?= $card['excerpt'] ?> <?//shorten_desc($card['excerpt'], $desc_limit) ?></p>
+					<p class="card-text mb-2" style="font-size: 0.9rem"><?= $card['excerpt'] ?> <?//shorten_desc($card['excerpt'], $desc_limit) ?></p>
 				</div>
 			</a>
 		</div>
