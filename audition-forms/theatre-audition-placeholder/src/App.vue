@@ -8,7 +8,7 @@
     <div v-if="!!selected && Object.keys(selected).length > 0" id="reqInfo">
       <h2 class="heading-underline">Program Requirements for {{ selected.name }}</h2>
       <div v-if="specialty === 'theatre'">
-        <a class="btn btn-primary mb-3" href="https://devspa.cah.ucf.edu/audition-theatre" target="_blank" rel="noopener">Apply Now</a>
+        <a class="btn btn-primary mb-3" href="https://performingarts.cah.ucf.edu/audition-theatre" target="_blank" rel="noopener">Apply Now</a>
         <div id="preamble">
           <p v-if="programCoordinator"><strong>Program Coordinator: {{ programCoordinator.name }}</strong> <a :href="`mailto:${programCoordinator.email}`">{{ programCoordinator.email }}</a></p>
           <p v-if="selected.level === 'undergrad'" id="undergrad-blurb"> Students must apply and be accepted through both the UCF School of Performing Arts and <a href="https://www.ucf.edu/admissions/undergraduate">UCF Undergraduate Admissions</a>. It is encouraged to apply to both UCF Undergraduate Admissions and the UCF School of Performing Arts as early as possible. The school can provisionally accept students prior to being accepted by UCF Undergraduate Admissions but cannot offer official acceptance of study until students receive their UCF acceptance.</p>
@@ -19,7 +19,7 @@
         </div>
       </div>
       <div v-else-if="specialty === 'music'">
-        <a class="btn btn-primary mb-3" href="https://devspa.cah.ucf.edu/audition-music" target="_blank" rel="noopener">Apply Now</a>
+        <a class="btn btn-primary mb-3" href="https://performingarts.cah.ucf.edu/audition-music" target="_blank" rel="noopener">Apply Now</a>
         <div v-html="programCopy" class="mb-3" id="programReqs" />
       </div>
     </div>
