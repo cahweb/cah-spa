@@ -1,13 +1,13 @@
 // Requires JQuery
 
 (function($) {
-    const headers = ['Student Resources'];
+   // const headers = ['Student Resources'];
 
     const items = [
         'Production Auditions',
         'Music Ensembles',
         'Scholarships',
-        'Course Listings',
+        //'Course Listings',
         'Student Organizations',
         'Production Calendar',
         'Production Archives',

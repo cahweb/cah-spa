@@ -13,10 +13,10 @@ final class AuditionFormAdmin
     private static $text_domain = "cah-spa-audition-theatre";
 
     // For DEV
-    private static $application_file_path = "D:\\wamp64\\application-files\\spa\\theatre";
+    //private static $application_file_path = "D:\\wamp64\\application-files\\spa\\theatre";
 
     // For PROD
-    //private static $application_file_path = "D:\\inetpub\\store\\spa\\theatre\\audition-files";
+    private static $application_file_path = "D:\\inetpub\\store\\spa\\theatre\\audition-files";
 
     private function __construct() { /*Prevents instantiation */ }
 

@@ -57,11 +57,25 @@
   .photo-tile p, .photo-tile br {
     display: none; }
 
+.navbar-nav .dropdown-menu .dropdown-item {
+  line-height: 1.42;
+  padding: .72em 1.35em;
+}
+
+.dropdown-menu {
+  z-index: 9090!important;
+}
+
 .spasubmenu {
   font-weight: bold;
   text-decoration: underline;
   padding-top: 1.2em;
 }
+
+.ucf-section-sidebar-menu-music .list-group-item a, .ucf-section-sidebar-menu-theatre .list-group-item a, .ucf-section-sidebar-menu-other .list-group-item a {
+  line-height: 1.5;
+}
+
 
 .small {
   font-size: 90%;
@@ -110,4 +124,10 @@
 }
 .sh-link a:hover {
     background-color: #fc0;
+}
+
+@media only screen and (max-width: 544px) {
+  .header-content-flexfix {
+    display: none !important;
+  }
 }
