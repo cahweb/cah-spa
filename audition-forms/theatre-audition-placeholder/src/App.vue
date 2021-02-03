@@ -19,7 +19,6 @@
         </div>
       </div>
       <div v-else-if="specialty === 'music'">
-        <a class="btn btn-primary mb-3" href="https://performingarts.cah.ucf.edu/audition-music" target="_blank" rel="noopener">Apply Now</a>
         <div v-html="programCopy" class="mb-3" id="programReqs" />
       </div>
     </div>
