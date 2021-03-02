@@ -60,6 +60,21 @@ if (stripos($title, 'theatre') !== false) {
 <script src="<?php echo get_stylesheet_uri(); ?>/../library/js/jqueryUI/jquery-ui.min.js"></script>
 <link href="<?php echo get_stylesheet_uri(); ?>/../library/js/jqueryUI/jquery-ui.min.css" rel="stylesheet">
 
+<div class="container-fluid mobile-header">
+    <div class="row bg-primary">
+        <div class="col-10 mx-auto p-3">
+            <p class="h2 text-center text-uppercase mb-0 w-100"><?= $title ?></p>
+        </div>
+    </div>
+    <? if ($subtitle != "") { ?>
+    <div class="row bg-inverse">
+        <div class="col-10 mx-auto p-3">
+            <p class="h3 font-sans-serif font-weight-bold text-center text-uppercase mb-0 w-100"><?= $subtitle ?></p>
+        </div>
+    </div>
+    <? } ?>
+</div>
+
 <div class="container pt-4 pb-4">
     <div class="row" id="degree-div">
         <div class="col-md-8 pt-3">

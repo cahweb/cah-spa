@@ -18,10 +18,12 @@ function my_theme_enqueue_styles() {
 // Defining SPA department code
 define( 'DEPT', 6 );
 
-add_action('wp_enqueue_scripts', 'spa_menu_fix', 10, 0);
+//add_action('wp_enqueue_scripts', 'spa_menu_fix', 10, 0);
+/*
 function spa_menu_fix() {
 	wp_enqueue_script( 'menu-fix', get_stylesheet_directory_uri() . '/dist/js/menu-fix.js', ['jquery'], '20200505', true);
 }
+*/
 
 // Shadowing the function in the parent theme, so we can add special functionality.
 function get_header_default_markup( $post ) {

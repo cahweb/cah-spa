@@ -1,6 +1,6 @@
 /*
  Theme Name: School of Performing Arts
- Theme URI: https://devspa.cah.ucf.edu
+ Theme URI: https://performingarts.cah.ucf.edu
  Description: Theme for the UCF School of Performing Arts
  Author: CAH Web Team
  Template: UCF-WordPress-Theme
@@ -60,6 +60,10 @@
 .navbar-nav .dropdown-menu .dropdown-item {
   line-height: 1.42;
   padding: .72em 1.35em;
+}
+
+.navbar-custom, .navbar-mainsite {
+  z-index: 9090!important;
 }
 
 .dropdown-menu {
@@ -126,8 +130,20 @@
     background-color: #fc0;
 }
 
+.mobile-header {
+  display: none;
+}
+
 @media only screen and (max-width: 544px) {
   .header-content-flexfix {
     display: none !important;
   }
+
+  .mobile-header {
+    display: block;
+  }
+}
+
+.header-content-inner {
+  margin-top: 10rem;
 }
