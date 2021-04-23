@@ -68,7 +68,7 @@ export default {
         undergrad: {
           'ba-theatre': {
             name: 'Kristina Tollefson',
-            email: 'kristina.tollefson@ucf.edu',
+            email: 'theatre@ucf.edu',
           },
           'bfa-acting': {
             name: 'Be Boyd',
