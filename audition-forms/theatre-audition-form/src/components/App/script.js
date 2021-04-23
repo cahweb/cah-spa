@@ -60,7 +60,7 @@ export default {
                             label: "B.A. Theatre Studies",
                             value: "ba-theatre",
                             name: "Kristina Tollefson",
-                            email: "kristina.tollefson@ucf.edu",
+                            email: "theatre@ucf.edu",
                         },
                         {
                             label: "BFA Acting",
