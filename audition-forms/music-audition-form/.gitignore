@@ -2,6 +2,7 @@
 node_modules
 dist/favicon.ico
 dist/index.html
+/public
 
 # local env files
 .env.local
