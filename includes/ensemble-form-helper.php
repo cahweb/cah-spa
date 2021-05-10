@@ -664,7 +664,7 @@ class Vars
         "Voice (Tenor)",
         "Voice (Bass)",
         "Colorguard (Marching Band)",
-        "Dance (Marching Band)",
+        //"Dance (Marching Band)",
         "Majorette (Marching Band)",
     ];
 
