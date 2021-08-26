@@ -138,7 +138,12 @@ if( !class_exists( 'PHPMailerHelper' ) ) {
          * @return void
          */
         private function _addAddr( array $to, string $field = 'to' ) {
-            foreach( $to as $recipient ) {
+            $addresses = $this->_maybe_wrap_addr( $to );
+
+            foreach( $addresses as $recipient ) {
+                if( empty( $recipient ) || !isset( $recipient['addr'] ) )
+                    continue;
+                    
                 switch( $field ) {
 
                     case 'to':
@@ -154,6 +159,25 @@ if( !class_exists( 'PHPMailerHelper' ) ) {
                         break;
                 }
             }
+        }
+
+
+        /**
+         * The _addAddr() function expects a 2D array for it to loop through for addresses and names.
+         * This checks to see if we have one and fixes it, if not.
+         * 
+         * @param array $addr  The address array which might need wrapping
+         * 
+         * @return array
+         */
+        private function _maybe_wrap_addr( array $addr ) : array
+        {
+            if( isset( $addr['addr'] ) )
+            {
+                return [ $addr ];
+            }
+
+            return $addr;
         }
     }
 }

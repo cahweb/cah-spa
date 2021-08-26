@@ -6,6 +6,8 @@
 include "dev/dev.php";
 include "includes/degree-cards.php";
 
+define( 'THEME_DIR', dirname( __FILE__ ) );
+
 
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 function my_theme_enqueue_styles() {
