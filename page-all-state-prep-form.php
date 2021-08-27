@@ -16,6 +16,10 @@ require_once 'recaptcha.php';
 
 FormTools\setup_captcha_wp();
 
+$dateFormat = "Y-m-d H:i T";
+$startDate = date_create_from_format($dateFormat, "2021-05-01 12:00 EDT");
+$endDate   = date_create_from_format($dateFormat, "2021-08-27 17:00 EDT");
+
 $messages = [];
 $has_error = false;
 
@@ -192,6 +196,11 @@ if( isset( $_POST['submitform'] ) )
 get_header();
 ?>
 
+<?php
+$now = time();
+
+if ($startDate->format('U') <= $now && $endDate->format('U') >= $now) :
+    ?>
 <div class="container mt-5 mb-4">
     <?php if( !empty( $messages ) ) : ?>
         <?php foreach( $messages as $message ) : ?>
@@ -294,6 +303,12 @@ get_header();
         </div>
     </form>
 </div>
+<?php else : ?>
+<div class="container mt-5 mb-4">
+    <h3>All-State Prep Clinic Pre-Registration is now closed.</h3>
+    <p>Walk-in registration is welcome and will occur in the Visual Arts Building lobby.</p>
+</div>
+<?php endif; ?>
 
 <?php
 get_footer();
