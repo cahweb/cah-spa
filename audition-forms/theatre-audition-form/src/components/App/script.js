@@ -285,7 +285,7 @@ export default {
         },
         // Get the right list of possible audition dates.
         dateList() {
-            if (this.selectedProgram === 'ba-theatre')
+            if (this.dateOptions[this.selectedProgram])
                 return this.dateOptions[this.selectedProgram]
 
             return this.dateOptions.general
