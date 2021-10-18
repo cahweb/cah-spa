@@ -185,6 +185,13 @@ export default {
   created() {
     this.init()
   },
+
+  mounted() {
+      const hash = window.location.hash
+      if (hash.length) {
+          this.changeReqs(hash)
+      }
+  }
 }
 </script>
 
