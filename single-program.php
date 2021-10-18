@@ -74,7 +74,13 @@ if (stripos($title, 'theatre') !== false) {
     </div>
     <? } ?>
 </div>
-
+<div class="container-fluid mb-4 bg-warning-t-2">
+    <div class="row">
+        <div class="col-10 mx-auto py-4">
+            <p class="text-center mb-0" style="line-height:1.44;"><em>Most programs in the UCF School of Performing Arts require an audition or interview. </em></p>
+        </div>
+    </div>
+</div>
 <div class="container pt-4 pb-4">
     <div class="row" id="degree-div">
         <div class="col-md-8 pt-3">

@@ -8,6 +8,7 @@
         $db_user = 'cah';
         $db_pass = 'cahweb';
         $db_name = 'cah';
+        $db_charset = "utf8";
         
         $db_connection = new mysqli($db_server, $db_user, $db_pass, $db_name);
         
@@ -15,6 +16,7 @@
             die("Database connection failed: " . $db_connection->connect_error . "<br><br>");
         } else {
             // echo "Database connection success.<br><br>";
+            mysqli_set_charset($db_connection, $db_charset);
             return $db_connection;
         }
     }
