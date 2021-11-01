@@ -33,8 +33,8 @@ export default new Vuex.Store({
 
   actions: {
     async init({dispatch}) {
-      dispatch('getSpec')
-        .then(() => {dispatch('getProgramReqs')})
+      await dispatch('getSpec')
+      await dispatch('getProgramReqs')
     },
 
     async getSpec({commit}) {

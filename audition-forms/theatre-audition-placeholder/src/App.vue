@@ -26,6 +26,7 @@
 </template>
 
 <script>
+/* eslint no-console: 1 */
 import {mapActions, mapState} from 'vuex'
 
 export default {
@@ -131,6 +132,10 @@ export default {
       return degrees
     },
     programCopy() {
+      if (Object.keys(this.programReqs).length == 0) {
+        return ''
+      }
+
       const programs = this.programReqs[this.specialty][this.selected.level]
 
       let html = '';
@@ -142,7 +147,12 @@ export default {
           const base = programs.text
           const specReqs = programs[this.selected.abbr]
 
-          lines = specReqs !== undefined ? [...base, ...specReqs] : base
+          if (this.selected.abbr === 'bm-composition') {
+            lines = specReqs
+          }
+          else {
+            lines = specReqs !== undefined ? [...base, ...specReqs] : base
+          }
         }
         else if (this.specialty === 'theatre') {
           lines = programs[this.selected.abbr]
@@ -173,6 +183,7 @@ export default {
       for (const degree of this.degreeList) {
         if (target === degree.abbr) {
           this.selected = degree
+          window.location.hash = `#${target}`
           break
         }
       }
@@ -184,14 +195,12 @@ export default {
 
   created() {
     this.init()
+        .then(() => {
+            if (window.location.hash.length) {
+                this.changeReqs(window.location.hash.substring(1))
+            }
+        })
   },
-
-  mounted() {
-      const hash = window.location.hash
-      if (hash.length) {
-          this.changeReqs(hash)
-      }
-  }
 }
 </script>
 
