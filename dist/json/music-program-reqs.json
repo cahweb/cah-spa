@@ -9,7 +9,7 @@
             "\t</li>",
             "\t<li>",
             "\t\t<h4 class=\"bullet-heading\">Complete The Form Below to Apply for Music Audition</h4>",
-            "\t\t<a href=\"https://performingarts.cah.ucf.edu/audition-music\" class=\"btn btn-primary\" target=\"_blank\" rel=\"noopener\">Apply Now</a>",
+            "\t\t<a href=\"https://performingarts.cah.ucf.edu/audition-music\" class=\"btn btn-success btn-lg mt-2 mb-4\" target=\"_blank\" rel=\"noopener\">Apply Now</a>",
             "\t\t<p>To complete this form, you will need to know your UCF ID. <a href=\"https://www.ucf.edu/admissions/undergraduate/question/what-are-my-nid-and-my-ucf-id/\" target=\"_blank\" rel=\"noopener\">Follow this link</a> to find instructions for retrieving your UCF ID. Also, ask any teachers whom you have studied music with to complete the <a href=\"/wp-content/uploads/sites/20/2015/12/Teacher-Evaluation.pdf\" target=\"_blank\" rel=\"noopener\">Teacher Evaluation Form</a> and bring it with you to your audition. No alternate date audition applications will be accepted after the final listed audition date.</p>",
             "\t\t<p>If you are unable to attend an audition on one of the scheduled days, you may submit a digital audition by choosing &ldquo;Digital Audition/Alternate Date&rdquo; in the Preferred Audition Date field below. A UCF faculty member will contact you after reviewing your video to let you know whether you have been accepted into the program.</p>",
             "\t</li>",
@@ -24,12 +24,12 @@
             "\t<li>",
             "\t\t<h4 class=\"bullet-heading\">Audition Day</h4>",
             "\t\t<ul>",
-            "\t\t\t<li><em>8:30 a.m.:</em> Check in at the <a href=\"https://map.ucf.edu/locations/19\" target=\"_blank\" rel=\"noopener\">UCF Rehearsal Hall (Building #19 on campus map)</a>. You will receive your actual audition time and, if you are a Music Education major, your education interview time, when you check in. Breakfast items will be available.</li>",
+            "\t\t\t<li><em>8:30 a.m.:</em> Check in at the <a href=\"https://map.ucf.edu/locations/19\" target=\"_blank\" rel=\"noopener\">UCF Rehearsal Hall (Building #19 on campus map)</a>. You will receive your actual audition time when you check in. Breakfast items will be available.</li>",
             "\t\t\t<li><em>9:00 a.m.:</em> Parent/student orientation begins in the Rehearsal Hall auditorium.</li>",
             "\t\t\t<li><em>9:30 a.m.:</em> Students are dismissed from orientation to warm up for auditions. Practice rooms are available.</li>",
-            "\t\t\t<li><em>9:45 a.m.:</em> Student auditions begin. Students will go to the studio room they have been assigned for audition ten minutes prior to their audition time and wait in the hallway for the professors to call their name, at which point they may enter and begin the audition or interview. With the exception of piano and percussion, auditions usually are about 10 minutes long. Piano and percussion run about 20 minutes long. Auditions are private with the student only. Parents may wait in the hall outside the audition studio or in the Rehearsal Hall.</li>",
+            "\t\t\t<li><em>9:45 a.m.:</em> Student auditions begin. Students will go to the studio room they have been assigned for audition ten minutes prior to their audition time and wait in the hallway for the professors to call their name, at which point they may enter and begin the audition. With the exception of piano and percussion, auditions usually are about 10 minutes long. Piano and percussion run about 20 minutes long. Auditions are private with the student only. Parents may wait in the hall outside the audition studio or in the Rehearsal Hall.</li>",
             "\t\t</ul>",
-            "\t\t<p>Parents will stay in the orientation to receive information from the Chair, an Admissions representative and Student Financial Aid representative until about 10:00 a.m. Once the student has completed their audition and/or education interview (if a Music Education major), they are free to leave.</p>",
+            "\t\t<p>Parents will stay in the orientation to receive information from the Chair, an Admissions representative and Student Financial Aid representative until about 10:00 a.m. Once the student has completed their audition, they are free to leave.</p>",
             "\t</li>",
             "\t<li>",
             "\t\t<h4 class=\"bullet-heading\">Notices of Acceptance/Non-Acceptance</h4>",
@@ -78,7 +78,7 @@
             "\t\t<p>Admissions and scholarship decisions will be made <strong>no later than March 15</strong> of each year. Admitted students have until May 1 to enroll, after which studio spots may be offered to candidates on the wait list.</p>",
             "\t</li>",
             "</ol>",
-            "<a href=\"https://app.getacceptd.com/ucfmusic\" class=\"ml-5 btn btn-primary\" target=\"_blank\" rel=\"noopener\">Apply Now with AcceptD</a>"
+            "<a href=\"https://app.getacceptd.com/ucfmusic\" class=\"ml-5 btn btn-success btn-lg mt-2 mb-4\" target=\"_blank\" rel=\"noopener\">Apply Now with AcceptD</a>"
         ]
     },
     "grad": {
@@ -91,7 +91,7 @@
             "\t\t<p>In order to apply for the Master of Arts, Music degree program, you must first apply to UCF through the College of Graduate Studies at <a href=\"https://graduate.ucf.edu\" target=\"_blank\" rel=\"noopener\">https://graduate.ucf.edu</a>.</p>",
             "\t\t<p>As part of the UCF Graduate Studies application, you will be presented with one of four ways to be considered for acceptance by the Music faculty: audition, submit a portfolio, submit a recording, or be interviewed.</p>",
             "\t\t<ul class=\"mb-3\">",
-            "\t\t<li><strong>Instrument/Voice Auditions.</strong> Department auditions are scheduled on campus on February 5, 12, and 19, and March 26. If the applicant chooses or these dates are impossible, then a digital audition recording may be submitted through <a href=\"https://app.getacceptd.com/ucfmusic\" target=\"_blank\" rel=\"noopener\">Acceptd</a>. In some cases, an alternate date may be arranged. Check the <a href=\"#\">Admission Audition Requirements</a> page for specific requirements on individual instrumental and voice types.</li>",
+            "\t\t<li><strong>Instrument/Voice Auditions.</strong> Department auditions are scheduled on campus on the dates listed above. If the applicant chooses or these dates are impossible, then a digital audition recording may be submitted through <a href=\"https://app.getacceptd.com/ucfmusic\" target=\"_blank\" rel=\"noopener\">Acceptd</a>. In some cases, an alternate date may be arranged. Check the <a href=\"https://performingarts.cah.ucf.edu/music-audition-requirements/\">Music Degree Audition Requirements</a> page for specific requirements on individual instrumental and voice types.</li>",
             "\t\t<!--",
             "\t\t\t<li><strong>Instrument/Voice Auditions</strong> are preferred, but audio or video recordings are also acceptable for performance candidates. For auditions, request your preferred date on the form. Check the <a href=\"https://performingarts.cah.ucf.edu/music-audition-requirements\" target=\"_blank\" rel=\"noopener\">Admission Audition Requirements</a> page for specific requirements on individual instrumental and voice types.</li>",
             "\t\t-->",

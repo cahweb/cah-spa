@@ -17,8 +17,8 @@ require_once 'recaptcha.php';
 FormTools\setup_captcha_wp();
 
 $dateFormat = "Y-m-d H:i T";
-$startDate = date_create_from_format($dateFormat, "2021-05-01 12:00 EDT");
-$endDate   = date_create_from_format($dateFormat, "2021-08-27 17:00 EDT");
+$startDate = date_create_from_format($dateFormat, "2022-07-14 12:00 EDT");
+$endDate   = date_create_from_format($dateFormat, "2022-08-26 17:00 EDT");
 
 $messages = [];
 $has_error = false;

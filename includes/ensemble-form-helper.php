@@ -24,7 +24,7 @@ const ENSEMBLE__BLANK_OTHER_INSTRUMENT = [
     'type' => 'danger'
 ];
 
-const SPA__BASE_URL = 'https://music.cah.ucf.edu/';
+const SPA__BASE_URL = 'https://performingarts.cah.ucf.edu/';
 
 /**
  * Gets a value from $_POST if it's set, or returns an empty string if not.
@@ -68,7 +68,7 @@ function check_box(string $field, string $value ) : string {
  * @return string
  */
 function message_chorus() : string {
-    $url = SPA__BASE_URL . 'choirs.php';
+    $url = SPA__BASE_URL . 'ensemble/choirs/';
     ob_start();
     ?>
     <table style="margin-bottom: 3em;">
@@ -116,7 +116,7 @@ function message_chorus() : string {
  * @return string
  */
 function message_opera() : string {
-    $url = SPA__BASE_URL . 'opera.php';
+    $url = SPA__BASE_URL . 'ensemble/opera/';
     ob_start();
     ?>
     <table style="margin-bottom: 3em;">
@@ -202,7 +202,7 @@ function message_opera() : string {
  * @return string
  */
 function message_orchestra() : string {
-    $url = SPA__BASE_URL . 'orchestra.php';
+    $url = SPA__BASE_URL . 'ensemble/orchestra/';
     ob_start();
     ?>
     <table>
@@ -231,7 +231,11 @@ function message_orchestra() : string {
         </tr>
         <tr>
             <td>
-                <p style="margin-top: 2em;">To learn more, visit <a href="<?= $url ?>"><?= $url ?></a>.</p>
+                <p style="margin-top: 2em;">To learn more, visit:</p>
+                    <ul>
+                        <li><a href="<?= $url ?>"><?= $url ?></a></li>
+                        <li><a href="https://performingarts.cah.ucf.edu/music/ensembles/ensemble-auditions-band-and-orchestra/">https://performingarts.cah.ucf.edu/music/ensembles/ensemble-auditions-band-and-orchestra/</a></li>
+                    </ul>
             </td>
         </tr>
         <tr>
@@ -283,7 +287,7 @@ function message_bands() : string {
         </tr>
         <tr>
             <td>
-                <p style="margin-top: 2em;">Please always feel free to contact us at any time, should you have questions. Additional program information can also be found online at <a href="https://www.ucfbands.com/">www.UCFBands.com</a>. We&apos;re excited about the year to come and would be very happy to share it with you.</p>
+                <p style="margin-top: 2em;">Please always feel free to contact us at any time, should you have questions. Additional program information can also be found online at <a href="https://www.ucfbands.com/">www.UCFBands.com</a> and <a href="https://performingarts.cah.ucf.edu/music/ensembles/ensemble-auditions-band-and-orchestra/">https://performingarts.cah.ucf.edu/music/ensembles/ensemble-auditions-band-and-orchestra/</a>. We&apos;re excited about the year to come and would be very happy to share it with you.</p>
             </td>
         </tr>
         <tr>
@@ -322,7 +326,7 @@ function message_bands() : string {
  * @return string
  */
 function message_jazz() : string {
-    $url = SPA__BASE_URL . 'jazz.php';
+    $url = SPA__BASE_URL . 'ensemble/jazz/';
     ob_start();
     ?>
     <table style="margin-bottom: 3em;">
@@ -338,7 +342,7 @@ function message_jazz() : string {
         </tr>
         <tr>
             <td>
-                <p style="margin-top: 2em;">If you'd like more information, <a href="https://music.cah.ucf.edu/jazz.php">visit here</a>.</p>
+                <p style="margin-top: 2em;">If you'd like more information, <a href="https://performingarts.cah.ucf.edu/program/jazz-studies/">visit here</a>.</p>
             </td>
         </tr>
         <tr>
@@ -377,7 +381,7 @@ function message_jazz() : string {
                     Pegasus Professor<br />
                     Director of Jazz Studies<br />
                     Phone: <a href="tel:+14078235411">(407) 823-5411</a><br />
-                    <a href="https://music.cah.ucf.edu/jazz.php">UCF Jazz Studies</a><br />
+                    <a href="https://performingarts.cah.ucf.edu/program/jazz-studies/">UCF Jazz Studies</a><br />
                     <a href="https://flyinghorserecords.com">Flying Horse Records</a><br />
                     <a href="http://www.yamaha.com/artists/artistdetailb.html?CNTID=5103049&CTID=5070060">Yamaha Performing Artist</a><br />
                     Booking and Information: <a href="https://www.nightisalive.com/jeffrupert">Night Is Alive</a>
@@ -427,7 +431,7 @@ function build_student_email( array $post ) : string {
                                 </td>
                             </tr>
                             <tr>
-                                <td><p>Thank you for your interest in the UCF Music Ensembles. The major music ensembles at UCF are open to all students on campus. All ensembles are courses at UCF and you must be registered in order to participate. Some ensembles only require course registration while others require an audition. To learn more about ensembles and auditions, please see the note below and visit <a href="https://music.cah.ucf.edu/ensembleauditions.php">https://music.cah.ucf.edu/ensembleauditions.php</a>.</p></td>
+                                <td><p>Thank you for your interest in the UCF Music Ensembles. The major music ensembles at UCF are open to all students on campus. All ensembles are courses at UCF and you must be registered in order to participate. Some ensembles only require course registration while others require an audition. To learn more about ensembles and auditions, please see the note below and visit <a href="https://performingarts.cah.ucf.edu/performance-opportunities/">https://performingarts.cah.ucf.edu/performance-opportunities/</a>.</p></td>
                             </tr>
 
                             <?php foreach( $post['ensembles'] as $ensemble ) : ?>

@@ -95,6 +95,10 @@
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+.card .card-text {
+  line-height:1.45;
+}
+
 .custom-card-img {
   object-fit: cover;
   min-height: 150px;
@@ -146,4 +150,12 @@
 
 .header-content-inner {
   margin-top: 10rem;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item .applynav {
+    background-color: #ffcc00!important;
+    font-size:.9rem!important;
+    padding: 0.42em .67em;
+    font-weight: bold;
+    letter-spacing: .07em;
 }
